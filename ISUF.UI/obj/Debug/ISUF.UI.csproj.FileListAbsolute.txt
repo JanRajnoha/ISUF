@@ -1,0 +1,2 @@
+C:\Users\JR\source\Workspaces\ISUF\ISUF\ISUF.UI\obj\Debug\ISUF.UI.csprojAssemblyReference.cache
+C:\Users\JR\source\Workspaces\ISUF\ISUF\ISUF.UI\obj\Debug\ISUF.UI.csproj.CoreCompileInputs.cache
