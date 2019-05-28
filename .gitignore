@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs/ISUF/v16
+/.vs
+/ISUF.Base/obj
+/ISUF.Storage/obj
+/ISUF.Win10/obj
+/ISUF.UI/obj
