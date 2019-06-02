@@ -12,3 +12,11 @@
 /ISUF.Storage/obj/Debug
 /ISUF.Win10/obj/Debug
 /ISUF.UI/obj/Debug
+/ISUF.Base/bin
+/ISUF.Storage/bin
+/ISUF.Win10/bin
+/ISUF.UI/bin
+/ISUF.Base/bin/Debug
+/ISUF.Storage/bin/Debug
+/ISUF.Win10/bin/Debug
+/ISUF.UI/bin/Debug
