@@ -22,6 +22,8 @@ Framework for information systems for UWP
 
 - [ ] Basic commands
 
+To - Do
+
 ### Storage
 
 ### UI
