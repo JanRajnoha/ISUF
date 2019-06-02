@@ -12,6 +12,16 @@ Framework for information systems for UWP
 ## To-Do
 ### Base
 
+- [ ] Framework constants
+
+- [ ] Support functions
+
+- [ ] Message dialog
+
+- [ ] Messenger
+
+- [ ] Basic commands
+
 ### Storage
 
 ### UI
