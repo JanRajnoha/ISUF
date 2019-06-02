@@ -22,11 +22,19 @@ Framework for information systems for UWP
 
 - [ ] Basic commands
 
+- [ ] Enums
+
 To - Do
 
 ### Storage
 
 ### UI
+
+- [ ] Commands
+
+- [ ] Framework controls
+
+- [ ] Events
 
 ### Windows 10
  
