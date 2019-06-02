@@ -8,3 +8,7 @@
 /ISUF.Storage/obj
 /ISUF.Win10/obj
 /ISUF.UI/obj
+/ISUF.Base/obj/Debug
+/ISUF.Storage/obj/Debug
+/ISUF.Win10/obj/Debug
+/ISUF.UI/obj/Debug
