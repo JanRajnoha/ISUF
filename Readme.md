@@ -9,7 +9,7 @@ Framework for information systems for UWP
 
 **Deployment:** Badge todo
 
-## To-Do
+## To-Do (Phase 1)
 
 ### Project
 
