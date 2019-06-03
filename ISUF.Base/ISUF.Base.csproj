@@ -149,13 +149,16 @@
     <Compile Include="Messages\UserLoggedOutMsg.cs" />
     <Compile Include="Modules\ModuleEnum.cs" />
     <Compile Include="Enum\ReturnCount.cs" />
-    <Compile Include="Interface\IInteractiveEnum.cs" />
+    <Compile Include="Interface\IModuleEnum.cs" />
     <Compile Include="Interface\IModule.cs" />
     <Compile Include="Modules\Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\SettingsService.cs" />
     <Compile Include="Service\ThemeSelectorService.cs" />
+    <Compile Include="Settings\CustomSettings.cs" />
+    <Compile Include="Settings\ShowAdsChangedEventArgs.cs" />
+    <Compile Include="Settings\UserLoggedEventArgs.cs" />
     <Compile Include="Storage\FileStream.cs" />
     <Compile Include="Templates\BaseItem.cs" />
     <Compile Include="Templates\TaskBaseItem.cs" />
@@ -182,9 +185,7 @@
       <Version>1.1.12</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Settings\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

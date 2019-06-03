@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
-    public class ModuleEnum : IInteractiveEnum
+    public class ModuleEnum : IModuleEnum
     {
         private ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 

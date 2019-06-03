@@ -15,6 +15,7 @@ namespace ISUF.Base.Modules
     {
         Type moduleType;
         string moduleName;
+        BaseItem moduleItem;
 
         public Module(Type moduleType)
         {

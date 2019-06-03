@@ -110,13 +110,29 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Interface\IItemManager.cs" />
+    <Compile Include="Interface\IStorageManager.cs" />
+    <Compile Include="Manager\ItemManager.cs" />
+    <Compile Include="Manager\StorageManager.cs" />
+    <Compile Include="Manager\TaskItemManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Crypting.cs" />
+    <Compile Include="Storage\ItemStorage.cs" />
     <EmbeddedResource Include="Properties\ISUF.Storage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Locator\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ISUF.Base\ISUF.Base.csproj">
+      <Project>{FD100127-1C0C-4B0F-B40B-96C3AA646009}</Project>
+      <Name>ISUF.Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

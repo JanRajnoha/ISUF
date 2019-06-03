@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Interface
 {
-    interface IInteractiveEnum
+    interface IModuleEnum
     {
         bool RegisterModule(Type moduleType);
 

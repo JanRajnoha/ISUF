@@ -17,41 +17,43 @@ Framework for information systems for UWP
 
 ### Base
 
-- [ ] Framework constants
+- [x] Framework constants
 
-- [ ] Support functions
+- [x] Support functions
 
-- [ ] Message dialog
+- [x] Message dialog
 
-- [ ] Messenger
+- [x] Messenger
 
-- [ ] Basic commands
+- [x] Basic commands
 
-- [ ] Enums
+- [x] Enums
 
-- [ ] Update
+- [x] Update
 
-- [ ] Services
+- [x] Services
 
-- [ ] Templates
+- [x] Templates
 
-- [ ] Messages
+- [x] Messages
 
-- [ ] Settings
+- [x] Settings
 
-- [ ] Exceptions
+- [x] Modules
 
-- [ ] Storage
+- [x] Exceptions
+
+- [x] Storage
 
 ### Storage
 
 - [ ] Storage
 
-- [ ] Security
+- [x] Security
 
 - [ ] Manager
 
-- [ ] Locator
+<!-- - [ ] Locator -->
 
 ### UI
 

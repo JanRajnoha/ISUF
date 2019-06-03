@@ -16,6 +16,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phases", "Phases", "{BE9D3A19-D996-4217-A76C-7EE9491A54B4}"
+	ProjectSection(SolutionItems) = preProject
+		Phases\Phase1.md = Phases\Phase1.md
+		Phases\Phase2.md = Phases\Phase2.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +102,9 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BE9D3A19-D996-4217-A76C-7EE9491A54B4} = {CEFED1A6-E9B0-446B-97A5-D194F6A4BB8A}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DF71509-32E5-461C-BD7A-5861A7A06D84}
 	EndGlobalSection
@@ -103,18 +112,18 @@ Global
 		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://goid.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ISUF.Base\\ISUF.Base.csproj
-		SccProjectName1 = ISUF.Base
-		SccLocalPath1 = ISUF.Base
-		SccProjectUniqueName2 = ISUF.Storage\\ISUF.Storage.csproj
-		SccProjectName2 = ISUF.Storage
-		SccLocalPath2 = ISUF.Storage
-		SccProjectUniqueName3 = ISUF.UI\\ISUF.UI.csproj
-		SccProjectName3 = ISUF.UI
-		SccLocalPath3 = ISUF.UI
-		SccProjectUniqueName4 = ISUF.Win10\\ISUF.Win10.csproj
-		SccProjectName4 = ISUF.Win10
-		SccLocalPath4 = ISUF.Win10
+		SccProjectUniqueName0 = ISUF.Win10\\ISUF.Win10.csproj
+		SccProjectName0 = ISUF.Win10
+		SccLocalPath0 = ISUF.Win10
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = ISUF.Base\\ISUF.Base.csproj
+		SccProjectName2 = ISUF.Base
+		SccLocalPath2 = ISUF.Base
+		SccProjectUniqueName3 = ISUF.Storage\\ISUF.Storage.csproj
+		SccProjectName3 = ISUF.Storage
+		SccLocalPath3 = ISUF.Storage
+		SccProjectUniqueName4 = ISUF.UI\\ISUF.UI.csproj
+		SccProjectName4 = ISUF.UI
+		SccLocalPath4 = ISUF.UI
 	EndGlobalSection
 EndGlobal
