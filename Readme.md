@@ -10,6 +10,11 @@ Framework for information systems for UWP
 **Deployment:** Badge todo
 
 ## To-Do
+
+### Project
+
+- [ ] NuGet export
+
 ### Base
 
 - [ ] Framework constants
