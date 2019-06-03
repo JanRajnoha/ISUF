@@ -1,5 +1,6 @@
 using ISUF.Base.Classes;
-using Microsoft.Extensions.Logging;
+using ISUF.Base.Enum;
+using ISUF.Base.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,12 +34,12 @@ namespace ISUF.Base.Service
         /// </summary>
         /// <param name="logLevel">Checked log level</param>
         /// <returns>Log level enable result</returns>
-        public static bool IsLogEnabled(LogLevel logLevel)
+        public static LogLevel GetLogLevel()
         {
             if (!IsLogEnabled())
-                return false;
+                return LogLevel.None;
 
-            return Constants.Instance.LogLevel.Contains(logLevel);
+            return Constants.Instance.LogLevel;
         }
 
         /// <summary>
@@ -66,9 +67,9 @@ namespace ISUF.Base.Service
         /// <param name="message">Log message</param>
         /// <param name="fileName">Log file name</param>
         /// <returns></returns>
-        public static async Task AddLogMessageAsync(string message, string fileName = "Log.txt")
+        public static async Task AddLogMessageAsync(string message, string fileName = "Log.txt", LogLevel logLevel = LogLevel.None)
         {
-            if (!IsLogEnabled())
+            if (logLevel == LogLevel.None || logLevel < Constants.Instance.LogLevel || !IsLogEnabled())
                 return;
 
             if (!messageQueue.ContainsKey(fileName))
@@ -94,9 +95,9 @@ namespace ISUF.Base.Service
         /// </summary>
         /// <param name="message">Log message</param>
         /// <param name="fileName">Log file name</param>
-        public static void AddLogMessage(string message, string fileName = "Log.txt")
+        public static void AddLogMessage(string message, string fileName = "Log.txt", LogLevel logLevel = LogLevel.None)
         {
-            AddLogMessageAsync(message, fileName).Wait();
+            AddLogMessageAsync(message, fileName, logLevel).Wait();
         }
 
         /// <summary>

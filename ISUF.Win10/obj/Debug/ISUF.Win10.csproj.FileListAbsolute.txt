@@ -1,2 +1,0 @@
-C:\Users\JR\source\Workspaces\ISUF\ISUF\ISUF.Win10\obj\Debug\ISUF.Win10.csprojAssemblyReference.cache
-C:\Users\JR\source\Workspaces\ISUF\ISUF\ISUF.Win10\obj\Debug\ISUF.Win10.csproj.CoreCompileInputs.cache

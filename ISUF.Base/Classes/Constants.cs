@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+using ISUF.Base.Enum;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +29,7 @@ namespace ISUF.Base.Classes
         public bool? AppFail { get; set; }
 
         [XmlElement(IsNullable = true)]
-        public ObservableCollection<LogLevel> LogLevel { get; set; }
+        public LogLevel LogLevel { get; set; }
 
         [XmlElement(IsNullable = true)]
         public Dictionary<string, bool> CustomConstants { get; set; }

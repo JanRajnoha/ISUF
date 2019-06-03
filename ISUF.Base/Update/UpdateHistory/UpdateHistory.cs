@@ -1,3 +1,4 @@
+using ISUF.Base.Enum;
 using ISUF.Base.Service;
 using System;
 using System.Collections.Generic;
@@ -224,7 +225,7 @@ namespace ISUF.Base.Update.UpdateHistory
 
             catch (Exception e)
             {
-                LogService.AddLogMessage("General framework exception");
+                new Exceptions.Exception(e.Message);
                 return false;
             }
         }
