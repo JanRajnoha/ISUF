@@ -24,9 +24,29 @@ Framework for information systems for UWP
 
 - [ ] Enums
 
-To - Do
+- [ ] Update
+
+- [ ] Services
+
+- [ ] Templates
+
+- [ ] Messages
+
+- [ ] Settings
+
+- [ ] Exceptions
+
+- [ ] Storage
 
 ### Storage
+
+- [ ] Storage
+
+- [ ] Security
+
+- [ ] Manager
+
+- [ ] Locator
 
 ### UI
 
@@ -36,5 +56,17 @@ To - Do
 
 - [ ] Events
 
+- [ ] Themes
+
+- [ ] ViewModel
+
+- [ ] EventArgs
+
 ### Windows 10
+
+- [ ] Notifications
+
+- [ ] Live tiles
+
+- [ ] Timeline
  
