@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -111,6 +111,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Classes\Functions.cs" />
+    <Compile Include="Command\BackupItemsCommand.cs" />
+    <Compile Include="Command\Command.cs" />
+    <Compile Include="Command\ImportItemsCommand.cs" />
+    <Compile Include="Command\ShareItemsCommand.cs" />
+    <Compile Include="Controls\CircleButton.cs" />
+    <Compile Include="Controls\DaysControl.xaml.cs">
+      <DependentUpon>DaysControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InAppNotifyMVVM.cs" />
+    <Compile Include="Controls\MainPageButton.cs" />
+    <Compile Include="Controls\MessageDialog.cs" />
+    <Compile Include="Controls\ModalWindow.xaml.cs">
+      <DependentUpon>ModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NavigationView.cs" />
+    <Compile Include="Controls\ShadowCheckBox.cs" />
+    <Compile Include="EventArgs\CommandCompletedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISUF.UI.rd.xml" />
   </ItemGroup>
@@ -118,10 +135,49 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Animations">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
+      <Version>5.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Template10">
+      <Version>1.1.12</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Command\" />
-    <Folder Include="EventArgs\" />
+    <Page Include="Controls\DaysControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ISUF.Base\ISUF.Base.csproj">
+      <Project>{FD100127-1C0C-4B0F-B40B-96C3AA646009}</Project>
+      <Name>ISUF.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISUF.ItemStorage\ISUF.ItemStorage.csproj">
+      <Project>{A3675874-38F5-4416-9E53-B3F3CD8062D8}</Project>
+      <Name>ISUF.ItemStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISUF.Security\ISUF.Security.csproj">
+      <Project>{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}</Project>
+      <Name>ISUF.Security</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModel\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

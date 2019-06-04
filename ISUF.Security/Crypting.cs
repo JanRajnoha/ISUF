@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ISUF.Storage.Security
+namespace ISUF.Security
 {
     /// <summary>
     /// Crypting class

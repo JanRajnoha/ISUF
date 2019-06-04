@@ -37,3 +37,7 @@
 /ISUF.Storage/bin/Debug/*.cache
 /ISUF.Win10/bin/Debug/*.cache
 /ISUF.UI/bin/Debug/*.cache
+/ISUF.ItemStorage/bin/Debug
+/ISUF.ItemStorage/obj
+/ISUF.Security/bin/Debug
+/ISUF.Security/obj

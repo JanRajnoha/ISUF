@@ -47,33 +47,33 @@ Framework for information systems for UWP
 
 ### Storage
 
-- [ ] Storage
+- [x] Storage
 
 - [x] Security
 
-- [ ] Manager
+- [x] Manager
 
 <!-- - [ ] Locator -->
 
 ### UI
 
-- [ ] Commands
+- [x] Commands
 
-- [ ] Framework controls
+- [x] Framework controls
 
-- [ ] Events
+- [x] Events
 
-- [ ] Themes
+- [x] Themes
 
-- [ ] ViewModel
+- [x] ViewModel
 
-- [ ] EventArgs
+- [x] EventArgs
 
 ### Windows 10
 
-- [ ] Notifications
+- [x] Notifications
 
-- [ ] Live tiles
+- [x] Live tiles
 
-- [ ] Timeline
+- [x] Timeline
  

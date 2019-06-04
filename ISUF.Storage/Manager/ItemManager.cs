@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using Windows.ApplicationModel.UserActivities;
-using Windows.UI.Shell;
 using ISUF.Base.Template;
 using ISUF.Storage.Interface;
 using ISUF.Base.Settings;
-using ISUF.Storage.Security;
+using ISUF.Security;
 
 namespace ISUF.Storage.Manager
 {

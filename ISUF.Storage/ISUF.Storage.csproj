@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -116,8 +116,6 @@
     <Compile Include="Manager\StorageManager.cs" />
     <Compile Include="Manager\TaskItemManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\Crypting.cs" />
-    <Compile Include="Storage\ItemStorage.cs" />
     <EmbeddedResource Include="Properties\ISUF.Storage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +130,14 @@
     <ProjectReference Include="..\ISUF.Base\ISUF.Base.csproj">
       <Project>{FD100127-1C0C-4B0F-B40B-96C3AA646009}</Project>
       <Name>ISUF.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISUF.ItemStorage\ISUF.ItemStorage.csproj">
+      <Project>{A3675874-38F5-4416-9E53-B3F3CD8062D8}</Project>
+      <Name>ISUF.ItemStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISUF.Security\ISUF.Security.csproj">
+      <Project>{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}</Project>
+      <Name>ISUF.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

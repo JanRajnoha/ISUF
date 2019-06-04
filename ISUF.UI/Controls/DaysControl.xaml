@@ -1,0 +1,91 @@
+﻿<UserControl
+    x:Class="ISUF.UI.Controls.DaysControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ISUF.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContextChanged="Days_DataContextChanged"
+    d:DesignHeight="300"
+    d:DesignWidth="200">
+
+    <Grid Height="auto"
+          Width="200"
+          Background="{ThemeResource AcrylicInAppSoft}">
+
+        <RelativePanel x:Name="Container" 
+                       Margin="10, 0, 0, 10">
+
+            <Button x:Name="Close"
+                    Height="25"
+                    Margin="0"
+                    Padding="0"
+                    Content="X"
+                    Width="25"
+                    RelativePanel.AlignRightWithPanel="True"
+                    Click="Close_Click"
+                    IsEnabled="True">
+
+            </Button>
+
+            <local:ShadowCheckBox x:Name="AllDays"
+                                  RelativePanel.Below="Close"
+                                  IsChecked="True"
+                                  Content="All days"
+                                  Margin="0, 5, 0, 0" 
+                                  Checked="AllDaysCheck"
+                                  Unchecked="AllDaysUncheck"/>
+
+            <local:ShadowCheckBox x:Name="Monday"
+                                  RelativePanel.Below="AllDays"
+                                  Content="Monday"
+                                  Margin="0, 5, 0, 0" 
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Tuesday" 
+                                  RelativePanel.Below="Monday"
+                                  Content="Tuesday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Wednesday" 
+                                  RelativePanel.Below="Tuesday"
+                                  Content="Wednesday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Thursday" 
+                                  RelativePanel.Below="Wednesday"
+                                  Content="Thursday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Friday" 
+                                  RelativePanel.Below="Thursday"
+                                  Content="Friday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Saturday" 
+                                  RelativePanel.Below="Friday"
+                                  Content="Saturday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+            <local:ShadowCheckBox x:Name="Sunday" 
+                                  RelativePanel.Below="Saturday"
+                                  Content="Sunday"
+                                  Margin="0, 5, 0, 0"
+                                  Unchecked="CheckChange"
+                                  Checked="CheckChange"/>
+
+        </RelativePanel>
+    </Grid>
+</UserControl>
