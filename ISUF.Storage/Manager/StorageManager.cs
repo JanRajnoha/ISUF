@@ -1,9 +1,9 @@
 ﻿using ISUF.Base.Enum;
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
+using ISUF.Interface;
 using ISUF.ItemStorage.Storage;
 using ISUF.Security;
-using ISUF.Storage.Interface;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -122,16 +122,12 @@ namespace ISUF.Storage.Manager
                     item.Encrypted = true;
                 }
 
-                // To-Do : solve
-
-                //var typeOfItemList = System.Enum.GetValues(typeof(string)).Cast<ItemTypeEnum>().ToList();
+                var typeOfItem = nameof(T);
 
                 ItemStorage<T> itemStorage = new ItemStorage<T>()
                 {
                     Items = GetFinalCollection(),
-
-                    // To-Do : solve
-                    //TypeOfItem = typeOfItemList[typeOfItemList.IndexOf(typeOfItemList.FirstOrDefault(x => x.ToString() == nameof(T)))]
+                    TypeOfItem = typeOfItem
                 };
 
                 XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));

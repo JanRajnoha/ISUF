@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.ItemStorage", "ISUF.It
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Security", "ISUF.Security\ISUF.Security.csproj", "{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Interface", "ISUF.Interface\ISUF.Interface.csproj", "{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +162,26 @@ Global
 		{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}.Release|x64.Build.0 = Release|x64
 		{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}.Release|x86.ActiveCfg = Release|x86
 		{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}.Release|x86.Build.0 = Release|x86
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|ARM.ActiveCfg = Debug|ARM
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|ARM.Build.0 = Debug|ARM
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|ARM64.Build.0 = Debug|ARM64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|x64.ActiveCfg = Debug|x64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|x64.Build.0 = Debug|x64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|x86.ActiveCfg = Debug|x86
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Debug|x86.Build.0 = Debug|x86
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|ARM.ActiveCfg = Release|ARM
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|ARM.Build.0 = Release|ARM
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|ARM64.ActiveCfg = Release|ARM64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|ARM64.Build.0 = Release|ARM64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|x64.ActiveCfg = Release|x64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|x64.Build.0 = Release|x64
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|x86.ActiveCfg = Release|x86
+		{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,29 +191,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DF71509-32E5-461C-BD7A-5861A7A06D84}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://goid.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ISUF.Win10\\ISUF.Win10.csproj
-		SccProjectName1 = ISUF.Win10
-		SccLocalPath1 = ISUF.Win10
-		SccProjectUniqueName2 = ISUF.Base\\ISUF.Base.csproj
-		SccProjectName2 = ISUF.Base
-		SccLocalPath2 = ISUF.Base
-		SccProjectUniqueName3 = ISUF.Storage\\ISUF.Storage.csproj
-		SccProjectName3 = ISUF.Storage
-		SccLocalPath3 = ISUF.Storage
-		SccProjectUniqueName4 = ISUF.UI\\ISUF.UI.csproj
-		SccProjectName4 = ISUF.UI
-		SccLocalPath4 = ISUF.UI
-		SccProjectUniqueName5 = ISUF.ItemStorage\\ISUF.ItemStorage.csproj
-		SccProjectName5 = ISUF.ItemStorage
-		SccLocalPath5 = ISUF.ItemStorage
-		SccProjectUniqueName6 = ISUF.Security\\ISUF.Security.csproj
-		SccProjectName6 = ISUF.Security
-		SccLocalPath6 = ISUF.Security
 	EndGlobalSection
 EndGlobal

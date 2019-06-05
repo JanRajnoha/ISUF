@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ISUF.Storage.Interface
+namespace ISUF.Interface
 {
     public interface IStorageManager<T>
     {

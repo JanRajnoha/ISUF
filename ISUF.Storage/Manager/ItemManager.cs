@@ -6,9 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Windows.ApplicationModel.UserActivities;
 using ISUF.Base.Template;
-using ISUF.Storage.Interface;
 using ISUF.Base.Settings;
 using ISUF.Security;
+using ISUF.Interface;
 
 namespace ISUF.Storage.Manager
 {

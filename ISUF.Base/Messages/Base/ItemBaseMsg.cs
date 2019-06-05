@@ -9,6 +9,6 @@ namespace ISUF.Base.Messages.Base
     public class ItemBaseMsg
     {
         // ToDo: Edit
-        public int ItemType { get; set; }
+        public string ItemType { get; set; }
     }
 }

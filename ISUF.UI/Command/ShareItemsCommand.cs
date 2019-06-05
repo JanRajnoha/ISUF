@@ -41,11 +41,10 @@ namespace ISUF.UI.Command
                     return;
 
                 string itemTypeName = itemList.Items[0].GetType().Name;
-                //var typeOfItemList = System.Enum.GetValues(typeof(ItemTypeEnum)).Cast<ItemTypeEnum>().ToList();
 
                 var sharedData = new ItemStorage<T>
                 {
-                    //TypeOfItem = typeOfItemList[typeOfItemList.IndexOf(typeOfItemList.FirstOrDefault(x => x.ToString() == itemTypeName))]
+                    TypeOfItem = itemTypeName
                 };
 
                 foreach (var item in new ObservableCollection<T>(itemList.SelectedItems.Cast<T>().Select(x => (T)x.Clone()).ToList()))

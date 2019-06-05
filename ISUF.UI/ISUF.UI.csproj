@@ -129,6 +129,10 @@
     <Compile Include="Controls\ShadowCheckBox.cs" />
     <Compile Include="EventArgs\CommandCompletedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ModuleAddVMBase.cs" />
+    <Compile Include="ViewModel\ModuleDetailVMBase.cs" />
+    <Compile Include="ViewModel\ModuleItemVMBase.cs" />
+    <Compile Include="ViewModel\ModuleVMBase.cs" />
     <EmbeddedResource Include="Properties\ISUF.UI.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +171,10 @@
       <Project>{FD100127-1C0C-4B0F-B40B-96C3AA646009}</Project>
       <Name>ISUF.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ISUF.Interface\ISUF.Interface.csproj">
+      <Project>{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}</Project>
+      <Name>ISUF.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ISUF.ItemStorage\ISUF.ItemStorage.csproj">
       <Project>{A3675874-38F5-4416-9E53-B3F3CD8062D8}</Project>
       <Name>ISUF.ItemStorage</Name>
@@ -175,9 +183,6 @@
       <Project>{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}</Project>
       <Name>ISUF.Security</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
