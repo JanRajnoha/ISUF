@@ -6,64 +6,67 @@ Import from old solution and splitting into projects
 
 ### Project
 
-- [ ] NuGet export
+- [x] Import all classes
 
 ### Base
 
-- [*] Framework constants
+- [x] Framework constants
 
-- [*] Support functions
+- [x] Support functions
 
-- [*] Message dialog
+- [x] Message dialog
 
-- [*] Messenger
+- [x] Messenger
 
-- [*] Basic commands
+- [x] Basic commands
 
-- [*] Enums
+- [x] Enums
 
-- [*] Update
+- [x] Update
 
-- [*] Services
+- [x] Services
 
-- [*] Templates
+- [x] Templates
 
-- [*] Messages
+- [x] Messages
 
-- [*] Settings
+- [x] Settings
 
-- [*] Exceptions
+- [x] Modules
 
-- [*] Storage
+- [x] Exceptions
+
+- [x] Storage
 
 ### Storage
 
-- [ ] Storage
+- [x] Storage
 
-- [ ] Security
+- [x] Security
 
-- [ ] Manager
+- [x] Manager
 
-- [ ] Locator
+<!-- - [ ] Locator -->
 
 ### UI
 
-- [ ] Commands
+- [x] Commands
 
-- [ ] Framework controls
+- [x] Framework controls
 
-- [ ] Events
+- [x] Events
 
-- [ ] Themes
+- [x] Themes
 
-- [ ] ViewModel
+- [x] ViewModel
 
-- [ ] EventArgs
+- [x] EventArgs
 
 ### Windows 10
 
-- [ ] Notifications
+- [x] Notifications
 
-- [ ] Live tiles
+- [x] Live tiles
 
-- [ ] Timeline
+- [x] Timeline
+ 
