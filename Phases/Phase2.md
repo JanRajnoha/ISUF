@@ -4,6 +4,6 @@
 
 ### Project
 
-- [ ] NuGet export
+- [x] NuGet export
 
 - [ ] Resolve all problems

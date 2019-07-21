@@ -39,6 +39,7 @@
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\ISUF.Base.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -50,6 +51,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -146,6 +149,7 @@
     <Compile Include="Messages\ShowNotificationMsg.cs" />
     <Compile Include="Messages\UserLoggedInMsg.cs" />
     <Compile Include="Messages\UserLoggedOutMsg.cs" />
+    <Compile Include="Modules\ModuleAnalyzer.cs" />
     <Compile Include="Modules\ModuleEnum.cs" />
     <Compile Include="Enum\ReturnCount.cs" />
     <Compile Include="Interface\IModuleEnum.cs" />
@@ -168,11 +172,8 @@
     <EmbeddedResource Include="Properties\ISUF.Base.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging">
-      <Version>2.2.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
@@ -184,7 +185,9 @@
       <Version>1.1.12</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="ISUF.Base.nuspec" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

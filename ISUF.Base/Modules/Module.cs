@@ -15,14 +15,23 @@ namespace ISUF.Base.Modules
     {
         Type moduleType;
         string moduleName;
-        BaseItem moduleItem;
 
+        /// <summary>
+        /// Create module by type. 
+        /// </summary>
+        /// <param name="moduleType">Type of module</param>
         public Module(Type moduleType)
         {
             this.moduleType = moduleType;
             moduleName = moduleType.ToString();
         }
 
+
+        /// <summary>
+        /// Create module by type and name
+        /// </summary>
+        /// <param name="moduleType">Type of module</param>
+        /// <param name="moduleName">Name of module</param>
         public Module(Type moduleType, string moduleName) : this(moduleType)
         {
             this.moduleName = moduleName;

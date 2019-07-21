@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ISUF.Interface</id>
+    <version>0.1.0-beta</version>
+    <title>ISUF Interface part</title>
+    <authors>Jan Rajnoha</authors>
+    <owners>Jan Rajnoha</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/JanRajnoha/ISUF</projectUrl>
+    <repository type="git" url="https://github.com/JanRajnoha/ISUF"/>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>Famework for information systems for UWP </summary>
+    <description>Famework for information systems for UWP </description>
+    <releaseNotes>First beta release</releaseNotes>
+    <copyright>Copyright (c) 2019</copyright>
+    <tags> Windows 10, Windows10, W10, UWP, XAML, Universal App, Information system, IS, Framework, FW, Template, UI</tags>
+
+    <dependencies>
+      <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="6.2.8" />
+    </dependencies>
+  </metadata>
+</package>

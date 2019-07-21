@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}</ProjectGuid>
+    <ProjectGuid>{E7B43DE8-F42B-427A-B9F7-997D5526342F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ISUF.Interface</RootNamespace>
-    <AssemblyName>ISUF.Interface</AssemblyName>
+    <RootNamespace>ItemStorage</RootNamespace>
+    <AssemblyName>ItemStorage</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
@@ -124,28 +124,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IItemManager.cs" />
-    <Compile Include="IModuleAddVMBase.cs" />
-    <Compile Include="IModuleDetailVMBase.cs" />
-    <Compile Include="IModuleItemVMBase.cs" />
-    <Compile Include="IModuleVMBase.cs" />
-    <Compile Include="IStorageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\ISUF.Interface.rd.xml" />
+    <EmbeddedResource Include="Properties\ItemStorage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ISUF.Base\ISUF.Base.csproj">
-      <Project>{FD100127-1C0C-4B0F-B40B-96C3AA646009}</Project>
-      <Name>ISUF.Base</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ISUF.Interface.nuspec" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

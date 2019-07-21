@@ -14,6 +14,11 @@ namespace ISUF.Base.Modules
     {
         private ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 
+        //public ModuleEnum()
+        //{
+        //    registeredModules = new ObservableCollection<Module>();
+        //}
+
         /// <summary>
         /// Check existence of module
         /// </summary>
@@ -42,6 +47,9 @@ namespace ISUF.Base.Modules
         /// <returns>Existence of module</returns>
         public bool ExistModule(Type moduleType, string moduleName)
         {
+            if (moduleType == null || moduleName == null)
+                return false;
+
             return registeredModules.Where(x => x.GetModuleName() == moduleName && x.GetModuleType() == moduleType).Count() != 0;
         }
 
@@ -52,6 +60,9 @@ namespace ISUF.Base.Modules
         /// <returns>Existence of module</returns>
         public bool ExistModule(Module module)
         {
+            if (module == null)
+                return false;
+
             return ExistModule(module.GetModuleType(), module.GetModuleName());
         }
 
