@@ -9,8 +9,9 @@ Framework for information systems for UWP
 
 **Deployment:** 
 
-| ISUF.Base | ![Nuget](https://img.shields.io/nuget/v/ISUF.Base.svg?color=green&label=NuGet) |
+| Package part | NuGet link |
 |-|-|
+| ISUF.Base | ![Nuget](https://img.shields.io/nuget/v/ISUF.Base.svg?color=green&label=NuGet) |
 | ISUF.Interface | ![Nuget](https://img.shields.io/nuget/v/ISUF.Interface.svg?color=green&label=NuGet) |
 | ISUF.ItemStorage | ![Nuget](https://img.shields.io/nuget/v/ISUF.ItemStorage.svg?color=green&label=NuGet) |
 | ISUF.Security | ![Nuget](https://img.shields.io/nuget/v/ISUF.Security.svg?color=green&label=NuGet) |
