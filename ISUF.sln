@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phases", "Phases", "{BE9D3A
 	ProjectSection(SolutionItems) = preProject
 		Phases\Phase1.md = Phases\Phase1.md
 		Phases\Phase2.md = Phases\Phase2.md
+		Phase3.md = Phase3.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.ItemStorage", "ISUF.ItemStorage\ISUF.ItemStorage.csproj", "{A3675874-38F5-4416-9E53-B3F3CD8062D8}"
@@ -219,35 +220,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DF71509-32E5-461C-BD7A-5861A7A06D84}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://goid.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ISUF.Base\\ISUF.Base.csproj
-		SccProjectName1 = ISUF.Base
-		SccLocalPath1 = ISUF.Base
-		SccProjectUniqueName2 = ISUF.Storage\\ISUF.Storage.csproj
-		SccProjectName2 = ISUF.Storage
-		SccLocalPath2 = ISUF.Storage
-		SccProjectUniqueName3 = ISUF.UI\\ISUF.UI.csproj
-		SccProjectName3 = ISUF.UI
-		SccLocalPath3 = ISUF.UI
-		SccProjectUniqueName4 = ISUF.Win10\\ISUF.Win10.csproj
-		SccProjectName4 = ISUF.Win10
-		SccLocalPath4 = ISUF.Win10
-		SccProjectUniqueName5 = ISUF.ItemStorage\\ISUF.ItemStorage.csproj
-		SccProjectName5 = ISUF.ItemStorage
-		SccLocalPath5 = ISUF.ItemStorage
-		SccProjectUniqueName6 = ISUF.Security\\ISUF.Security.csproj
-		SccProjectName6 = ISUF.Security
-		SccLocalPath6 = ISUF.Security
-		SccProjectUniqueName7 = ISUF.Interface\\ISUF.Interface.csproj
-		SccProjectName7 = ISUF.Interface
-		SccLocalPath7 = ISUF.Interface
-		SccProjectUniqueName8 = ISUF.Tests\\ISUF.Tests.csproj
-		SccProjectName8 = ISUF.Tests
-		SccLocalPath8 = ISUF.Tests
 	EndGlobalSection
 EndGlobal

@@ -6,4 +6,4 @@
 
 - [x] NuGet export
 
-- [ ] Resolve all problems
+- [x] Resolve all problems

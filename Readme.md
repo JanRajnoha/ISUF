@@ -19,10 +19,18 @@ Framework for information systems for UWP
 | ISUF.UI | ![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet) |
 
 
-## To-Do (Phase 2)
+## To-Do (Phase 3)
 
 ### Project
 
-- [x] NuGet export
+- [ ] Dynamic forms
 
-- [ ] Resolve all problems
+- [ ] Dynamic panes
+
+- [ ] Dynamic menu
+
+- [ ] Dynamic Main Page
+
+- [ ] Database providers
+
+- [ ] Dynamic database tables
