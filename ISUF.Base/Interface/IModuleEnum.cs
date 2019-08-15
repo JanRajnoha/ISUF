@@ -10,7 +10,7 @@ namespace ISUF.Base.Interface
 {
     interface IModuleEnum
     {
-        bool RegisterModule(Type moduleType);
+        bool RegisterModule(Type moduleType);   
 
         bool RegisterModule(Type moduleType, string moduleName);
 

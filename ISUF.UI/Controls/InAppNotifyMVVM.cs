@@ -1,5 +1,6 @@
 ﻿using ISUF.Base.Classes;
 using ISUF.Base.Messages;
+using ISUF.Base.Service;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel.Core;
@@ -230,7 +231,7 @@ namespace ISUF.UI.Controls
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                LogService.AddLogMessage(e.Message);
             }
         }
     }

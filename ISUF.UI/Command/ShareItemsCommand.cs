@@ -1,16 +1,12 @@
 ﻿using ISUF.Base.Classes;
 using ISUF.Base.Service;
 using ISUF.Base.Template;
-using ISUF.ItemStorage.Storage;
 using ISUF.Security;
+using ISUF.Storage.Storage;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;

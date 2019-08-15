@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ISUF.UI</id>
-    <version>0.1.0-beta</version>
+    <version>0.2.1-beta</version>
     <title>ISUF UI part</title>
     <authors>Jan Rajnoha</authors>
     <owners>Jan Rajnoha</owners>
@@ -12,8 +12,20 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Famework for information systems for UWP </summary>
     <description>Famework for information systems for UWP </description>
-    <releaseNotes>First beta release</releaseNotes>
+    <releaseNotes>Beta release</releaseNotes>
     <copyright>Copyright (c) 2019</copyright>
     <tags> Windows 10, Windows10, W10, UWP, XAML, Universal App, Information system, IS, Framework, FW, Template, UI</tags>
+
+    <dependencies>
+      <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="6.2.8" />
+      <dependency id="Microsoft.Toolikt.Uwp.UI" version="5.1.1" />
+      <dependency id="Microsoft.Toolikt.Uwp.UI.Animations" version="5.1.1" />
+      <dependency id="Microsoft.Toolikt.Uwp.UI.Controls" version="5.1.1" />
+      <dependency id="Template10" version="1.1.12" />
+    </dependencies>
   </metadata>
+
+  <files>
+    <file src="bin\release\**" target="build" />
+  </files>
 </package>

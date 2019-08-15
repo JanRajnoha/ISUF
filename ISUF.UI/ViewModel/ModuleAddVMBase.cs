@@ -79,8 +79,8 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private IItemManager<T> manager;
-        public IItemManager<T> Manager
+        private IItemManager manager;
+        public IItemManager Manager
         {
             get { return manager; }
             set

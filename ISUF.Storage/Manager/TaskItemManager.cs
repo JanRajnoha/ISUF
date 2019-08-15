@@ -1,5 +1,7 @@
-﻿using ISUF.Base.Settings;
+﻿using ISUF.Base.Service;
+using ISUF.Base.Settings;
 using ISUF.Base.Templates;
+using ISUF.Interface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,12 +13,12 @@ using Windows.UI.Notifications;
 
 namespace ISUF.Storage.Manager
 {
-    public class TaskItemManager<T> : ItemManager<T> where T : TaskBaseItem
+    public class TaskItemManager : ItemManager
     {
         private readonly string shortTypeName;
         private readonly string longTypeName;
 
-        public TaskItemManager(string fileName, string shortTypeName, string longTypeName) : base(fileName)
+        public TaskItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName, string shortTypeName, string longTypeName) : base(dbAccess, moduleItemType, moduleName)
         {
             this.shortTypeName = shortTypeName;
             this.longTypeName = longTypeName;
@@ -24,7 +26,7 @@ namespace ISUF.Storage.Manager
 
         protected override void CustomSettings_UserLogChanged(object sender, UserLoggedEventArgs e)
         {
-            Debug.WriteLine($"User secure settings has changed. Log called from {GetType().ToString()}.");
+            LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType().ToString()}.");
         }
 
         /// <summary>
@@ -32,43 +34,50 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="item">New task item</param>
         /// <returns>Result of addition check action. True = successful</returns>
-        public override bool AddItemAdditionCheck(T item)
+        public override bool AddItemAdditionCheck<T>(T item)
         {
-            if (item.NotifyDays.Count == 0)
-                item.NotifyDays = new ObservableCollection<DayOfWeek>
-                {
-                    DayOfWeek.Monday,
-                    DayOfWeek.Tuesday,
-                    DayOfWeek.Wednesday,
-                    DayOfWeek.Thursday,
-                    DayOfWeek.Friday,
-                    DayOfWeek.Saturday,
-                    DayOfWeek.Sunday
-                };
+            if (item is TaskBaseItem itemTask)
+            {
+                if (itemTask.NotifyDays.Count == 0)
+                    itemTask.NotifyDays = new ObservableCollection<DayOfWeek>
+                    {
+                        DayOfWeek.Monday,
+                        DayOfWeek.Tuesday,
+                        DayOfWeek.Wednesday,
+                        DayOfWeek.Thursday,
+                        DayOfWeek.Friday,
+                        DayOfWeek.Saturday,
+                        DayOfWeek.Sunday
+                    };
 
-            return true;
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
         /// Remove item from collection and remove schduled toast
         /// </summary>
         /// <param name="detailedItem">Removed item</param>
-        public override void Delete(T detailedItem)
+        public override Task<bool> Delete<T>(T detailedItem)
         {
-            base.Delete(detailedItem);
+            var result = base.Delete(detailedItem);
 
             var ToastNotifier = ToastNotificationManager.CreateToastNotifier();
             var ScheduledToastList = ToastNotifier.GetScheduledToastNotifications();
 
             if (ScheduledToastList.Select(x => x.Id).Contains(shortTypeName + detailedItem.ID))
                 ToastNotificationManager.CreateToastNotifier().RemoveFromSchedule(ScheduledToastList.FirstOrDefault(x => x.Id == (shortTypeName + detailedItem.ID)));
+
+            return null; // TODO
         }
 
         /// <summary>
         /// Schedule new toast notification
         /// </summary>
         /// <param name="act">Scheduling activity</param>
-        public void ScheduleToastNotification(T act)
+        public void ScheduleToastNotification<T>(T act) where T : TaskBaseItem
         {
             if (!act.Notify || act.Secured || act.End.Date < DateTime.Today)
                 return;
@@ -97,18 +106,17 @@ namespace ISUF.Storage.Manager
         /// <summary>
         /// Update completed activity with adding today date to Dates collection
         /// </summary>
-        /// <param name="CompletedActivity">Completed Activity</param>
-        public async void CompleteTask(T CompletedActivity)
+        /// <param name="completedActivity">Completed Activity</param>
+        public async Task<bool> CompleteTask<T>(T completedActivity) where T : TaskBaseItem
         {
-            int Index = ItemsSource.IndexOf(CompletedActivity);
-            if (Index == -1)
-            {
-                Index = IndexOfItem(CompletedActivity);
-                if (Index == -1)
-                    return;
-            }
+            var itemSource = dbAccess.GetAllItems<T>();
 
-            ItemsSource[Index].AddDate();
+            var item = itemSource.FirstOrDefault(x => x.ID == completedActivity.ID);
+
+            if (item == null)
+                return false;
+
+            item.AddDate();
 
             // To-Do : solve
 
@@ -117,7 +125,7 @@ namespace ISUF.Storage.Manager
             //else
             //    ScheduleToastNotification(ItemsSource[Index]);
 
-            await SaveDataAsync();
+            return await dbAccess.UpdateItem(item);
         }
     }
 }

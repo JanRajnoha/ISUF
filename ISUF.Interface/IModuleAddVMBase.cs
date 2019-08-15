@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ISUF.Base.Template;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Windows.Input;
 
 namespace ISUF.Interface
 {
-    public interface IModuleAddVMBase<T>
+    public interface IModuleAddVMBase<T> where T : BaseItem
     {
         ICommand Close { get; set; }
 
@@ -19,7 +20,7 @@ namespace ISUF.Interface
 
         bool ErrorVisible { get; set; }
 
-        IItemManager<T> Manager { get; set; }
+        IItemManager Manager { get; set; }
 
         void SetDetailItem(T currentItem);
 

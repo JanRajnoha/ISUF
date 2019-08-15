@@ -19,5 +19,12 @@
 /ISUF.Security/obj
 /ISUF.Interface/bin
 /ISUF.Interface/obj
+/ISUF.Tests/bin/x86/Debug
+/ISUF.Tests/obj/ARM
+/ISUF.Tests/obj/ARM64
+/ISUF.Tests/obj/x64
 /ISUF.Tests/bin
 /ISUF.Tests/obj
+/ISUF.Tests/bin/x86
+/ISUF.Tests/obj/x86
+/ISUF.Tests/obj/x86/Debug

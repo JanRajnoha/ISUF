@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ISUF.Base.Template;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,26 +8,20 @@ using System.Threading.Tasks;
 
 namespace ISUF.Interface
 {
-    public interface IItemManager<T>
+    public interface IItemManager
     {
-        Task<bool> AddItem(T item, bool saveData);
+        Task<bool> AddItem<T>(T item) where T : BaseItem;
 
-        bool AddItemAdditionCheck(T item);
+        bool AddItemAdditionCheck<T>(T item) where T : BaseItem;
 
-        Task<bool> AddItemRange(List<T> item, bool reloadSource = true, bool CheckItems = true);
+        Task<bool> AddItemRange<T>(List<T> item, bool checkItems = true) where T : BaseItem;
 
-        Task<List<string>> GetItemsNameList();
+        Task<List<string>> GetItemsNameList<T>() where T : BaseItem;
 
-        int IndexOfItem(T examinedItem);
+        Task<bool> Delete<T>(T detailedItem) where T : BaseItem;
 
-        int IndexOfItem(int ID);
+        T GetItem<T>(int ID) where T : BaseItem;
 
-        void Delete(T detailedItem);
-
-        T GetItem(int ID);
-
-        Task<ObservableCollection<T>> GetItemsAsync(bool SecureChanged = false);
-
-        Task SaveChangesAsync();
+        Task<ObservableCollection<T>> GetItemsAsync<T>() where T : BaseItem;
     }
 }

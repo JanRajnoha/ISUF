@@ -17,7 +17,7 @@ namespace ISUF.Base.Template
         public int ID { get; set; } = -1;
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Created { get; set; } = DateTime.UtcNow;
 
         [JsonIgnore]
         [XmlIgnore]

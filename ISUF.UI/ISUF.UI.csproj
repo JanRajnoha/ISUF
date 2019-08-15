@@ -11,7 +11,7 @@
     <AssemblyName>ISUF.UI</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -128,6 +128,7 @@
     <Compile Include="Controls\NavigationView.cs" />
     <Compile Include="Controls\ShadowCheckBox.cs" />
     <Compile Include="EventArgs\CommandCompletedEventArgs.cs" />
+    <Compile Include="Models\UIModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ModuleAddVMBase.cs" />
     <Compile Include="ViewModel\ModuleDetailVMBase.cs" />
@@ -137,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
       <Version>5.1.1</Version>
@@ -175,13 +176,13 @@
       <Project>{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}</Project>
       <Name>ISUF.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ISUF.ItemStorage\ISUF.ItemStorage.csproj">
-      <Project>{A3675874-38F5-4416-9E53-B3F3CD8062D8}</Project>
-      <Name>ISUF.ItemStorage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ISUF.Security\ISUF.Security.csproj">
       <Project>{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}</Project>
       <Name>ISUF.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISUF.Storage\ISUF.Storage.csproj">
+      <Project>{E570C06C-7F7B-4D13-B235-F7AD1189AAA6}</Project>
+      <Name>ISUF.Storage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

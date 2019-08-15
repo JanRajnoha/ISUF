@@ -11,7 +11,7 @@
     <AssemblyName>ISUF.Storage</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -30,6 +30,7 @@
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,6 +40,7 @@
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -110,10 +112,19 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DatabaseAccess\DatabaseAccess.cs" />
+    <Compile Include="DatabaseAccess\JsonDBAccess.cs" />
+    <Compile Include="DatabaseAccess\SqlDbAccess.cs" />
+    <Compile Include="DatabaseAccess\XmlDbAccess.cs" />
+    <Compile Include="Enum\DbTypeOfChange.cs" />
     <Compile Include="Manager\ItemManager.cs" />
     <Compile Include="Manager\StorageManager.cs" />
     <Compile Include="Manager\TaskItemManager.cs" />
+    <Compile Include="Modules\StorageModule.cs" />
+    <Compile Include="Modules\StorageModuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\ItemStorage.cs" />
+    <Compile Include="Storage\StorageChange.cs" />
     <EmbeddedResource Include="Properties\ISUF.Storage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +143,6 @@
     <ProjectReference Include="..\ISUF.Interface\ISUF.Interface.csproj">
       <Project>{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}</Project>
       <Name>ISUF.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ISUF.ItemStorage\ISUF.ItemStorage.csproj">
-      <Project>{A3675874-38F5-4416-9E53-B3F3CD8062D8}</Project>
-      <Name>ISUF.ItemStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\ISUF.Security\ISUF.Security.csproj">
       <Project>{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}</Project>

@@ -1,4 +1,5 @@
 ﻿using ISUF.Base.Modules;
+using ISUF.Base.Template;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace ISUF.Tests
     [TestClass]
     public class ModuleTest
     {
-        ModuleEnum mEnum = new ModuleEnum();
+        ModuleManager mEnum = new ModuleManager();
         Module mod;
         
         [TestMethod]
@@ -22,7 +23,7 @@ namespace ISUF.Tests
         {
             ModuleAnalyzer analyzer = new ModuleAnalyzer();
 
-            var analyzeResult = analyzer.Analyze(typeof(TestClass));
+            var analyzeResult = analyzer.Analyze(typeof(TestClassNotBaseItem));
 
             var expextedResult = new Dictionary<string, Type>
             {
@@ -34,7 +35,7 @@ namespace ISUF.Tests
         }
 
         [TestMethod]
-        [Priority(2)]
+        [Priority(1)]
         public void AddModuleTest()
         {
             Assert.IsTrue(mEnum.ModuleCount() == 0);
@@ -45,7 +46,7 @@ namespace ISUF.Tests
         }
 
         [TestMethod]
-        [Priority(3)]
+        [Priority(2)]
         public void CreateModuleTest()
         {
             Assert.IsNull(mod);
@@ -56,7 +57,14 @@ namespace ISUF.Tests
         }
     }
 
-    public class TestClass
+    public class TestClass : BaseItem
+    {
+        public string StringProp { get; set; }
+
+        public int IntProp { get; set; }
+    }
+
+    public class TestClassNotBaseItem
     {
         public string StringProp { get; set; }
 

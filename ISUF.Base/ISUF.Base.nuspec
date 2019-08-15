@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ISUF.Base</id>
-    <version>0.1.0-beta</version>
+    <version>0.2.1-beta</version>
     <title>ISUF Base part</title>
     <authors>Jan Rajnoha</authors>
     <owners>Jan Rajnoha</owners>
@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>Famework for information systems for UWP </summary>
     <description>Famework for information systems for UWP </description>
-    <releaseNotes>First beta release</releaseNotes>
+    <releaseNotes>Beta release. Updated work with modules.</releaseNotes>
     <copyright>Copyright (c) 2019</copyright>
     <tags> Windows 10, Windows10, W10, UWP, XAML, Universal App, Information system, IS, Framework, FW, Template, UI</tags>
 
@@ -23,5 +23,9 @@
       <dependency id="System.Collections" version="4.3.0" />
     </dependencies>
   </metadata>
+  
+  <files>
+    <file src="bin\release\**" target="build" />
+  </files>
   
 </package>

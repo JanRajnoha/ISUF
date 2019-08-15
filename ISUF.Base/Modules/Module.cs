@@ -13,26 +13,25 @@ namespace ISUF.Base.Modules
     /// </summary>
     public partial class Module : IModule
     {
-        Type moduleType;
-        string moduleName;
+        protected Type moduleItemType { get; set; }
+        protected string moduleName { get; set; }
 
         /// <summary>
         /// Create module by type. 
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        public Module(Type moduleType)
+        /// <param name="moduleItemType">Type of module</param>
+        public Module(Type moduleItemType)
         {
-            this.moduleType = moduleType;
-            moduleName = moduleType.ToString();
+            this.moduleItemType = moduleItemType;
+            moduleName = moduleItemType.ToString();
         }
-
-
+        
         /// <summary>
         /// Create module by type and name
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
+        /// <param name="moduleItemType">Type of module</param>
         /// <param name="moduleName">Name of module</param>
-        public Module(Type moduleType, string moduleName) : this(moduleType)
+        public Module(Type moduleItemType, string moduleName) : this(moduleItemType)
         {
             this.moduleName = moduleName;
         }
@@ -52,7 +51,7 @@ namespace ISUF.Base.Modules
         /// <returns>Type of module</returns>
         public Type GetModuleType()
         {
-            return moduleType;
+            return moduleItemType;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using ISUF.Base.Enum;
+using ISUF.Base.Service;
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Interface;
-using ISUF.ItemStorage.Storage;
 using ISUF.Security;
+using ISUF.Storage.Storage;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -155,7 +155,7 @@ namespace ISUF.Storage.Manager
 
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                LogService.AddLogMessage(e.Message);
                 return false;
             }
         }
