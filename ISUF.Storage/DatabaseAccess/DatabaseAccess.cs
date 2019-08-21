@@ -38,11 +38,17 @@ namespace ISUF.Storage.DatabaseAccess
                 registeredModules.Add(moduleType, tableName);
         }
 
+        public abstract void CreateDatabase();
+
+        public abstract void UpdateDatabase();
+
+        public abstract void RemoveDatabase();
+
         public abstract bool CheckConnectionString(string connectionString);
 
-        public abstract void UpdateDatabaseTable<T>(string tableName) where T : BaseItem;
+        public abstract void UpdateDatabaseTable(string tableName, Type tableType);
 
-        public abstract void CreateDatabaseTable<T>(string tableName) where T : BaseItem;
+        public abstract void CreateDatabaseTable(string tableName, Type tableType);
 
         public abstract void RemoveDatabaseTable(string tableName);
 

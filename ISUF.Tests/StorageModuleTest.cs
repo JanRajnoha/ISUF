@@ -20,8 +20,6 @@ namespace ISUF.Tests
             try
             {
                 storageModuleManager = new StorageModuleManager(typeof(XmlDbAccess));
-
-                storageModuleManager.DbAccess = new XmlDbAccess("", false);
             }
             catch (Exception ex)
             {
@@ -37,9 +35,7 @@ namespace ISUF.Tests
         {
             try
             {
-                storageModuleEnum = new StorageModuleManager(typeof(XmlDbAccess));
-
-                storageModuleEnum.DbAccess = new XmlDbAccess(@"C:\Users\JR\Documents\Test", false);
+                storageModuleEnum = new StorageModuleManager(typeof(XmlDbAccess), @"C:\Users\JR\Documents\Test", false);
             }
             catch (Exception ex)
             {

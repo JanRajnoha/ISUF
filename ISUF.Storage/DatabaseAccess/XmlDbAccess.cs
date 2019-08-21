@@ -20,6 +20,10 @@ namespace ISUF.Storage.DatabaseAccess
         {
         }
 
+        public XmlDbAccess(bool useChache) : base(ApplicationData.Current.LocalFolder.ToString(), useChache)
+        {
+        }
+
         public override bool CheckConnectionString(string connectionString)
         {
             try
@@ -31,6 +35,30 @@ namespace ISUF.Storage.DatabaseAccess
             {
                 LogService.AddLogMessage(ex.Message);
                 return false;
+            }
+        }
+
+        public override void CreateDatabase()
+        {
+            foreach (var module in registeredModules)
+            {
+                CreateDatabaseTable(module.Value, module.Key);
+            }
+        }
+
+        public override void UpdateDatabase()
+        {
+            foreach (var module in registeredModules)
+            {
+                UpdateDatabaseTable(module.Value, module.Key);
+            }
+        }
+
+        public override void RemoveDatabase()
+        {
+            foreach (var module in registeredModules)
+            {
+                RemoveDatabaseTable(module.Value);
             }
         }
 
@@ -62,7 +90,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        public override void CreateDatabaseTable<T>(string tableName)
+        public override void CreateDatabaseTable(string tableName, Type tableType)
         {
             try
             {
@@ -246,10 +274,10 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        public override void UpdateDatabaseTable<T>(string tableName)
+        public override void UpdateDatabaseTable(string tableName, Type tableType)
         {
             RemoveDatabaseTable(tableName);
-            CreateDatabaseTable<T>(tableName);
+            CreateDatabaseTable(tableName, tableType);
         }
 
         public override async Task<bool> UpdateItem<T>(T updateItem)

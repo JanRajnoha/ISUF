@@ -13,7 +13,7 @@ namespace ISUF.Base.Modules
     public class ModuleManager
         : IModuleEnum
     {
-        private ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
+        protected ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 
         //public ModuleEnum()
         //{

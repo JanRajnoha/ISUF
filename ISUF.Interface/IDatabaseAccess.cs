@@ -12,9 +12,15 @@ namespace ISUF.Interface
     {
         void RegisterModule(Type moduleType, string tableName);
 
-        void UpdateDatabaseTable<T>(string tableName) where T : BaseItem;
+        void CreateDatabase();
 
-        void CreateDatabaseTable<T>(string tableName) where T : BaseItem;
+        void UpdateDatabase();
+
+        void RemoveDatabase();
+
+        void UpdateDatabaseTable(string tableName, Type tableType);
+
+        void CreateDatabaseTable(string tableName, Type tableType);
 
         void RemoveDatabaseTable(string tableName);
 

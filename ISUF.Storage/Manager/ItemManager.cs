@@ -47,7 +47,7 @@ namespace ISUF.Storage.Manager
         /// <param name="e"></param>
         protected virtual void CustomSettings_UserLogChanged(object sender, UserLoggedEventArgs e)
         {
-            LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType().ToString()}.");
+            LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType()}.");
         }
 
         /// <summary>

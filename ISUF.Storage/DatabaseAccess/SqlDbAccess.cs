@@ -36,12 +36,24 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
+        public override void CreateDatabase()
+        {
+        }
+
+        public override void UpdateDatabase()
+        {
+        }
+
+        public override void RemoveDatabase()
+        {
+        }
+
         public override Task<bool> AddItemIntoDatabase<T>(T newItem)
         {
             throw new NotImplementedException();
         }
 
-        public override void CreateDatabaseTable<T>(string tableName)
+        public override void CreateDatabaseTable(string tableName, Type tableType)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +93,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void UpdateDatabaseTable<T>(string tableName)
+        public override void UpdateDatabaseTable(string tableName, Type tableType)
         {
             throw new NotImplementedException();
         }
