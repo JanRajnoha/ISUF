@@ -21,7 +21,7 @@ namespace ISUF.Storage.Modules
 
         public IDatabaseAccess DbAccess
         {
-            get { return dbAccess; }
+            get => dbAccess;
             set
             {
                 dbAccess = value;

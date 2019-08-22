@@ -11,7 +11,7 @@ namespace ISUF.Base.Modules
     /// <summary>
     /// Base class for creating modules grouping all classes, that work with data of selected item type
     /// </summary>
-    public partial class Module : IModule
+    public class Module : IModule
     {
         protected Type moduleItemType { get; set; }
         protected string moduleName { get; set; }

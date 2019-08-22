@@ -64,6 +64,13 @@ namespace ISUF.Tests
         public int IntProp { get; set; }
     }
 
+    public class TestClass2 : BaseItem
+    {
+        public string StringProp { get; set; }
+
+        public double DoubleProp { get; set; }
+    }
+
     public class TestClassNotBaseItem
     {
         public string StringProp { get; set; }

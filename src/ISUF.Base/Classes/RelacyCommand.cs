@@ -51,7 +51,7 @@ namespace ISUF.Base.Classes
 
         public RelayCommand(Action<T> execute, Func<T, bool> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _execute = execute ?? throw new Exceptions.ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 

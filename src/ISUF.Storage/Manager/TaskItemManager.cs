@@ -60,9 +60,9 @@ namespace ISUF.Storage.Manager
         /// Remove item from collection and remove schduled toast
         /// </summary>
         /// <param name="detailedItem">Removed item</param>
-        public override Task<bool> Delete<T>(T detailedItem)
+        public override Task<bool> RemoveItem<T>(T detailedItem)
         {
-            var result = base.Delete(detailedItem);
+            var result = base.RemoveItem(detailedItem);
 
             var ToastNotifier = ToastNotificationManager.CreateToastNotifier();
             var ScheduledToastList = ToastNotifier.GetScheduledToastNotifications();

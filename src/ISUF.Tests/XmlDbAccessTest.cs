@@ -24,6 +24,7 @@ namespace ISUF.Tests
         {
             storageTestManager = new StorageModuleManager(typeof(XmlDbAccess), @"C:\Users\JR\Documents\Test", false);
             storageTestModule = new StorageModule(typeof(TestClass), typeof(ItemManager));
+            storageTestModule = new StorageModule(typeof(TestClass2), typeof(ItemManager));
 
             storageTestManager.RegisterModule(storageTestModule);
         }
@@ -34,14 +35,7 @@ namespace ISUF.Tests
             storageTestManager.CreateDatabase();
 
             Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
-        }
-
-        [TestMethod]
-        public void RemoveDatabase()
-        {
-            storageTestManager.RemoveDatabase();
-
-            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
         }
 
         [TestMethod]
@@ -50,42 +44,101 @@ namespace ISUF.Tests
             storageTestManager.UpdateDatabase();
 
             Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
+        }
+
+        [TestMethod]
+        public void RemoveDatabase()
+        {
+            storageTestManager.RemoveDatabase();
+
+            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
         }
 
         [TestMethod]
         public void CreateTable()
         {
-            Assert.IsTrue(false);
-        }
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            module.ItemManager.CreateDatabaseTable();
 
-        [TestMethod]
-        public void RemoveTable()
-        {
-            Assert.IsTrue(false);
+            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
         }
 
         [TestMethod]
         public void UpdateTable()
         {
-            Assert.IsTrue(false);
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            module.ItemManager.UpdateDatabaseTable();
+
+            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+        }
+
+        [TestMethod]
+        public void RemoveTable()
+        {
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            module.ItemManager.RemoveDatabaseTable();
+
+            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
         }
 
         [TestMethod]
         public void AddItemIntoDatabase()
         {
-            Assert.IsTrue(false);
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            TestClass testItem = new TestClass();
+            testItem.IntProp = 5;
+            testItem.StringProp = "asd";
+
+            module.ItemManager.AddItem(testItem);
+
+            var item = module.ItemManager.GetItem<TestClass>(0);
+
+            Assert.AreEqual("asd", item.StringProp);
         }
 
         [TestMethod]
         public void UpdateItemInDatabase()
         {
-            Assert.IsTrue(false);
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            TestClass testItem = new TestClass();
+            testItem.IntProp = 5;
+            testItem.StringProp = "asd";
+
+            module.ItemManager.AddItem(testItem);
+
+            var item = module.ItemManager.GetItem<TestClass>(0);
+
+            Assert.AreEqual("asd", item.StringProp);
+
+            item.IntProp = 999;
+            module.ItemManager.AddItem(item);
+
+            var editedItem = module.ItemManager.GetItem<TestClass>(0);
+
+            Assert.AreEqual(999, editedItem.IntProp);
         }
 
         [TestMethod]
         public void RemoveItemFromDatabase()
         {
-            Assert.IsTrue(false);
+            StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
+            TestClass testItem = new TestClass();
+            testItem.IntProp = 5;
+            testItem.StringProp = "asd";
+
+            module.ItemManager.AddItem(testItem);
+
+            var item = module.ItemManager.GetItem<TestClass>(0);
+
+            Assert.AreEqual("asd", item.StringProp);
+
+            module.ItemManager.RemoveItem(item);
+
+            var removedItem = module.ItemManager.GetItem<TestClass>(0);
+
+            Assert.AreEqual(null, removedItem);
         }
     }
 }

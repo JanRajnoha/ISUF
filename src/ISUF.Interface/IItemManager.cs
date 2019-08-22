@@ -18,10 +18,14 @@ namespace ISUF.Interface
 
         Task<List<string>> GetItemsNameList<T>() where T : BaseItem;
 
-        Task<bool> Delete<T>(T detailedItem) where T : BaseItem;
+        Task<bool> RemoveItem<T>(T detailedItem) where T : BaseItem;
 
         T GetItem<T>(int ID) where T : BaseItem;
 
-        Task<ObservableCollection<T>> GetItemsAsync<T>() where T : BaseItem;
+        void UpdateDatabaseTable();
+
+        void CreateDatabaseTable();
+
+        void RemoveDatabaseTable();
     }
 }

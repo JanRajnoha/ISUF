@@ -152,27 +152,27 @@ namespace ISUF.Base.Update.UpdateHistory
         /// <summary>
         /// Read data from file
         /// </summary>
-        /// <param name="Attempts">Number of attempts</param>
+        /// <param name="attempts">Number of attempts</param>
         /// <returns>Collection of items of type T</returns>
-        public async Task ReadDataAsync(int Attempts = 0)
+        public async Task ReadDataAsync(int attempts = 0)
         {
-            object ReadedObjects = null;
-            Stream XmlStream = null;
+            Stream xmlStream = null;
 
             try
             {
                 XmlSerializer Serializ = new XmlSerializer(typeof(UpdateHistoryFile));
-                XmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName);
+                xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName);
 
-                using (XmlStream)
+                object readedObjects;
+                using (xmlStream)
                 {
-                    ReadedObjects = (UpdateHistoryFile)Serializ.Deserialize(XmlStream);
+                    readedObjects = (UpdateHistoryFile) Serializ.Deserialize(xmlStream);
                 }
 
-                if (ReadedObjects != null)
+                if (readedObjects != null)
                 {
-                    LastVersion = new Version(((UpdateHistoryFile)ReadedObjects).LastVersion);
-                    UpdateList = ((UpdateHistoryFile)ReadedObjects).UpdateList;
+                    LastVersion = new Version(((UpdateHistoryFile) readedObjects).LastVersion);
+                    UpdateList = ((UpdateHistoryFile) readedObjects).UpdateList;
                 }
                 else
                 {
@@ -182,15 +182,20 @@ namespace ISUF.Base.Update.UpdateHistory
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception s) when ((s.Message.Contains("denied")) && (Attempts < 10))
+            catch (Exception s) when (s.Message.Contains("denied") && attempts < 10)
             {
-                await ReadDataAsync(Attempts + 1);
+                await LogService.AddLogMessageAsync("File is in use");
+                await ReadDataAsync(attempts + 1);
             }
 
-            catch
+            catch (Exception e)
             {
-                XmlStream?.Close();
-                XmlStream?.Dispose();
+                throw new Exceptions.Exception("Unhandled exception", e);
+            }
+            finally
+            {
+                xmlStream?.Close();
+                xmlStream?.Dispose();
                 LastVersion = new Version(0, 0, 0, 0);
                 UpdateList = new List<UpdateItem>();
             }
@@ -199,9 +204,9 @@ namespace ISUF.Base.Update.UpdateHistory
         /// <summary>
         /// Save data to file
         /// </summary>
-        /// <param name="Attempts">Number of attempts</param>
+        /// <param name="attempts">Number of attempts</param>
         /// <returns>True, if save was succesful</returns>
-        public async Task<bool> SaveDataAsync(int Attempts = 0)
+        public async Task<bool> SaveDataAsync(int attempts = 0)
         {
             try
             {
@@ -209,24 +214,23 @@ namespace ISUF.Base.Update.UpdateHistory
                 var v = Package.Current.Id.Version;
                 Version packageVersion = new Version(v.Major, v.Minor, v.Build, v.Revision);
 
-                using (Stream XmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(FileName, CreationCollisionOption.ReplaceExisting))
+                using (Stream xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(FileName, CreationCollisionOption.ReplaceExisting))
                 {
-                    serializer.Serialize(XmlStream, new UpdateHistoryFile() { UpdateList = this.UpdateList, LastVersion = packageVersion.ToString() });
+                    serializer.Serialize(xmlStream, new UpdateHistoryFile() { UpdateList = this.UpdateList, LastVersion = packageVersion.ToString() });
                 }
 
                 return true;
             }
 
             // When file is unavailable
-            catch (Exception s) when ((s.Message.Contains("denied") || s.Message.Contains("is in use")) && (Attempts <= 10))
+            catch (Exception s) when ((s.Message.Contains("denied") || s.Message.Contains("is in use")) && (attempts <= 10))
             {
-                return await SaveDataAsync(Attempts + 1);
+                return await SaveDataAsync(attempts + 1);
             }
 
             catch (Exception e)
             {
-                new Exceptions.Exception(e.Message);
-                return false;
+                throw new Exceptions.Exception("Unhandled exception", e);
             }
         }
     }

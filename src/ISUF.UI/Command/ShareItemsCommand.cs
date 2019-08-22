@@ -58,11 +58,11 @@ namespace ISUF.UI.Command
 
                 try
                 {
-                    XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));
+                    XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
 
-                    using (Stream XmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.tdn", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult())
+                    using (Stream xmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.tdn", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult())
                     {
-                        Serializ.Serialize(XmlStream, sharedData);
+                        serializer.Serialize(xmlStream, sharedData);
                     }
                 }
                 catch (Exception e)

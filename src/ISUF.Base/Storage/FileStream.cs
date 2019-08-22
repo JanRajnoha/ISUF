@@ -42,22 +42,21 @@ namespace ISUF.Base.Storage
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception s) when ((s.Message.Contains("denied")) && (attempts < 10))
+            catch (Exception e) when (e.Message.Contains("denied") && attempts < 10)
             {
+                await LogService.AddLogMessageAsync("File is in use");
                 return await ReadDataAsync(fileName, path, attempts + 1);
             }
 
             catch (Exception e)
             {
-                await LogService.AddLogMessageAsync(e.Message);
+                throw new Exceptions.Exception("Unhandled exception", e);
             }
 
             finally
             {
                 xmlStream?.Close();
             }
-
-            return default(T);
         }
 
         /// <summary>
@@ -86,22 +85,21 @@ namespace ISUF.Base.Storage
             }
 
             // When file is unavailable
-            catch (Exception s) when ((s.Message.Contains("denied") || s.Message.Contains("is in use")) && (attempts <= 10))
+            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && attempts <= 10)
             {
+                await LogService.AddLogMessageAsync("File is in use");
                 return await SaveDataAsync(data, fileName, path, attempts + 1);
             }
 
             catch (Exception e)
             {
-                await LogService.AddLogMessageAsync(e.Message);
+                throw new Exceptions.Exception("Unhandled exception", e);
             }
 
             finally
             {
                 xmlStream?.Close();
             }
-
-            return false;
         }
     }
 }

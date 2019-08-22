@@ -19,6 +19,7 @@ namespace ISUF.Storage.Manager
     /// Storage manager class
     /// </summary>
     /// <typeparam name="T">Type of item</typeparam>
+    [Obsolete("Will be removed")]
     abstract public class StorageManager<T> : IStorageManager<T> where T : BaseItem
     {
         PathType pathType { get; set; }
@@ -43,44 +44,43 @@ namespace ISUF.Storage.Manager
         /// <summary>
         /// Read data from file
         /// </summary>
-        /// <param name="Attempts">Number of attempts</param>
+        /// <param name="attempts">Number of attempts</param>
         /// <returns>Collection of items of type T</returns>
-        protected async Task<ObservableCollection<T>> ReadDataAsync(int Attempts = 0)
+        protected async Task<ObservableCollection<T>> ReadDataAsync(int attempts = 0)
         {
-            object ReadedObjects = null;
-
             try
             {
-                XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));
-                Stream XmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName);
+                XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
+                Stream xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName);
 
-                using (XmlStream)
+                object readedObjects;
+                using (xmlStream)
                 {
-                    ReadedObjects = (ItemStorage<T>)Serializ.Deserialize(XmlStream);
+                    readedObjects = (ItemStorage<T>)serializer.Deserialize(xmlStream);
                 }
 
-                XmlStream.Dispose();
+                xmlStream.Dispose();
 
-                if (ReadedObjects != null)
+                if (readedObjects != null)
                 {
-                    ItemsSourceAll = ((ItemStorage<T>)ReadedObjects).Items;
-                    ItemsSource = ((ItemStorage<T>)ReadedObjects).Items;
+                    ItemsSourceAll = ((ItemStorage<T>)readedObjects).Items;
+                    ItemsSource = ((ItemStorage<T>)readedObjects).Items;
 
-                    return new ObservableCollection<T>(((ItemStorage<T>)ReadedObjects).Items.Where(x => GetValidItems(x)));
+                    return new ObservableCollection<T>(((ItemStorage<T>)readedObjects).Items.Where(GetValidItems));
                 }
                 else
                     return new ObservableCollection<T>();
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception s) when ((s.Message.Contains("denied")) && (Attempts < 10))
+            catch (Exception s) when (s.Message.Contains("denied") && attempts < 10)
             {
-                return await ReadDataAsync(Attempts + 1);
+                return await ReadDataAsync(attempts + 1);
             }
 
-            catch
+            catch (Exception e)
             {
-                return new ObservableCollection<T>();
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -93,7 +93,7 @@ namespace ISUF.Storage.Manager
         {
             bool userLogged = CustomSettings.IsUserLogged;
 
-            return x.Secured == userLogged || (x.Secured != userLogged && userLogged == true);
+            return x.Secured == userLogged || (x.Secured != userLogged && userLogged);
         }
 
         /// <summary>

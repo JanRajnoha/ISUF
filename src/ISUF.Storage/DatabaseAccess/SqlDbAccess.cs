@@ -24,10 +24,7 @@ namespace ISUF.Storage.DatabaseAccess
             {
                 SqlConnection testConnection = new SqlConnection(connectionString);
                 testConnection.Open();
-                if (testConnection.State == System.Data.ConnectionState.Broken)
-                    return false;
-                else
-                    return true;
+                return testConnection.State != System.Data.ConnectionState.Broken;
             }
             catch (Exception ex)
             {
@@ -53,7 +50,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void CreateDatabaseTable(string tableName, Type tableType)
+        public override void CreateDatabaseTable(Type tableType)
         {
             throw new NotImplementedException();
         }
@@ -78,7 +75,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void RemoveDatabaseTable(string tableName)
+        public override void RemoveDatabaseTable(Type tableType)
         {
             throw new NotImplementedException();
         }
@@ -93,7 +90,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void UpdateDatabaseTable(string tableName, Type tableType)
+        public override void UpdateDatabaseTable(Type tableType)
         {
             throw new NotImplementedException();
         }

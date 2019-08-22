@@ -122,14 +122,14 @@ namespace ISUF.Base.Service
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && (Attempts < 10))
+            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
             {
                 SaveAllLogFile(fileName, Attempts + 1);
             }
 
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
-                return;
+                throw new Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -151,14 +151,14 @@ namespace ISUF.Base.Service
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && (Attempts < 10))
+            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
             {
                 SaveLogFile(message, fileName, Attempts + 1);
             }
 
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
-                return;
+                throw new Exceptions.Exception("Unhandled exception", e);
             }
         }
     }

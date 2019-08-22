@@ -16,22 +16,18 @@ namespace ISUF.Base.Exceptions
     {
         public Exception()
         {
-            LogService.AddLogMessage("General framework exception", logLevel:LogLevel.Log);
         }
 
         public Exception(string message) : base(message)
         {
-            LogService.AddLogMessage("Framework exception, message: " + message, logLevel: LogLevel.Log);
         }
 
         public Exception(string message, System.Exception innerException) : base(message, innerException)
         {
-            LogService.AddLogMessage("Framework exception, message: " + message, logLevel: LogLevel.Log);
         }
 
         protected Exception(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            LogService.AddLogMessage("General framework exception", logLevel: LogLevel.Log);
         }
     }
 }

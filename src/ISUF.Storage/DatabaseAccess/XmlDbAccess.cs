@@ -1,4 +1,3 @@
-using ISUF.Base.Modules;
 using ISUF.Base.Service;
 using ISUF.Base.Template;
 using ISUF.Storage.Enum;
@@ -28,7 +27,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             try
             {
-                var fullPath = Path.GetFullPath(connectionString + @"\test.xml");
+                Path.GetFullPath(connectionString + @"\test.xml");
                 return true;
             }
             catch (Exception ex)
@@ -40,33 +39,33 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override void CreateDatabase()
         {
-            foreach (var module in registeredModules)
+            foreach (KeyValuePair<Type, string> module in registeredModules)
             {
-                CreateDatabaseTable(module.Value, module.Key);
+                CreateDatabaseTable(module.Key);
             }
         }
 
         public override void UpdateDatabase()
         {
-            foreach (var module in registeredModules)
+            foreach (KeyValuePair<Type, string> module in registeredModules)
             {
-                UpdateDatabaseTable(module.Value, module.Key);
+                UpdateDatabaseTable(module.Key);
             }
         }
 
         public override void RemoveDatabase()
         {
-            foreach (var module in registeredModules)
+            foreach (KeyValuePair<Type, string> module in registeredModules)
             {
-                RemoveDatabaseTable(module.Value);
+                RemoveDatabaseTable(module.Key);
             }
         }
 
         public override async Task<bool> AddItemIntoDatabase<T>(T newItem)
         {
-            var allItems = GetAllItems<T>();
+            ObservableCollection<T> allItems = GetAllItems<T>();
 
-            var addStorageChange = new StorageChange()
+            StorageChange addStorageChange = new StorageChange()
             {
                 InMemoryChange = useInMemoryCache,
                 ModuleType = typeof(T),
@@ -85,13 +84,18 @@ namespace ISUF.Storage.DatabaseAccess
             }
             else
             {
-                var tableName = registeredModules[typeof(T)];
+                string tableName = registeredModules[typeof(T)];
                 return await SaveFileAsync(allItems, tableName);
             }
         }
 
-        public override void CreateDatabaseTable(string tableName, Type tableType)
+        public override void CreateDatabaseTable(Type tableType)
         {
+            string tableName = registeredModules[tableType];
+
+            if (tableName == null)
+                throw new Base.Exceptions.ArgumentException("Module is not registered");
+
             try
             {
                 using (FileStream file = File.Create($@"{connectionsString}\{tableName}.xml"))
@@ -99,9 +103,9 @@ namespace ISUF.Storage.DatabaseAccess
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                LogService.AddLogMessage(ex.Message);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -109,11 +113,9 @@ namespace ISUF.Storage.DatabaseAccess
         {
             if (useInMemoryCache)
                 return (ObservableCollection<T>)inMemoryCache[typeof(T)].Cast<T>();
-            else
-            {
-                var tableName = registeredModules[typeof(T)];
-                return ReadFileAsync<T>(tableName).Result;
-            }
+
+            string tableName = registeredModules[typeof(T)];
+            return ReadFileAsync<T>(tableName).Result;
         }
 
         /// <summary>
@@ -123,16 +125,15 @@ namespace ISUF.Storage.DatabaseAccess
         /// <returns>Collection of items of type T</returns>
         protected async Task<ObservableCollection<T>> ReadFileAsync<T>(string tableName, int Attempts = 0) where T : BaseItem
         {
-            object readedObjects = null;
-
             try
             {
-                XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));
-                Stream XmlStream = File.OpenRead($@"{connectionsString}\{tableName}.xml");
+                XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
+                Stream xmlStream = File.OpenRead($@"{connectionsString}\{tableName}.xml");
 
-                using (XmlStream)
+                object readedObjects;
+                using (xmlStream)
                 {
-                    readedObjects = (ItemStorage<T>)Serializ.Deserialize(XmlStream);
+                    readedObjects = (ItemStorage<T>)serializer.Deserialize(xmlStream);
                 }
 
                 if (readedObjects != null)
@@ -140,21 +141,20 @@ namespace ISUF.Storage.DatabaseAccess
 
                     return ((ItemStorage<T>)readedObjects).Items;
                 }
-                else
-                    return new ObservableCollection<T>();
+
+                return new ObservableCollection<T>();
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception ex) when ((ex.Message.Contains("denied")) && (Attempts < 10))
+            catch (Exception e) when (e.Message.Contains("denied") && Attempts < 10)
             {
-                LogService.AddLogMessage(ex.Message);
+                LogService.AddLogMessage(e.Message);
                 return await ReadFileAsync<T>(tableName, Attempts + 1);
             }
 
-            catch (Exception ex)
+            catch (Exception e)
             {
-                LogService.AddLogMessage(ex.Message);
-                return new ObservableCollection<T>();
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -167,7 +167,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             try
             {
-                var typeOfItem = nameof(T);
+                string typeOfItem = nameof(T);
 
                 ItemStorage<T> itemStorage = new ItemStorage<T>()
                 {
@@ -186,16 +186,15 @@ namespace ISUF.Storage.DatabaseAccess
             }
 
             // When file is unavailable
-            catch (Exception ex) when ((ex.Message.Contains("denied") || ex.Message.Contains("is in use")) && (Attempts < 10))
+            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
             {
-                LogService.AddLogMessage(ex.Message);
+                LogService.AddLogMessage(e.Message);
                 return await SaveFileAsync(itemsToSave, tableName, Attempts + 1);
             }
 
-            catch (Exception ex)
+            catch (Exception e)
             {
-                LogService.AddLogMessage(ex.Message);
-                return false;
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -223,8 +222,13 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        public override void RemoveDatabaseTable(string tableName)
+        public override void RemoveDatabaseTable(Type tableType)
         {
+            string tableName = registeredModules[tableType];
+
+            if (tableName == null)
+                throw new Base.Exceptions.ArgumentException("Module is not registered");
+
             if (File.Exists(connectionsString))
                 File.Delete($@"{connectionsString}\{tableName}.xml");
         }
@@ -233,8 +237,8 @@ namespace ISUF.Storage.DatabaseAccess
         {
             if (useInMemoryCache)
             {
-                var allItems = inMemoryCache[typeof(T)];
-                var itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
+                ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
+                BaseItem itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
 
                 if (itemToRemove != null)
                 {
@@ -246,13 +250,13 @@ namespace ISUF.Storage.DatabaseAccess
             }
             else
             {
-                var allItems = GetAllItems<T>();
-                var itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
+                ObservableCollection<T> allItems = GetAllItems<T>();
+                T itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
 
                 if (itemToRemove != null)
                 {
                     allItems.Remove(itemToRemove);
-                    var tableName = registeredModules[typeof(T)];
+                    string tableName = registeredModules[typeof(T)];
 
                     return await SaveFileAsync(allItems, tableName);
                 }
@@ -269,34 +273,34 @@ namespace ISUF.Storage.DatabaseAccess
             }
             else
             {
-                var tableName = registeredModules[typeof(T)];
+                string tableName = registeredModules[typeof(T)];
                 await SaveFileAsync(source, tableName);
             }
         }
 
-        public override void UpdateDatabaseTable(string tableName, Type tableType)
+        public override void UpdateDatabaseTable(Type tableType)
         {
-            RemoveDatabaseTable(tableName);
-            CreateDatabaseTable(tableName, tableType);
+            RemoveDatabaseTable(tableType);
+            CreateDatabaseTable(tableType);
         }
 
         public override async Task<bool> UpdateItem<T>(T updateItem)
         {
             if (useInMemoryCache)
             {
-                var allItems = inMemoryCache[typeof(T)];
-                var itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
-                var itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
+                ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
+                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
+                int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
 
                 allItems[itemToUpdateIndex] = updateItem;
                 return true;
             }
             else
             {
-                var allItems = GetAllItems<T>();
-                var itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
-                var itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
-                var tableName = registeredModules[typeof(T)];
+                ObservableCollection<T> allItems = GetAllItems<T>();
+                T itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
+                int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
+                string tableName = registeredModules[typeof(T)];
 
                 allItems[itemToUpdateIndex] = updateItem;
                 return await SaveFileAsync(allItems, tableName);
@@ -310,8 +314,8 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override async Task WriteInMemoryCache<T>()
         {
-            var itemsToSave = inMemoryCache[typeof(T)];
-            var tableName = registeredModules[typeof(T)];
+            ObservableCollection<BaseItem> itemsToSave = inMemoryCache[typeof(T)];
+            string tableName = registeredModules[typeof(T)];
 
             await SaveFileAsync(itemsToSave, tableName);
         }
@@ -323,8 +327,8 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override async Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB)
         {
-            var itemsToSave = inMemoryCache[typeof(T)];
-            var tableName = registeredModules[typeof(T)];
+            ObservableCollection<BaseItem> itemsToSave = inMemoryCache[typeof(T)];
+            string tableName = registeredModules[typeof(T)];
 
             await SaveFileAsync(itemsToSave, tableName);
 

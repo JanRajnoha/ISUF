@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ISUF.Storage.DatabaseAccess
@@ -26,7 +25,7 @@ namespace ISUF.Storage.DatabaseAccess
         public DatabaseAccess(string connectionString, bool useInMemoryCache = false)
         {
             if (!CheckConnectionString(connectionString))
-                throw new ArgumentException("Connection string is not valid.");
+                throw new Base.Exceptions.ArgumentException("Connection string is not valid.");
 
             connectionsString = connectionString;
             this.useInMemoryCache = useInMemoryCache;
@@ -36,6 +35,8 @@ namespace ISUF.Storage.DatabaseAccess
         {
             if (!registeredModules.ContainsKey(moduleType))
                 registeredModules.Add(moduleType, tableName);
+            else
+                throw new Base.Exceptions.ArgumentException("Module with this name is already registered.");
         }
 
         public abstract void CreateDatabase();
@@ -46,11 +47,11 @@ namespace ISUF.Storage.DatabaseAccess
 
         public abstract bool CheckConnectionString(string connectionString);
 
-        public abstract void UpdateDatabaseTable(string tableName, Type tableType);
+        public abstract void UpdateDatabaseTable(Type tableType);
 
-        public abstract void CreateDatabaseTable(string tableName, Type tableType);
+        public abstract void CreateDatabaseTable(Type tableType);
 
-        public abstract void RemoveDatabaseTable(string tableName);
+        public abstract void RemoveDatabaseTable(Type tableType);
 
         public abstract ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
 

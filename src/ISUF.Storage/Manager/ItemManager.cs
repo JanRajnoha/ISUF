@@ -17,23 +17,25 @@ namespace ISUF.Storage.Manager
     /// <summary>
     /// Item manager class
     /// </summary>
-    /// <typeparam name="T">Type of item</typeparam>
     public class ItemManager : IItemManager
     {
         protected string id;
-
         protected string moduleName;
+        protected Type moduleItemType;
+        protected IDatabaseAccess dbAccess;
 
-        protected IDatabaseAccess dbAccess { get; set; }
-
+        // TODO dopsat
         /// <summary>
         /// Create instance of class for selected file and register UserLogChanged
         /// </summary>
         /// <param name="dbAccess">Database Access object for working with database</param>
+        /// <param name="moduleItemType"></param>
+        /// <param name="moduleName"></param>
         public ItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName)
         {
             this.dbAccess = dbAccess;
             this.moduleName = moduleName;
+            this.moduleItemType = moduleItemType;
 
             dbAccess.RegisterModule(moduleItemType, moduleName);
 
@@ -118,7 +120,7 @@ namespace ISUF.Storage.Manager
         /// Remove item from collection and save it
         /// </summary>
         /// <param name="detailedItem">Removed item</param>
-        public virtual async Task<bool> Delete<T>(T detailedItem) where T : BaseItem
+        public virtual async Task<bool> RemoveItem<T>(T detailedItem) where T : BaseItem
         {
             //UpdatePhraseList();
 
@@ -155,6 +157,21 @@ namespace ISUF.Storage.Manager
         public virtual T GetItem<T>(int ID) where T : BaseItem
         {
             return dbAccess.GetItem<T>(ID);
+        }
+
+        public void UpdateDatabaseTable()
+        {
+            dbAccess.UpdateDatabaseTable(moduleItemType);
+        }
+
+        public void CreateDatabaseTable()
+        {
+            dbAccess.CreateDatabaseTable(moduleItemType);
+        }
+
+        public void RemoveDatabaseTable()
+        {
+            dbAccess.RemoveDatabaseTable(moduleItemType);
         }
 
         /// <summary>

@@ -18,11 +18,11 @@ namespace ISUF.Interface
 
         void RemoveDatabase();
 
-        void UpdateDatabaseTable(string tableName, Type tableType);
+        void UpdateDatabaseTable(Type tableType);
 
-        void CreateDatabaseTable(string tableName, Type tableType);
+        void CreateDatabaseTable(Type tableType);
 
-        void RemoveDatabaseTable(string tableName);
+        void RemoveDatabaseTable(Type tableType);
 
         ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
 
