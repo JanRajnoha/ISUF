@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Base", "ISUF.Base\ISUF.Base.csproj", "{FD100127-1C0C-4B0F-B40B-96C3AA646009}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Base", "src\ISUF.Base\ISUF.Base.csproj", "{FD100127-1C0C-4B0F-B40B-96C3AA646009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Storage", "ISUF.Storage\ISUF.Storage.csproj", "{E570C06C-7F7B-4D13-B235-F7AD1189AAA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Storage", "src\ISUF.Storage\ISUF.Storage.csproj", "{E570C06C-7F7B-4D13-B235-F7AD1189AAA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.UI", "ISUF.UI\ISUF.UI.csproj", "{1F802733-F96C-4563-8511-CE62BB2FDEFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.UI", "src\ISUF.UI\ISUF.UI.csproj", "{1F802733-F96C-4563-8511-CE62BB2FDEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Win10", "ISUF.Win10\ISUF.Win10.csproj", "{DFA1A97F-3C51-461A-9CC4-6AEA6B9836B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Win10", "src\ISUF.Win10\ISUF.Win10.csproj", "{DFA1A97F-3C51-461A-9CC4-6AEA6B9836B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEFED1A6-E9B0-446B-97A5-D194F6A4BB8A}"
 	ProjectSection(SolutionItems) = preProject
@@ -23,11 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phases", "Phases", "{BE9D3A
 		Phase3.md = Phase3.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Security", "ISUF.Security\ISUF.Security.csproj", "{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Security", "src\ISUF.Security\ISUF.Security.csproj", "{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Interface", "ISUF.Interface\ISUF.Interface.csproj", "{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Interface", "src\ISUF.Interface\ISUF.Interface.csproj", "{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Tests", "ISUF.Tests\ISUF.Tests.csproj", "{B46DB974-7CA2-491A-8E87-C4B2AAB67878}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Tests", "src\ISUF.Tests\ISUF.Tests.csproj", "{B46DB974-7CA2-491A-8E87-C4B2AAB67878}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

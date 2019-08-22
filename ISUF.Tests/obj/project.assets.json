@@ -15,7 +15,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -24,10 +24,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -602,6 +602,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-arm": {
@@ -618,7 +662,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -627,10 +671,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -1480,6 +1524,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-arm-aot": {
@@ -1496,7 +1584,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -1505,10 +1593,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -2456,6 +2544,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-arm64-aot": {
@@ -2472,7 +2604,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -2481,10 +2613,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -3432,6 +3564,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-x64": {
@@ -3448,7 +3624,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -3457,10 +3633,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -4310,6 +4486,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-x64-aot": {
@@ -4326,7 +4546,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -4335,10 +4555,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -5286,6 +5506,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-x86": {
@@ -5302,7 +5566,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -5311,10 +5575,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -6164,6 +6428,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0.17763/win10-x86-aot": {
@@ -6180,7 +6488,7 @@
           "build/Microsoft.Net.Native.Compiler.targets": {}
         }
       },
-      "Microsoft.NET.Test.Sdk/16.0.1": {
+      "Microsoft.NET.Test.Sdk/15.9.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -6189,10 +6497,10 @@
           "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
         },
         "build": {
-          "build/uap10.0/Microsoft.NET.Test.Sdk.props": {}
+          "build/uap10.0/Microsoft.Net.Test.Sdk.props": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/Microsoft.NET.Test.Sdk.props": {}
+          "buildMultiTargeting/Microsoft.Net.Test.Sdk.props": {}
         }
       },
       "Microsoft.Net.UWPCoreRuntimeSdk/2.2.8": {
@@ -7140,6 +7448,50 @@
         "runtime": {
           "bin/placeholder/ISUF.Base.dll": {}
         }
+      },
+      "ISUF.Interface/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8",
+          "System.Collections": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Interface.dll": {}
+        }
+      },
+      "ISUF.Security/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.2.8"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Security.dll": {}
+        }
+      },
+      "ISUF.Storage/1.0.0": {
+        "type": "project",
+        "framework": "UAP,Version=v10.0.17763",
+        "dependencies": {
+          "ISUF.Base": "1.0.0",
+          "ISUF.Interface": "1.0.0",
+          "ISUF.Security": "1.0.0",
+          "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.9"
+        },
+        "compile": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ISUF.Storage.dll": {}
+        }
       }
     }
   },
@@ -7198,23 +7550,20 @@
         "tools/csc/mrt150.dll"
       ]
     },
-    "Microsoft.NET.Test.Sdk/16.0.1": {
-      "sha512": "ON7UIMIhAwrYb0ep+3ztoWVGvtfo88IhiHVnbyOiuVsi8bOMCdMPVcR+EX1WYGgKAd030pHRaxazMlkQ6uDyJQ==",
+    "Microsoft.NET.Test.Sdk/15.9.0": {
+      "sha512": "sGDhl1lTcyC4nbMA6vta+nADm50IEGnm9SW9+JNaie1zjtSmUdOPHu02+WK2SJND+3vbr9DWvgfi9qlSPfUAyw==",
       "type": "package",
-      "path": "microsoft.net.test.sdk/16.0.1",
+      "path": "microsoft.net.test.sdk/15.9.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "build/net40/Microsoft.NET.Test.Sdk.props",
-        "build/net40/Microsoft.NET.Test.Sdk.targets",
-        "build/netcoreapp1.0/Microsoft.NET.Test.Sdk.Program.cs",
-        "build/netcoreapp1.0/Microsoft.NET.Test.Sdk.Program.fs",
-        "build/netcoreapp1.0/Microsoft.NET.Test.Sdk.Program.vb",
-        "build/netcoreapp1.0/Microsoft.NET.Test.Sdk.props",
-        "build/netcoreapp1.0/Microsoft.NET.Test.Sdk.targets",
-        "build/uap10.0/Microsoft.NET.Test.Sdk.props",
-        "buildMultiTargeting/Microsoft.NET.Test.Sdk.props",
-        "microsoft.net.test.sdk.16.0.1.nupkg.sha512",
+        "build/net45/Microsoft.Net.Test.Sdk.props",
+        "build/net45/Microsoft.Net.Test.Sdk.targets",
+        "build/netcoreapp1.0/Microsoft.Net.Test.Sdk.props",
+        "build/netcoreapp1.0/Microsoft.Net.Test.Sdk.targets",
+        "build/uap10.0/Microsoft.Net.Test.Sdk.props",
+        "buildMultiTargeting/Microsoft.Net.Test.Sdk.props",
+        "microsoft.net.test.sdk.15.9.0.nupkg.sha512",
         "microsoft.net.test.sdk.nuspec"
       ]
     },
@@ -13389,6 +13738,7 @@
       "path": "system.runtime.interopservices.runtimeinformation/4.0.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -13921,36 +14271,53 @@
       "type": "project",
       "path": "../ISUF.Base/ISUF.Base.csproj",
       "msbuildProject": "../ISUF.Base/ISUF.Base.csproj"
+    },
+    "ISUF.Interface/1.0.0": {
+      "type": "project",
+      "path": "../ISUF.Interface/ISUF.Interface.csproj",
+      "msbuildProject": "../ISUF.Interface/ISUF.Interface.csproj"
+    },
+    "ISUF.Security/1.0.0": {
+      "type": "project",
+      "path": "../ISUF.Security/ISUF.Security.csproj",
+      "msbuildProject": "../ISUF.Security/ISUF.Security.csproj"
+    },
+    "ISUF.Storage/1.0.0": {
+      "type": "project",
+      "path": "../ISUF.Storage/ISUF.Storage.csproj",
+      "msbuildProject": "../ISUF.Storage/ISUF.Storage.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "UAP,Version=v10.0.17763": [
       "ISUF.Base >= 1.0.0",
+      "ISUF.Interface >= 1.0.0",
+      "ISUF.Storage >= 1.0.0",
       "MSTest.TestAdapter >= 1.4.0",
       "MSTest.TestFramework >= 1.4.0",
-      "Microsoft.NET.Test.Sdk >= 16.0.1",
+      "Microsoft.NET.Test.Sdk >= 15.9.0",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 6.2.8"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\JR\\.nuget\\packages\\": {},
+    "C:\\Users\\rajnoha\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\UWPNuGetPackages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\JR\\Documents\\Visual Studio 17\\Projects\\ISUF\\ISUF\\ISUF.Tests\\ISUF.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Tests\\ISUF.Tests.csproj",
       "projectName": "ISUF.Tests",
-      "projectPath": "C:\\Users\\JR\\Documents\\Visual Studio 17\\Projects\\ISUF\\ISUF\\ISUF.Tests\\ISUF.Tests.csproj",
-      "packagesPath": "C:\\Users\\JR\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\JR\\Documents\\Visual Studio 17\\Projects\\ISUF\\ISUF\\ISUF.Tests\\obj\\",
+      "projectPath": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Tests\\ISUF.Tests.csproj",
+      "packagesPath": "C:\\Users\\rajnoha\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\UWPNuGetPackages\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\JR\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\rajnoha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -13963,8 +14330,14 @@
       "frameworks": {
         "uap10.0.17763": {
           "projectReferences": {
-            "C:\\Users\\JR\\Documents\\Visual Studio 17\\Projects\\ISUF\\ISUF\\ISUF.Base\\ISUF.Base.csproj": {
-              "projectPath": "C:\\Users\\JR\\Documents\\Visual Studio 17\\Projects\\ISUF\\ISUF\\ISUF.Base\\ISUF.Base.csproj"
+            "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Base\\ISUF.Base.csproj": {
+              "projectPath": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Base\\ISUF.Base.csproj"
+            },
+            "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Interface\\ISUF.Interface.csproj": {
+              "projectPath": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Interface\\ISUF.Interface.csproj"
+            },
+            "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Storage\\ISUF.Storage.csproj": {
+              "projectPath": "C:\\Users\\rajnoha\\source\\repos\\JanRajnoha\\ISUF\\ISUF.Storage\\ISUF.Storage.csproj"
             }
           }
         }
@@ -13983,7 +14356,7 @@
           },
           "Microsoft.NET.Test.Sdk": {
             "target": "Package",
-            "version": "[16.0.1, )"
+            "version": "[15.9.0, )"
           },
           "Microsoft.NETCore.UniversalWindowsPlatform": {
             "target": "Package",
