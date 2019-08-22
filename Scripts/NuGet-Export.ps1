@@ -1,15 +1,24 @@
 $CurrentDir = $PSScriptRoot
+$NuGetDirectoryName = "NuGet"
 
+cd "$CurrentDir"
 cd..
 
-If (-Not (Test-Path ($CurrentDir + "\NuGet")))
+If (-Not (Test-Path ("\$NuGetDirectoryName")))
 {
-    New-Item -Path $CurrentDir -Name "NuGet" -ItemType "directory"
+    $NuGetDir = New-Item -Name "$NuGetDirectoryName" -ItemType "directory"
 }
 
+$NuGetDir =  "$(Get-Location)\$NuGetDirectoryName"
+
+cd "$NuGetDir"
+
+Remove-Item -path "$(Get-Location)\*" -Filter *.nupkg -Force
+
+cd..
 cd src
 
-$Directories = dir $CurrentDir -Directory
+$Directories = dir -Directory
 
 foreach ($Directory in $Directories)
 {
@@ -19,7 +28,7 @@ foreach ($Directory in $Directories)
     
     foreach ($File in $Files)
     {
-        C:\Users\JR\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$CurrentDir\NuGet"
+        C:\Users\rajnoha\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$NuGetDir"
     }
 
     cd..
