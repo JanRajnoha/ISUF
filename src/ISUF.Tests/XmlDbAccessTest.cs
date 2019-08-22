@@ -9,24 +9,26 @@ using ISUF.Storage.DatabaseAccess;
 using ISUF.Storage.Manager;
 using ISUF.Storage.Modules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Windows.Storage;
 
 namespace ISUF.Tests
 {
     [TestClass]
     public class XmlDbAccessTest : IDbAccessTest
     {
-        public StorageModuleManager storageTestManager { get; set; }
-        public StorageModule storageTestModule { get; set; }
-        public TestClass testItem { get; set; }
+        StorageModuleManager storageTestManager;
+        StorageModule storageTestModule;
+        StorageModule storageTestModule2;
 
         [TestInitialize]
         public void PrepareData()
         {
-            storageTestManager = new StorageModuleManager(typeof(XmlDbAccess), @"C:\Users\JR\Documents\Test", false);
+            storageTestManager = new StorageModuleManager(typeof(XmlDbAccess), ApplicationData.Current.LocalFolder.Path ,false);
             storageTestModule = new StorageModule(typeof(TestClass), typeof(ItemManager));
-            storageTestModule = new StorageModule(typeof(TestClass2), typeof(ItemManager));
+            storageTestModule2 = new StorageModule(typeof(TestClass2), typeof(ItemManager));
 
             storageTestManager.RegisterModule(storageTestModule);
+            storageTestManager.RegisterModule(storageTestModule2);
         }
 
         [TestMethod]
@@ -34,8 +36,8 @@ namespace ISUF.Tests
         {
             storageTestManager.CreateDatabase();
 
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass2).Name}.xml"));
         }
 
         [TestMethod]
@@ -43,8 +45,8 @@ namespace ISUF.Tests
         {
             storageTestManager.UpdateDatabase();
 
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass2).Name}.xml"));
         }
 
         [TestMethod]
@@ -52,8 +54,8 @@ namespace ISUF.Tests
         {
             storageTestManager.RemoveDatabase();
 
-            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
-            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass2).Name}"));
+            Assert.IsTrue(!File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
+            Assert.IsTrue(!File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass2).Name}.xml"));
         }
 
         [TestMethod]
@@ -62,7 +64,7 @@ namespace ISUF.Tests
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
             module.ItemManager.CreateDatabaseTable();
 
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
 
         [TestMethod]
@@ -71,7 +73,7 @@ namespace ISUF.Tests
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
             module.ItemManager.UpdateDatabaseTable();
 
-            Assert.IsTrue(File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
 
         [TestMethod]
@@ -80,20 +82,23 @@ namespace ISUF.Tests
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
             module.ItemManager.RemoveDatabaseTable();
 
-            Assert.IsTrue(!File.Exists($@"C:\Users\JR\Documents\Test\{typeof(TestClass).Name}"));
+            Assert.IsTrue(!File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
 
         [TestMethod]
         public void AddItemIntoDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            TestClass testItem = new TestClass();
-            testItem.IntProp = 5;
-            testItem.StringProp = "asd";
+            module.ItemManager.UpdateDatabaseTable();
+            TestClass testItem = new TestClass
+            {
+                IntProp = 5,
+                StringProp = "asd"
+            };
 
             module.ItemManager.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(0);
+            var item = module.ItemManager.GetItem<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
         }
@@ -102,20 +107,23 @@ namespace ISUF.Tests
         public void UpdateItemInDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            TestClass testItem = new TestClass();
-            testItem.IntProp = 5;
-            testItem.StringProp = "asd";
+            module.ItemManager.UpdateDatabaseTable();
+            TestClass testItem = new TestClass
+            {
+                IntProp = 5,
+                StringProp = "asd"
+            };
 
             module.ItemManager.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(0);
+            var item = module.ItemManager.GetItem<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
 
             item.IntProp = 999;
             module.ItemManager.AddItem(item);
 
-            var editedItem = module.ItemManager.GetItem<TestClass>(0);
+            var editedItem = module.ItemManager.GetItem<TestClass>(1);
 
             Assert.AreEqual(999, editedItem.IntProp);
         }
@@ -124,19 +132,22 @@ namespace ISUF.Tests
         public void RemoveItemFromDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            TestClass testItem = new TestClass();
-            testItem.IntProp = 5;
-            testItem.StringProp = "asd";
+            module.ItemManager.UpdateDatabaseTable();
+            TestClass testItem = new TestClass
+            {
+                IntProp = 5,
+                StringProp = "asd"
+            };
 
             module.ItemManager.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(0);
+            var item = module.ItemManager.GetItem<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
 
             module.ItemManager.RemoveItem(item);
 
-            var removedItem = module.ItemManager.GetItem<TestClass>(0);
+            var removedItem = module.ItemManager.GetItem<TestClass>(1);
 
             Assert.AreEqual(null, removedItem);
         }

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>ISUF.Storage</id>
-    <version>0.2.1-beta</version>
+    <version>0.2.2-beta</version>
     <title>ISUF Storage part</title>
     <authors>Jan Rajnoha</authors>
     <owners>Jan Rajnoha</owners>

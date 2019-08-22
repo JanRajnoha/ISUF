@@ -10,7 +10,7 @@ namespace ISUF.Interface
 {
     public interface IItemManager
     {
-        Task<bool> AddItem<T>(T item) where T : BaseItem;
+        bool AddItem<T>(T item) where T : BaseItem;
 
         bool AddItemAdditionCheck<T>(T item) where T : BaseItem;
 

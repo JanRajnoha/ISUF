@@ -35,3 +35,11 @@
 /ISUF.UI/obj
 /ISUF.Win10/obj
 /ISUF.Tests/obj
+/ISUF.Base/bin
+/ISUF.Interface/bin
+/ISUF.ItemStorage
+/ISUF.Security/bin
+/ISUF.Storage/bin
+/ISUF.Tests/bin/x86/Debug
+/ISUF.UI/bin
+/ISUF.Win10/bin

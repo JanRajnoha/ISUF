@@ -58,7 +58,7 @@ namespace ISUF.Storage.Manager
         /// <param name="item">New item</param>
         /// <param name="saveData">Save data after adding item into collection</param>
         /// <returns>True, if action was succesfull</returns>
-        public virtual async Task<bool> AddItem<T>(T item) where T : BaseItem
+        public virtual bool AddItem<T>(T item) where T : BaseItem
         {
             T newItem = item;
 
@@ -74,11 +74,11 @@ namespace ISUF.Storage.Manager
             {
                 newItem.ID = itemSource != null ? GetID(itemSource) : 0;
 
-                return await dbAccess.AddItemIntoDatabase(newItem);
+                return dbAccess.AddItemIntoDatabase(newItem).Result;
             }
             else
             {
-                return await dbAccess.UpdateItem(newItem);
+                return dbAccess.UpdateItem(newItem).Result;
             }
         }
 
@@ -105,7 +105,7 @@ namespace ISUF.Storage.Manager
             foreach (var item in itemList)
             {
                 if (checkItems)
-                    res &= await AddItem(item);
+                    res &= AddItem(item);
                 else
                     res &= await dbAccess.AddItemIntoDatabase(item);
 

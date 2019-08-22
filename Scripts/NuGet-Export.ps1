@@ -4,7 +4,7 @@ $NuGetDirectoryName = "NuGet"
 cd "$CurrentDir"
 cd..
 
-If (-Not (Test-Path ("\$NuGetDirectoryName")))
+If (-Not (Test-Path ("$NuGetDirectoryName")))
 {
     $NuGetDir = New-Item -Name "$NuGetDirectoryName" -ItemType "directory"
 }
@@ -28,7 +28,7 @@ foreach ($Directory in $Directories)
     
     foreach ($File in $Files)
     {
-        C:\Users\rajnoha\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$NuGetDir"
+        C:\Users\JR\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$NuGetDir"
     }
 
     cd..

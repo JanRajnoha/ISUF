@@ -23,7 +23,7 @@ namespace ISUF.Base.Modules
         public Module(Type moduleItemType)
         {
             this.moduleItemType = moduleItemType;
-            moduleName = moduleItemType.ToString();
+            moduleName = moduleItemType.Name;
         }
         
         /// <summary>

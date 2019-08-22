@@ -84,6 +84,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
             else
             {
+                allItems.Add(newItem);
                 string tableName = registeredModules[typeof(T)];
                 return await SaveFileAsync(allItems, tableName);
             }
@@ -154,7 +155,8 @@ namespace ISUF.Storage.DatabaseAccess
 
             catch (Exception e)
             {
-                throw new Base.Exceptions.Exception("Unhandled exception", e);
+                return new ObservableCollection<T>();
+                //throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -177,7 +179,7 @@ namespace ISUF.Storage.DatabaseAccess
 
                 XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));
 
-                using (Stream XmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync($@"{connectionsString}\{tableName}.xml", CreationCollisionOption.ReplaceExisting))
+                using (Stream XmlStream = File.OpenWrite($@"{connectionsString}\{tableName}.xml"))
                 {
                     Serializ.Serialize(XmlStream, itemStorage);
                 }
@@ -194,7 +196,8 @@ namespace ISUF.Storage.DatabaseAccess
 
             catch (Exception e)
             {
-                throw new Base.Exceptions.Exception("Unhandled exception", e);
+                return default;
+                //throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -229,7 +232,7 @@ namespace ISUF.Storage.DatabaseAccess
             if (tableName == null)
                 throw new Base.Exceptions.ArgumentException("Module is not registered");
 
-            if (File.Exists(connectionsString))
+            if (File.Exists($@"{connectionsString}\{tableName}.xml"))
                 File.Delete($@"{connectionsString}\{tableName}.xml");
         }
 
