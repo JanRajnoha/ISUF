@@ -125,6 +125,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\ItemStorage.cs" />
     <Compile Include="Storage\StorageChange.cs" />
+    <Compile Include="Templates\HistoryItem.cs" />
+    <Compile Include="Templates\UserItem.cs" />
     <EmbeddedResource Include="Properties\ISUF.Storage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
