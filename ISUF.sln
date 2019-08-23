@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28922.388
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Base", "src\ISUF.Base\ISUF.Base.csproj", "{FD100127-1C0C-4B0F-B40B-96C3AA646009}"
 EndProject
@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Win10", "src\ISUF.Win1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEFED1A6-E9B0-446B-97A5-D194F6A4BB8A}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
@@ -20,7 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phases", "Phases", "{BE9D3A
 	ProjectSection(SolutionItems) = preProject
 		Phases\Phase1.md = Phases\Phase1.md
 		Phases\Phase2.md = Phases\Phase2.md
-		Phase3.md = Phase3.md
+		Phases\Phase3.md = Phases\Phase3.md
+		Phase4.md = Phase4.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Security", "src\ISUF.Security\ISUF.Security.csproj", "{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}"
@@ -28,6 +30,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Interface", "src\ISUF.Interface\ISUF.Interface.csproj", "{C4BD9107-B2E0-4A47-ACCC-2399E1CF3DD4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Tests", "src\ISUF.Tests\ISUF.Tests.csproj", "{B46DB974-7CA2-491A-8E87-C4B2AAB67878}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{F039ABA7-5797-4603-BB25-4479E57FE482}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\NuGet-Export.ps1 = Scripts\NuGet-Export.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,35 +204,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BE9D3A19-D996-4217-A76C-7EE9491A54B4} = {CEFED1A6-E9B0-446B-97A5-D194F6A4BB8A}
+		{F039ABA7-5797-4603-BB25-4479E57FE482} = {CEFED1A6-E9B0-446B-97A5-D194F6A4BB8A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DF71509-32E5-461C-BD7A-5861A7A06D84}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://goid.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ISUF.Base\\ISUF.Base.csproj
-		SccProjectName1 = ISUF.Base
-		SccLocalPath1 = ISUF.Base
-		SccProjectUniqueName2 = ISUF.Interface\\ISUF.Interface.csproj
-		SccProjectName2 = ISUF.Interface
-		SccLocalPath2 = ISUF.Interface
-		SccProjectUniqueName3 = ISUF.Security\\ISUF.Security.csproj
-		SccProjectName3 = ISUF.Security
-		SccLocalPath3 = ISUF.Security
-		SccProjectUniqueName4 = ISUF.Storage\\ISUF.Storage.csproj
-		SccProjectName4 = ISUF.Storage
-		SccLocalPath4 = ISUF.Storage
-		SccProjectUniqueName5 = ISUF.Tests\\ISUF.Tests.csproj
-		SccProjectName5 = ISUF.Tests
-		SccLocalPath5 = ISUF.Tests
-		SccProjectUniqueName6 = ISUF.UI\\ISUF.UI.csproj
-		SccProjectName6 = ISUF.UI
-		SccLocalPath6 = ISUF.UI
-		SccProjectUniqueName7 = ISUF.Win10\\ISUF.Win10.csproj
-		SccProjectName7 = ISUF.Win10
-		SccLocalPath7 = ISUF.Win10
 	EndGlobalSection
 EndGlobal

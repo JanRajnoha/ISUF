@@ -25,11 +25,15 @@ foreach ($Directory in $Directories)
     cd $Directory
 
     $Files = Get-ChildItem -Filter *.csproj
-    
-    foreach ($File in $Files)
+	$NuspecFile = Get-ChildItem -Filter *.nuspec
+
+	if ($NuspecFile -ne $null)
     {
-        C:\Users\JR\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$NuGetDir"
-    }
+		foreach ($File in $Files)
+		{
+		    C:\Users\JR\Downloads\nuget.exe pack $File -IncludeReferencedProjects -OutputDirectory "$NuGetDir"
+		}
+	}
 
     cd..
 }
