@@ -17,7 +17,8 @@ namespace ISUF.Storage.Modules
 
         public IItemManager ItemManager { get; set; }
 
-        private IDatabaseAccess dbAccess;
+        protected IDatabaseAccess dbAccess;
+        protected string moduleTableName;
 
         public IDatabaseAccess DbAccess
         {
@@ -28,16 +29,21 @@ namespace ISUF.Storage.Modules
                 CreateItemManager();
             }
         }
-
-        // TODO: Přidat init možnost na zadání tableName
-        public StorageModule(Type moduleItemType, Type itemManagerType) : base(moduleItemType)
+        
+        public StorageModule(Type moduleItemType, Type itemManagerType, string moduleTableName = null) : base(moduleItemType)
         {
-            this.itemManagerType = itemManagerType;
+            SetModuleInfo(itemManagerType, moduleTableName);
         }
 
-        public StorageModule(Type moduleItemType, string moduleName, Type itemManagerType) : base(moduleItemType, moduleName)
+        public StorageModule(Type moduleItemType, string moduleName, Type itemManagerType, string moduleTableName = null) : base(moduleItemType, moduleName)
+        {
+            SetModuleInfo(itemManagerType, moduleTableName);
+        }
+
+        private void SetModuleInfo(Type itemManagerType, string moduleTableName)
         {
             this.itemManagerType = itemManagerType;
+            this.moduleTableName = moduleTableName ?? moduleName;
         }
 
         private void CreateItemManager()

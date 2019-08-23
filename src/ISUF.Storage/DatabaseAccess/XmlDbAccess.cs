@@ -171,7 +171,7 @@ namespace ISUF.Storage.DatabaseAccess
             {
                 string typeOfItem = nameof(T);
 
-                ItemStorage<T> itemStorage = new ItemStorage<T>()
+                ItemStorage<T> itemStorage = new ItemStorage<T>
                 {
                     Items = itemsToSave,
                     TypeOfItem = typeOfItem

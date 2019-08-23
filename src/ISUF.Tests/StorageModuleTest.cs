@@ -47,7 +47,7 @@ namespace ISUF.Tests
 
         [TestMethod]
         [Priority(5)]
-        public void CreateStorugeModuleTest()
+        public void CreateStorageModuleTest()
         {
             AbsolutePathXmlDbAccessTest();
 
@@ -60,11 +60,11 @@ namespace ISUF.Tests
 
         [TestMethod]
         [Priority(4)]
-        public void AddStorugeModuleTest()
+        public void AddStorageModuleTest()
         {
             AbsolutePathXmlDbAccessTest();
 
-            CreateStorugeModuleTest();
+            CreateStorageModuleTest();
 
             Assert.IsTrue(storageModuleEnum.ModuleCount() == 0);
 
