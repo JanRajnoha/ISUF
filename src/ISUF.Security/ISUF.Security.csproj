@@ -126,6 +126,7 @@
   <ItemGroup>
     <Compile Include="Crypting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecureSign.cs" />
     <EmbeddedResource Include="Properties\ISUF.Security.rd.xml" />
   </ItemGroup>
   <ItemGroup>
