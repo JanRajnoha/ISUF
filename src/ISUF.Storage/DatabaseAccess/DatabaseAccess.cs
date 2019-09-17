@@ -1,6 +1,7 @@
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Interface;
+using ISUF.Storage.Enum;
 using ISUF.Storage.Storage;
 using ISUF.Storage.Templates;
 using System;
@@ -17,7 +18,7 @@ namespace ISUF.Storage.DatabaseAccess
         protected bool useInMemoryCache;
         protected Dictionary<Type, ObservableCollection<BaseItem>> inMemoryCache = new Dictionary<Type, ObservableCollection<BaseItem>>();
         protected Dictionary<Type, string> registeredModules = new Dictionary<Type, string>();
-        protected List<HistoryItem> dbChanges = new List<HistoryItem>();
+        protected List<StorageChange> dbChanges = new List<StorageChange>();
         protected Type historyModuleType;
         protected Type userModuleType;
 
@@ -46,23 +47,101 @@ namespace ISUF.Storage.DatabaseAccess
 
         public abstract bool CheckConnectionString(string connectionString);
 
-        public abstract void UpdateDatabaseTable(Type tableType);
+        public virtual void UpdateDatabaseTable(Type tableType)
+        {
+            StorageChange addStorageChange = new StorageChange()
+            {
+                ID = -1,
+                TypeOfChange = DbTypeOfChange.UpdateTable,
+                ModuleType = tableType,
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
 
-        public abstract void CreateDatabaseTable(Type tableType);
+            dbChanges.Add(addStorageChange);
+        }
 
-        public abstract void RemoveDatabaseTable(Type tableType);
+        public virtual void CreateDatabaseTable(Type tableType)
+        {
+            StorageChange addStorageChange = new StorageChange()
+            {
+                ID = -1,
+                TypeOfChange = DbTypeOfChange.CreateTable,
+                ModuleType = tableType,
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
+
+            dbChanges.Add(addStorageChange);
+        }
+
+        public virtual void RemoveDatabaseTable(Type tableType)
+        {
+            StorageChange addStorageChange = new StorageChange()
+            {
+                ID = -1,
+                TypeOfChange = DbTypeOfChange.RemoveTable,
+                ModuleType = tableType,
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
+
+            dbChanges.Add(addStorageChange);
+        }
 
         public abstract ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
 
         public abstract T GetItem<T>(int ID) where T : BaseItem;
 
-        public abstract Task<bool> UpdateItem<T>(T updateItem) where T : BaseItem;
+        public virtual async Task<bool> EditItemInDatabase<T>(T editedItem) where T : BaseItem
+        {
+            StorageChange editStorageChange = new StorageChange()
+            {
+                ID = editedItem.ID,
+                TypeOfChange = DbTypeOfChange.Edit,
+                ModuleType = typeof(T),
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
 
-        public abstract Task<bool> AddItemIntoDatabase<T>(T newItem) where T : BaseItem;
+            dbChanges.Add(editStorageChange);
 
-        public abstract void RemoveAllRows();
+            return true;
+        }
 
-        public abstract Task<bool> RemoveRow<T>(int ID) where T : BaseItem;
+        public virtual async Task<bool> AddItemIntoDatabase<T>(T newItem) where T : BaseItem
+        {
+            StorageChange addStorageChange = new StorageChange()
+            {
+                ID = newItem.ID,
+                TypeOfChange = DbTypeOfChange.Add,
+                ModuleType = typeof(T),
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
+
+            dbChanges.Add(addStorageChange);
+
+            return true;
+        }
+
+        public abstract void RemoveAllItemsFromDatabase();
+
+        public virtual async Task<bool> RemoveItemFromDatabase<T>(int ID) where T : BaseItem
+        {
+            StorageChange removeStorageChange = new StorageChange()
+            {
+                ID = ID,
+                TypeOfChange = DbTypeOfChange.Remove,
+                ModuleType = typeof(T),
+                InMemoryChange = useInMemoryCache,
+                ChangeSaved = !useInMemoryCache,
+            };
+
+            dbChanges.Add(removeStorageChange);
+
+            return true;
+        }
 
         //protected abstract  ObservableCollection<T> GetFinalCollection<T>() where T : BaseItem;
 
@@ -133,6 +212,6 @@ namespace ISUF.Storage.DatabaseAccess
             this.historyModuleType = historyModuleType;
         }
 
-        public abstract void WriteHistory();
+        //public abstract void WriteHistory();
     }
 }

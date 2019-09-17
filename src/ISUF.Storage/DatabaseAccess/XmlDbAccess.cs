@@ -64,15 +64,9 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override async Task<bool> AddItemIntoDatabase<T>(T newItem)
         {
+            base.AddItemIntoDatabase(newItem);
+
             ObservableCollection<T> allItems = GetAllItems<T>();
-
-            HistoryItem addStorageChange = new HistoryItem(newItem.ID, DbTypeOfChange.Add, typeof(T).Name)
-            {
-                InMemoryChange = useInMemoryCache,
-                ChangeSaved = !useInMemoryCache,
-            };
-
-            dbChanges.Add(addStorageChange);
 
             if (useInMemoryCache)
             {
@@ -90,6 +84,8 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override void CreateDatabaseTable(Type tableType)
         {
+            base.CreateDatabaseTable(tableType);
+
             string tableName = registeredModules[tableType];
 
             if (tableName == null)
@@ -209,7 +205,7 @@ namespace ISUF.Storage.DatabaseAccess
             return GetItem<T>(ID) != null;
         }
 
-        public override void RemoveAllRows()
+        public override void RemoveAllItemsFromDatabase()
         {
             FileStream clearedFile = null;
 
@@ -225,6 +221,8 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override void RemoveDatabaseTable(Type tableType)
         {
+            base.RemoveDatabaseTable(tableType);
+
             string tableName = registeredModules[tableType];
 
             if (tableName == null)
@@ -234,8 +232,10 @@ namespace ISUF.Storage.DatabaseAccess
                 File.Delete($@"{connectionsString}\{tableName}.xml");
         }
 
-        public override async Task<bool> RemoveRow<T>(int ID)
+        public override async Task<bool> RemoveItemFromDatabase<T>(int ID)
         {
+            base.RemoveItemFromDatabase<T>(ID);
+
             if (useInMemoryCache)
             {
                 ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
@@ -281,29 +281,33 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override void UpdateDatabaseTable(Type tableType)
         {
+            base.UpdateDatabaseTable(tableType);
+
             RemoveDatabaseTable(tableType);
             CreateDatabaseTable(tableType);
         }
 
-        public override async Task<bool> UpdateItem<T>(T updateItem)
+        public override async Task<bool> EditItemInDatabase<T>(T editedItem)
         {
+            base.EditItemInDatabase(editedItem);
+
             if (useInMemoryCache)
             {
                 ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
-                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
+                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.ID == editedItem.ID);
                 int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
 
-                allItems[itemToUpdateIndex] = updateItem;
+                allItems[itemToUpdateIndex] = editedItem;
                 return true;
             }
             else
             {
                 ObservableCollection<T> allItems = GetAllItems<T>();
-                T itemToUpdate = allItems.FirstOrDefault(x => x.ID == updateItem.ID);
+                T itemToUpdate = allItems.FirstOrDefault(x => x.ID == editedItem.ID);
                 int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
                 string tableName = registeredModules[typeof(T)];
 
-                allItems[itemToUpdateIndex] = updateItem;
+                allItems[itemToUpdateIndex] = editedItem;
                 return await SaveFileAsync(allItems, tableName);
             }
         }
@@ -332,16 +336,16 @@ namespace ISUF.Storage.DatabaseAccess
             return await ReadFileAsync<T>(tableName);
         }
 
-        public override async void WriteHistory()
-        {
-            var historyTableName = registeredModules[historyModuleType];
-            var allHistoryRecords = await ReadFileAsync<HistoryItem>(historyTableName);
+        //public override async void WriteHistory()
+        //{
+        //    var historyTableName = registeredModules[historyModuleType];
+        //    var allHistoryRecords = await ReadFileAsync<HistoryItem>(historyTableName);
 
-            foreach (var historyItem in dbChanges.Where(x => x.ChangeSaved))
-            {
-                allHistoryRecords.Add(historyItem);
-                dbChanges.Remove(historyItem);
-            }
-        }
+        //    foreach (var historyItem in dbChanges.Where(x => x.ChangeSaved))
+        //    {
+        //        allHistoryRecords.Add(historyItem);
+        //        dbChanges.Remove(historyItem);
+        //    }
+        //}
     }
 }

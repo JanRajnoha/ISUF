@@ -12,7 +12,7 @@ namespace ISUF.Storage.Enum
         Edit,
         Remove,
         CreateTable,
-        EditTable,
+        UpdateTable,
         RemoveTable
     }
 }

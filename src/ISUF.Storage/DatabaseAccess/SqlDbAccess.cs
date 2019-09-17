@@ -70,7 +70,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void RemoveAllRows()
+        public override void RemoveAllItemsFromDatabase()
         {
             throw new NotImplementedException();
         }
@@ -80,7 +80,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override Task<bool> RemoveRow<T>(int ID)
+        public override Task<bool> RemoveItemFromDatabase<T>(int ID)
         {
             throw new NotImplementedException();
         }
@@ -95,7 +95,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override Task<bool> UpdateItem<T>(T updateItem)
+        public override Task<bool> EditItemInDatabase<T>(T editedItem)
         {
             throw new NotImplementedException();
         }
@@ -120,9 +120,9 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override void WriteHistory()
-        {
-            throw new NotImplementedException();
-        }
+        //public override void WriteHistory()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

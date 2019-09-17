@@ -28,13 +28,13 @@ namespace ISUF.Interface
 
         T GetItem<T>(int ID) where T : BaseItem;
 
-        Task<bool> UpdateItem<T>(T updateItem) where T : BaseItem;
+        Task<bool> EditItemInDatabase<T>(T editedItem) where T : BaseItem;
 
         Task<bool> AddItemIntoDatabase<T>(T newItem) where T : BaseItem;
 
-        void RemoveAllRows();
+        void RemoveAllItemsFromDatabase();
 
-        Task<bool> RemoveRow<T>(int ID) where T : BaseItem;
+        Task<bool> RemoveItemFromDatabase<T>(int ID) where T : BaseItem;
 
         bool IsItemInDatabase<T>(int ID) where T : BaseItem;
 
@@ -54,6 +54,6 @@ namespace ISUF.Interface
 
         void RegisterHistoryModule(Type historyModuleType, IItemManager historyManager);
 
-        void WriteHistory();
+        //void WriteHistory();
     }
 }

@@ -3,8 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using Windows.ApplicationModel.UserActivities;
 using ISUF.Base.Template;
 using ISUF.Base.Settings;
 using ISUF.Security;
@@ -78,7 +76,7 @@ namespace ISUF.Storage.Manager
             }
             else
             {
-                return dbAccess.UpdateItem(newItem).Result;
+                return dbAccess.EditItemInDatabase(newItem).Result;
             }
         }
 
@@ -124,7 +122,7 @@ namespace ISUF.Storage.Manager
         {
             //UpdatePhraseList();
 
-            return await dbAccess.RemoveRow<T>(detailedItem.ID);
+            return await dbAccess.RemoveItemFromDatabase<T>(detailedItem.ID);
         }
 
         /// <summary>

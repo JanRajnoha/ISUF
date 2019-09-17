@@ -125,7 +125,7 @@ namespace ISUF.Storage.Manager
             //else
             //    ScheduleToastNotification(ItemsSource[Index]);
 
-            return await dbAccess.UpdateItem(item);
+            return await dbAccess.EditItemInDatabase(item);
         }
     }
 }
