@@ -12,7 +12,7 @@ namespace ISUF.Storage.Modules
 {
     public partial class StorageModuleManager : ModuleManager
     {
-        private IDatabaseAccess dbAccess;
+        protected IDatabaseAccess dbAccess;
 
         public StorageModuleManager(Type dbAccessType, string connectionString = "", bool useCache = false) : base()
         {
@@ -27,7 +27,7 @@ namespace ISUF.Storage.Modules
         public override bool RegisterModule(Module module)
         {
             var storageModule = (StorageModule)module;
-            storageModule.DbAccess = dbAccess;
+            storageModule.SetDbAccess(dbAccess);
 
             return base.RegisterModule(module);
         }

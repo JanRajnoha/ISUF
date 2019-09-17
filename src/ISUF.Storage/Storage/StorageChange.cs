@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Storage
 {
+    [Obsolete("Don't use", true)]
     public class StorageChange
     {
         public int ID { get; set; }

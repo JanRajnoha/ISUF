@@ -49,5 +49,11 @@ namespace ISUF.Interface
         bool HasInMemoryCacheItem<T>() where T : BaseItem;
 
         bool CreateInMemoryCacheItem<T>() where T : BaseItem;
+
+        void RegisterUserModule(Type userModuleType);
+
+        void RegisterHistoryModule(Type historyModuleType, IItemManager historyManager);
+
+        void WriteHistory();
     }
 }

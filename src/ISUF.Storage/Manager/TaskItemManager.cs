@@ -70,7 +70,7 @@ namespace ISUF.Storage.Manager
             if (ScheduledToastList.Select(x => x.Id).Contains(shortTypeName + detailedItem.ID))
                 ToastNotificationManager.CreateToastNotifier().RemoveFromSchedule(ScheduledToastList.FirstOrDefault(x => x.Id == (shortTypeName + detailedItem.ID)));
 
-            return null; // TODO
+            return null; // TODO - Insp, co to je a proč todo
         }
 
         /// <summary>

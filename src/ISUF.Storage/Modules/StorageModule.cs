@@ -1,13 +1,6 @@
 ﻿using ISUF.Base.Modules;
-using ISUF.Base.Template;
 using ISUF.Interface;
-using ISUF.Storage.DatabaseAccess;
-using ISUF.Storage.Manager;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ISUF.Storage.Modules
 {
@@ -20,16 +13,6 @@ namespace ISUF.Storage.Modules
         protected IDatabaseAccess dbAccess;
         protected string moduleTableName;
 
-        public IDatabaseAccess DbAccess
-        {
-            get => dbAccess;
-            set
-            {
-                dbAccess = value;
-                CreateItemManager();
-            }
-        }
-        
         public StorageModule(Type moduleItemType, Type itemManagerType, string moduleTableName = null) : base(moduleItemType)
         {
             SetModuleInfo(itemManagerType, moduleTableName);
@@ -46,9 +29,12 @@ namespace ISUF.Storage.Modules
             this.moduleTableName = moduleTableName ?? moduleName;
         }
 
-        private void CreateItemManager()
+        private void CreateItemManager() => ItemManager = (IItemManager)Activator.CreateInstance(itemManagerType, dbAccess, moduleItemType, moduleName);
+
+        public void SetDbAccess(IDatabaseAccess dbAccess)
         {
-            ItemManager = (IItemManager)Activator.CreateInstance(itemManagerType, DbAccess, moduleItemType, moduleName);
+            this.dbAccess = dbAccess;
+            CreateItemManager();
         }
     }
 }

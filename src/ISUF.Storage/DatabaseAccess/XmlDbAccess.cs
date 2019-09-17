@@ -2,6 +2,7 @@ using ISUF.Base.Service;
 using ISUF.Base.Template;
 using ISUF.Storage.Enum;
 using ISUF.Storage.Storage;
+using ISUF.Storage.Templates;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,13 +66,10 @@ namespace ISUF.Storage.DatabaseAccess
         {
             ObservableCollection<T> allItems = GetAllItems<T>();
 
-            StorageChange addStorageChange = new StorageChange()
+            HistoryItem addStorageChange = new HistoryItem(newItem.ID, DbTypeOfChange.Add, typeof(T).Name)
             {
                 InMemoryChange = useInMemoryCache,
-                ModuleType = typeof(T),
-                ID = newItem.ID,
                 ChangeSaved = !useInMemoryCache,
-                TypeOfChange = DbTypeOfChange.Add
             };
 
             dbChanges.Add(addStorageChange);
@@ -310,11 +308,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        //protected override ObservableCollection<T> GetFinalCollection<T>()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+        //TODO dopsat historii
         public override async Task WriteInMemoryCache<T>()
         {
             ObservableCollection<BaseItem> itemsToSave = inMemoryCache[typeof(T)];
@@ -336,6 +330,18 @@ namespace ISUF.Storage.DatabaseAccess
             await SaveFileAsync(itemsToSave, tableName);
 
             return await ReadFileAsync<T>(tableName);
+        }
+
+        public override async void WriteHistory()
+        {
+            var historyTableName = registeredModules[historyModuleType];
+            var allHistoryRecords = await ReadFileAsync<HistoryItem>(historyTableName);
+
+            foreach (var historyItem in dbChanges.Where(x => x.ChangeSaved))
+            {
+                allHistoryRecords.Add(historyItem);
+                dbChanges.Remove(historyItem);
+            }
         }
     }
 }

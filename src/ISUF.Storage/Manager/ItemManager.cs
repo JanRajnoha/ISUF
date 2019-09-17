@@ -24,7 +24,7 @@ namespace ISUF.Storage.Manager
         protected Type moduleItemType;
         protected IDatabaseAccess dbAccess;
 
-        // TODO dopsat
+        // TODO dopsat dokumentaci
         /// <summary>
         /// Create instance of class for selected file and register UserLogChanged
         /// </summary>
@@ -159,17 +159,17 @@ namespace ISUF.Storage.Manager
             return dbAccess.GetItem<T>(ID);
         }
 
-        public void UpdateDatabaseTable()
+        public virtual void UpdateDatabaseTable()
         {
             dbAccess.UpdateDatabaseTable(moduleItemType);
         }
 
-        public void CreateDatabaseTable()
+        public virtual void CreateDatabaseTable()
         {
             dbAccess.CreateDatabaseTable(moduleItemType);
         }
 
-        public void RemoveDatabaseTable()
+        public virtual void RemoveDatabaseTable()
         {
             dbAccess.RemoveDatabaseTable(moduleItemType);
         }

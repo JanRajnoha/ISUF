@@ -2,6 +2,7 @@ using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Interface;
 using ISUF.Storage.Storage;
+using ISUF.Storage.Templates;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,14 +14,12 @@ namespace ISUF.Storage.DatabaseAccess
     public abstract class DatabaseAccess : IDatabaseAccess
     {
         protected string connectionsString;
-
         protected bool useInMemoryCache;
-
         protected Dictionary<Type, ObservableCollection<BaseItem>> inMemoryCache = new Dictionary<Type, ObservableCollection<BaseItem>>();
-
         protected Dictionary<Type, string> registeredModules = new Dictionary<Type, string>();
-
-        protected List<StorageChange> dbChanges = new List<StorageChange>();
+        protected List<HistoryItem> dbChanges = new List<HistoryItem>();
+        protected Type historyModuleType;
+        protected Type userModuleType;
 
         public DatabaseAccess(string connectionString, bool useInMemoryCache = false)
         {
@@ -117,5 +116,23 @@ namespace ISUF.Storage.DatabaseAccess
             else
                 return false;
         }
+
+        public void RegisterUserModule(Type userModuleType)
+        {
+            if (this.userModuleType != null)
+                throw new Base.Exceptions.ArgumentException($"User module was defined. Defined user module: {this.userModuleType.Name}");
+
+            this.userModuleType = userModuleType;
+        }
+
+        public void RegisterHistoryModule(Type historyModuleType, IItemManager historyManager)
+        {
+            if (this.historyModuleType != null)
+                throw new Base.Exceptions.ArgumentException($"History module was defined. Defined hisory module: {this.historyModuleType.Name}");
+
+            this.historyModuleType = historyModuleType;
+        }
+
+        public abstract void WriteHistory();
     }
 }

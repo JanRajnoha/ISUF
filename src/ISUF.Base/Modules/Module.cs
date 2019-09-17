@@ -15,6 +15,7 @@ namespace ISUF.Base.Modules
     {
         protected Type moduleItemType { get; set; }
         protected string moduleName { get; set; }
+        protected ModuleManager moduleManager { get; set; }
 
         /// <summary>
         /// Create module by type. 
@@ -53,5 +54,8 @@ namespace ISUF.Base.Modules
         {
             return moduleItemType;
         }
+
+        public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;
+
     }
 }

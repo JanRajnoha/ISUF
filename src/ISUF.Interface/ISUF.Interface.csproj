@@ -130,6 +130,7 @@
     <Compile Include="IModuleDetailVMBase.cs" />
     <Compile Include="IModuleItemVMBase.cs" />
     <Compile Include="IModuleVMBase.cs" />
+    <Compile Include="IStorageModuleStorageAccess.cs" />
     <Compile Include="IStorageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISUF.Interface.rd.xml" />

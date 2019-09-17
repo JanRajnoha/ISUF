@@ -5,14 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
-    class HistoryItem : BaseItem
+    public class HistoryItem : BaseItem
     {
         public int ItemID { get; set; }
         public DbTypeOfChange TypeOfChange { get; set; }
         public string ModuleType { get; set; }
+
+        [XmlIgnore]
+        public bool ChangeSaved { get; set; }
+
+        [XmlIgnore]
+        public bool InMemoryChange { get; set; }
 
         public HistoryItem(int itemID, DbTypeOfChange typeOfChange, string moduleType)
         {

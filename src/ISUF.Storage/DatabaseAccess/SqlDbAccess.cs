@@ -119,5 +119,10 @@ namespace ISUF.Storage.DatabaseAccess
         {
             throw new NotImplementedException();
         }
+
+        public override void WriteHistory()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

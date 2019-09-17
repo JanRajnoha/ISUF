@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
-    public class ModuleManager
-        : IModuleEnum
+    public class ModuleManager : IModuleEnum
     {
         protected ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 
@@ -156,6 +155,8 @@ namespace ISUF.Base.Modules
         {
             if (ExistModule(module))
                 return false;
+
+            module.SetModuleManager(this);
 
             registeredModules.Add(module);
 
