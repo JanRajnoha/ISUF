@@ -9,25 +9,25 @@ using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
-    class UserItem : BaseItem
+    public class UserItem : BaseItem
     {
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public byte[] Hash { get; set; }
         public byte[] Salt { get; set; }
 
         [XmlIgnore]
         public string Password { get; set; } = string.Empty;
 
-        public UserItem(string userName, byte[] hash, byte[] salt)
+        public UserItem(string username, byte[] hash, byte[] salt)
         {
-            UserName = userName;
+            Username = username;
             Hash = hash;
             Salt = salt;
         }
 
         public UserItem(UserItem userItem) : base(userItem)
         {
-            UserName = userItem.UserName;
+            Username = userItem.Username;
             Hash = userItem.Hash;
             Salt = userItem.Salt;
             Password = userItem.Password;
