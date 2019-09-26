@@ -12,7 +12,7 @@ namespace ISUF.Storage.Modules
     public class UserModule : StorageModule
     {
         //public int CurrentUserSession { get; private set; }
-        public int CurrentUserId { get; private set; }
+        public int CurrentUserId { get; private set; } = -1;
 
         public UserModule(Type moduleItemType, Type itemManagerType, string moduleTableName = null) : base(moduleItemType, itemManagerType, moduleTableName)
         {
@@ -24,11 +24,11 @@ namespace ISUF.Storage.Modules
 
         public bool SignInUser(string username, string password)
         {
-            var user = ((UserItemManager)ItemManager).GetUserByUsername<UserItem>(username);
+            var user = ((UserItemManager)itemManager).GetUserByUsername<UserItem>(username);
 
             if (SecureSign.Decrypt(user.Salt, user.Hash, password))
             {
-                CurrentUserId = user.ID;
+                CurrentUserId = user.Id;
                 //CrateUserSession();
             }
             else return false;
@@ -39,13 +39,24 @@ namespace ISUF.Storage.Modules
         public bool RegisterUser(string username, string password)
         {
             // toto predelat na registraci
-            var user = ((UserItemManager)ItemManager).GetUserByUsername<UserItem>(username);
+            var user = ((UserItemManager)itemManager).GetUserByUsername<UserItem>(username);
 
-            CurrentUserId = user.ID;
+            CurrentUserId = user.Id;
             //CrateUserSession();
 
             return true;
         }
+
+        public void SignOutUser()
+        {
+            CurrentUserId = -1;
+        }
+
+        public int GetCurrentUserId()
+        {
+            return CurrentUserId;
+        }
+
 
         //private void CrateUserSession()
         //{

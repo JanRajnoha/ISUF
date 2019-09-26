@@ -118,6 +118,7 @@
     <Compile Include="DatabaseAccess\SqlDbAccess.cs" />
     <Compile Include="DatabaseAccess\XmlDbAccess.cs" />
     <Compile Include="Enum\DbTypeOfChange.cs" />
+    <Compile Include="Enum\UserLogType.cs" />
     <Compile Include="Manager\ItemManager.cs" />
     <Compile Include="Manager\StorageManager.cs" />
     <Compile Include="Manager\TaskItemManager.cs" />

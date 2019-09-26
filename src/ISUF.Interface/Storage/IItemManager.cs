@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ISUF.Interface
+namespace ISUF.Interface.Storage
 {
     public interface IItemManager
     {
@@ -16,9 +16,13 @@ namespace ISUF.Interface
 
         Task<bool> AddItemRange<T>(List<T> item, bool checkItems = true) where T : BaseItem;
 
-        Task<List<string>> GetItemsNameList<T>() where T : BaseItem;
+        List<string> GetItemsNameList<T>() where T : BaseItem;
+
+        Task<ObservableCollection<T>> GetAllItems<T>() where T : BaseItem;
 
         Task<bool> RemoveItem<T>(T detailedItem) where T : BaseItem;
+
+        Task<bool> RemoveItem<T>(int id) where T : BaseItem;
 
         T GetItem<T>(int ID) where T : BaseItem;
 

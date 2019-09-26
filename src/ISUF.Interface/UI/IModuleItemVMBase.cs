@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ISUF.Interface
+namespace ISUF.Interface.UI
 {
     public interface IModuleItemVMBase<T>
     {

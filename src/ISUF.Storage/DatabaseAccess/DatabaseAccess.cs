@@ -1,9 +1,8 @@
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
-using ISUF.Interface;
 using ISUF.Storage.Enum;
+using ISUF.Interface.Storage;
 using ISUF.Storage.Storage;
-using ISUF.Storage.Templates;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -97,7 +96,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             StorageChange editStorageChange = new StorageChange()
             {
-                ID = editedItem.ID,
+                ID = editedItem.Id,
                 TypeOfChange = DbTypeOfChange.Edit,
                 ModuleType = typeof(T),
                 InMemoryChange = useInMemoryCache,
@@ -113,7 +112,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             StorageChange addStorageChange = new StorageChange()
             {
-                ID = newItem.ID,
+                ID = newItem.Id,
                 TypeOfChange = DbTypeOfChange.Add,
                 ModuleType = typeof(T),
                 InMemoryChange = useInMemoryCache,
@@ -157,7 +156,7 @@ namespace ISUF.Storage.DatabaseAccess
             if (useInMemoryCache)
                 return inMemoryCache[typeof(T)].Contains(x);
             else
-                return IsItemInDatabase<T>(x.ID);
+                return IsItemInDatabase<T>(x.Id);
         }
 
         public abstract Task WriteInMemoryCache<T>() where T : BaseItem;

@@ -1,12 +1,7 @@
 ﻿using ISUF.Base.Classes;
 using ISUF.Base.Messages;
 using ISUF.Base.Template;
-using ISUF.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ISUF.Interface.UI;
 using System.Windows.Input;
 using Template10.Mvvm;
 

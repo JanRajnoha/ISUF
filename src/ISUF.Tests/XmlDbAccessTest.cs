@@ -62,7 +62,7 @@ namespace ISUF.Tests
         public void CreateTable()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.CreateDatabaseTable();
+            module.CreateDatabaseTable();
 
             Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
@@ -71,7 +71,7 @@ namespace ISUF.Tests
         public void UpdateTable()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.UpdateDatabaseTable();
+            module.UpdateDatabaseTable();
 
             Assert.IsTrue(File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
@@ -80,7 +80,7 @@ namespace ISUF.Tests
         public void RemoveTable()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.RemoveDatabaseTable();
+            module.RemoveDatabaseTable();
 
             Assert.IsTrue(!File.Exists($@"{ApplicationData.Current.LocalFolder.Path}\{typeof(TestClass).Name}.xml"));
         }
@@ -89,16 +89,16 @@ namespace ISUF.Tests
         public void AddItemIntoDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.UpdateDatabaseTable();
+            module.UpdateDatabaseTable();
             TestClass testItem = new TestClass
             {
                 IntProp = 5,
                 StringProp = "asd"
             };
 
-            module.ItemManager.AddItem(testItem);
+            module.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(1);
+            var item = module.GetItemById<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
         }
@@ -107,23 +107,23 @@ namespace ISUF.Tests
         public void UpdateItemInDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.UpdateDatabaseTable();
+            module.UpdateDatabaseTable();
             TestClass testItem = new TestClass
             {
                 IntProp = 5,
                 StringProp = "asd"
             };
 
-            module.ItemManager.AddItem(testItem);
+            module.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(1);
+            var item = module.GetItemById<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
 
             item.IntProp = 999;
-            module.ItemManager.AddItem(item);
+            module.AddItem(item);
 
-            var editedItem = module.ItemManager.GetItem<TestClass>(1);
+            var editedItem = module.GetItemById<TestClass>(1);
 
             Assert.AreEqual(999, editedItem.IntProp);
         }
@@ -132,22 +132,22 @@ namespace ISUF.Tests
         public void RemoveItemFromDatabase()
         {
             StorageModule module = (StorageModule)storageTestManager.GetModule(typeof(TestClass));
-            module.ItemManager.UpdateDatabaseTable();
+            module.UpdateDatabaseTable();
             TestClass testItem = new TestClass
             {
                 IntProp = 5,
                 StringProp = "asd"
             };
 
-            module.ItemManager.AddItem(testItem);
+            module.AddItem(testItem);
 
-            var item = module.ItemManager.GetItem<TestClass>(1);
+            var item = module.GetItemById<TestClass>(1);
 
             Assert.AreEqual("asd", item.StringProp);
 
-            module.ItemManager.RemoveItem(item);
+            module.RemoveItemById(item.Id);
 
-            var removedItem = module.ItemManager.GetItem<TestClass>(1);
+            var removedItem = module.GetItemById<TestClass>(1);
 
             Assert.AreEqual(null, removedItem);
         }

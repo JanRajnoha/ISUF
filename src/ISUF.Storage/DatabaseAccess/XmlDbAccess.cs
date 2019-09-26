@@ -197,7 +197,7 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override T GetItem<T>(int ID)
         {
-            return GetAllItems<T>().FirstOrDefault(x => x.ID == ID);
+            return GetAllItems<T>().FirstOrDefault(x => x.Id == ID);
         }
 
         public override bool IsItemInDatabase<T>(int ID)
@@ -239,7 +239,7 @@ namespace ISUF.Storage.DatabaseAccess
             if (useInMemoryCache)
             {
                 ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
-                BaseItem itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
+                BaseItem itemToRemove = allItems.FirstOrDefault(x => x.Id == ID);
 
                 if (itemToRemove != null)
                 {
@@ -252,7 +252,7 @@ namespace ISUF.Storage.DatabaseAccess
             else
             {
                 ObservableCollection<T> allItems = GetAllItems<T>();
-                T itemToRemove = allItems.FirstOrDefault(x => x.ID == ID);
+                T itemToRemove = allItems.FirstOrDefault(x => x.Id == ID);
 
                 if (itemToRemove != null)
                 {
@@ -294,7 +294,7 @@ namespace ISUF.Storage.DatabaseAccess
             if (useInMemoryCache)
             {
                 ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
-                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.ID == editedItem.ID);
+                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.Id == editedItem.Id);
                 int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
 
                 allItems[itemToUpdateIndex] = editedItem;
@@ -303,7 +303,7 @@ namespace ISUF.Storage.DatabaseAccess
             else
             {
                 ObservableCollection<T> allItems = GetAllItems<T>();
-                T itemToUpdate = allItems.FirstOrDefault(x => x.ID == editedItem.ID);
+                T itemToUpdate = allItems.FirstOrDefault(x => x.Id == editedItem.Id);
                 int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
                 string tableName = registeredModules[typeof(T)];
 

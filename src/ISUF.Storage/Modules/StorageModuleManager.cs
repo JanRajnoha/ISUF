@@ -1,12 +1,6 @@
-﻿using ISUF.Base.Template;
-using ISUF.Interface;
-using ISUF.Base.Modules;
+﻿using ISUF.Base.Modules;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using ISUF.Interface.Storage;
 
 namespace ISUF.Storage.Modules
 {

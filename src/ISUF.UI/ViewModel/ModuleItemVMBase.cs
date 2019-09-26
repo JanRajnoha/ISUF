@@ -2,9 +2,9 @@
 using ISUF.Base.Messages;
 using ISUF.Base.Service;
 using ISUF.Base.Template;
-using ISUF.Interface;
 using ISUF.Security;
 using ISUF.Storage.Storage;
+using ISUF.Interface.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,7 +48,7 @@ namespace ISUF.UI.ViewModel
             {
                 ItemType = ItemType,
                 Edit = false,
-                ID = item.ID,
+                ID = item.Id,
                 ManagerID = item.ManagerID
             });
         });
@@ -182,7 +182,7 @@ namespace ISUF.UI.ViewModel
             messenger.Send(new ItemEditMsg()
             {
                 ItemType = ItemType,
-                ID = obj.ID,
+                ID = obj.Id,
                 ManagerID = obj.ManagerID
             });
         }

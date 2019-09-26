@@ -12,7 +12,7 @@ using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ISUF.Interface
+namespace ISUF.Interface.UI
 {
     public interface IModuleVMBase<T>
     {

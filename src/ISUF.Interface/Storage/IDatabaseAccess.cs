@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ISUF.Interface
+namespace ISUF.Interface.Storage
 {
     public interface IDatabaseAccess
     {

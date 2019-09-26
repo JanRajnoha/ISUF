@@ -3,13 +3,14 @@ using ISUF.Base.Messages;
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Base.Service;
-using ISUF.Interface;
 using ISUF.UI.Controls;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Template10.Mvvm;
 using Windows.ApplicationModel.UserActivities;
+using ISUF.Interface.UI;
+using ISUF.Interface.Storage;
 
 namespace ISUF.UI.ViewModel
 {

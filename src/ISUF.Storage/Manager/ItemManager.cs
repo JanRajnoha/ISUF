@@ -6,9 +6,9 @@ using System.ComponentModel;
 using ISUF.Base.Template;
 using ISUF.Base.Settings;
 using ISUF.Security;
-using ISUF.Interface;
 using ISUF.Base.Service;
 using System;
+using ISUF.Interface.Storage;
 
 namespace ISUF.Storage.Manager
 {
@@ -68,9 +68,9 @@ namespace ISUF.Storage.Manager
             if (!AddItemAdditionCheck(item))
                 return false;
 
-            if (newItem.ID == -1)
+            if (newItem.Id == -1)
             {
-                newItem.ID = itemSource != null ? GetID(itemSource) : 0;
+                newItem.Id = itemSource != null ? GetID(itemSource) : 0;
 
                 return dbAccess.AddItemIntoDatabase(newItem).Result;
             }
@@ -122,7 +122,14 @@ namespace ISUF.Storage.Manager
         {
             //UpdatePhraseList();
 
-            return await dbAccess.RemoveItemFromDatabase<T>(detailedItem.ID);
+            return await RemoveItem<T>(detailedItem.Id);
+        }
+
+        public virtual async Task<bool> RemoveItem<T>(int id) where T : BaseItem
+        {
+            //UpdatePhraseList();
+
+            return await dbAccess.RemoveItemFromDatabase<T>(id);
         }
 
         /// <summary>
@@ -134,11 +141,11 @@ namespace ISUF.Storage.Manager
         {
             int index = 0;
 
-            var orderedItemSource = itemSource.OrderBy(x => x.ID).ToList();
+            var orderedItemSource = itemSource.OrderBy(x => x.Id).ToList();
 
             for (int i = 0; i < orderedItemSource.Count; i++)
             {
-                if (orderedItemSource[i].ID != index)
+                if (orderedItemSource[i].Id != index)
                     return index;
                 else
                     index++;
@@ -176,11 +183,16 @@ namespace ISUF.Storage.Manager
         /// Return list of names of items
         /// </summary>
         /// <returns>List of names of items</returns>
-        public virtual async Task<List<string>> GetItemsNameList<T>() where T : BaseItem
+        public virtual List<string> GetItemsNameList<T>() where T : BaseItem
+        {
+            return GetAllItems<T>().Result?.Select(x => x.Name).ToList() ?? new List<string>();
+        }
+
+        public virtual async Task<ObservableCollection<T>> GetAllItems<T>() where T : BaseItem
         {
             var itemSource = dbAccess.GetAllItems<T>();
 
-            return itemSource?.Select(x => x.Name).ToList() ?? new List<string>();
+            return itemSource ?? new ObservableCollection<T>();
         }
 
         /// <summary>

@@ -1,13 +1,10 @@
 ﻿using ISUF.Base.Service;
 using ISUF.Base.Settings;
 using ISUF.Base.Templates;
-using ISUF.Interface;
+using ISUF.Interface.Storage;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
 
@@ -67,8 +64,8 @@ namespace ISUF.Storage.Manager
             var ToastNotifier = ToastNotificationManager.CreateToastNotifier();
             var ScheduledToastList = ToastNotifier.GetScheduledToastNotifications();
 
-            if (ScheduledToastList.Select(x => x.Id).Contains(shortTypeName + detailedItem.ID))
-                ToastNotificationManager.CreateToastNotifier().RemoveFromSchedule(ScheduledToastList.FirstOrDefault(x => x.Id == (shortTypeName + detailedItem.ID)));
+            if (ScheduledToastList.Select(x => x.Id).Contains(shortTypeName + detailedItem.Id))
+                ToastNotificationManager.CreateToastNotifier().RemoveFromSchedule(ScheduledToastList.FirstOrDefault(x => x.Id == (shortTypeName + detailedItem.Id)));
 
             return null; // TODO - Insp, co to je a proč todo
         }
@@ -111,7 +108,7 @@ namespace ISUF.Storage.Manager
         {
             var itemSource = dbAccess.GetAllItems<T>();
 
-            var item = itemSource.FirstOrDefault(x => x.ID == completedActivity.ID);
+            var item = itemSource.FirstOrDefault(x => x.Id == completedActivity.Id);
 
             if (item == null)
                 return false;

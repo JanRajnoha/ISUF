@@ -1,7 +1,7 @@
 ﻿using ISUF.Base.Template;
 using System.Collections.ObjectModel;
 
-namespace ISUF.Interface
+namespace ISUF.Interface.Storage
 {
     public interface IStorageModuleStorageAccess
     {

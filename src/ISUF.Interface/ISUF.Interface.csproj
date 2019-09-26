@@ -125,14 +125,15 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IDatabaseAccess.cs" />
-    <Compile Include="IItemManager.cs" />
-    <Compile Include="IModuleAddVMBase.cs" />
-    <Compile Include="IModuleDetailVMBase.cs" />
-    <Compile Include="IModuleItemVMBase.cs" />
-    <Compile Include="IModuleVMBase.cs" />
-    <Compile Include="IStorageModuleStorageAccess.cs" />
-    <Compile Include="IStorageManager.cs" />
+    <Compile Include="Storage\IDatabaseAccess.cs" />
+    <Compile Include="Storage\IItemManager.cs" />
+    <Compile Include="Storage\IStorageModuleItemAccess.cs" />
+    <Compile Include="UI\IModuleAddVMBase.cs" />
+    <Compile Include="UI\IModuleDetailVMBase.cs" />
+    <Compile Include="UI\IModuleItemVMBase.cs" />
+    <Compile Include="UI\IModuleVMBase.cs" />
+    <Compile Include="Storage\IStorageModuleStorageAccess.cs" />
+    <Compile Include="Storage\IStorageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISUF.Interface.rd.xml" />
   </ItemGroup>

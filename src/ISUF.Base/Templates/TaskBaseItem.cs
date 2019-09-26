@@ -26,7 +26,7 @@ namespace ISUF.Base.Templates
 
         public TaskBaseItem(TaskBaseItem taskBaseItem)
         {
-            ID = taskBaseItem.ID;
+            Id = taskBaseItem.Id;
             Name = taskBaseItem.Name;
             Secured = taskBaseItem.Secured;
             Description = taskBaseItem.Description;

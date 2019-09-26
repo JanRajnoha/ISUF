@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ISUF.Interface;
+using ISUF.Interface.Storage;
 using ISUF.Storage.Templates;
 
 namespace ISUF.Storage.Manager

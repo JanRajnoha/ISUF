@@ -14,7 +14,7 @@ namespace ISUF.Base.Template
     public class BaseItem : INotifyPropertyChanged, ICloneable
     {
         public bool Secured { get; set; }
-        public int ID { get; set; } = -1;
+        public int Id { get; set; } = -1;
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
@@ -35,7 +35,7 @@ namespace ISUF.Base.Template
         public BaseItem(BaseItem baseItem) : this()
         {
             Secured = baseItem.Secured;
-            ID = baseItem.ID;
+            Id = baseItem.Id;
             Name = baseItem.Name;
             Description = baseItem.Description;
 

@@ -41,7 +41,7 @@ namespace ISUF.Base.Modules
         /// Return name of module. Default value is type of item converted into string
         /// </summary>
         /// <returns>Name of module</returns>
-        public string GetModuleName()
+        public virtual string GetModuleName()
         {
             return moduleName;
         }
@@ -50,7 +50,7 @@ namespace ISUF.Base.Modules
         /// Return type of module
         /// </summary>
         /// <returns>Type of module</returns>
-        public Type GetModuleType()
+        public virtual Type GetModuleType()
         {
             return moduleItemType;
         }
