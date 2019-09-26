@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
-    public class HistoryItem : BaseItem
+    public class HistoryItem : AtomicItem
     {
         public int ItemID { get; set; }
         public DbTypeOfChange TypeOfChange { get; set; }

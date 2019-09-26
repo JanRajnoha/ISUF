@@ -57,14 +57,14 @@ namespace ISUF.Tests
         }
     }
 
-    public class TestClass : BaseItem
+    public class TestClass : AtomicItem
     {
         public string StringProp { get; set; }
 
         public int IntProp { get; set; }
     }
 
-    public class TestClass2 : BaseItem
+    public class TestClass2 : AtomicItem
     {
         public string StringProp { get; set; }
 

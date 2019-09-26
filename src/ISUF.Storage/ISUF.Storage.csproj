@@ -118,11 +118,14 @@
     <Compile Include="DatabaseAccess\SqlDbAccess.cs" />
     <Compile Include="DatabaseAccess\XmlDbAccess.cs" />
     <Compile Include="Enum\DbTypeOfChange.cs" />
+    <Compile Include="Enum\UserActivity.cs" />
     <Compile Include="Enum\UserLogType.cs" />
-    <Compile Include="Manager\ItemManager.cs" />
+    <Compile Include="Manager\BaseItemManager.cs" />
+    <Compile Include="Manager\AtomicItemManager.cs" />
     <Compile Include="Manager\StorageManager.cs" />
     <Compile Include="Manager\TaskItemManager.cs" />
     <Compile Include="Manager\UserItemManager.cs" />
+    <Compile Include="Modules\LogUserModule.cs" />
     <Compile Include="Modules\StorageModule.cs" />
     <Compile Include="Modules\StorageModuleManager.cs" />
     <Compile Include="Modules\UserModule.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Storage\ItemStorage.cs" />
     <Compile Include="Storage\StorageChange.cs" />
     <Compile Include="Templates\HistoryItem.cs" />
+    <Compile Include="Templates\LogUserActivityItem.cs" />
     <Compile Include="Templates\UserItem.cs" />
     <EmbeddedResource Include="Properties\ISUF.Storage.rd.xml" />
   </ItemGroup>

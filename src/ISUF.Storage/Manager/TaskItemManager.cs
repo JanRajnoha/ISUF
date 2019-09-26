@@ -10,7 +10,7 @@ using Windows.UI.Notifications;
 
 namespace ISUF.Storage.Manager
 {
-    public class TaskItemManager : ItemManager
+    public class TaskItemManager : BaseItemManager
     {
         private readonly string shortTypeName;
         private readonly string longTypeName;

@@ -11,11 +11,11 @@ namespace ISUF.Base.Locator
 {
     public class ManagerLocator : LocatorBase
     {
-        Dictionary<string, IFake<BaseItem>> managerDictionary;
+        Dictionary<string, IFake<AtomicItem>> managerDictionary;
 
         public ManagerLocator()
         {
-            managerDictionary = new Dictionary<string, IFake<BaseItem>>();
+            managerDictionary = new Dictionary<string, IFake<AtomicItem>>();
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace ISUF.Base.Locator
         /// </summary>
         /// <param name="managerID">Manager ID</param>
         /// <returns>Manager</returns>
-        public IFake<BaseItem> GetManager(string managerID)
+        public IFake<AtomicItem> GetManager(string managerID)
         {
             if (IsManagerExist(managerID))
                 return managerDictionary[managerID];
@@ -36,7 +36,7 @@ namespace ISUF.Base.Locator
         /// </summary>
         /// <param name="newManager">New Manager</param>
         /// <param name="managerID">Manager ID</param>
-        public void AddManager(IFake<BaseItem> newManager, string managerID)
+        public void AddManager(IFake<AtomicItem> newManager, string managerID)
         {
             if (!IsManagerExist(managerID))
                 managerDictionary.Add(managerID, newManager);
@@ -80,9 +80,9 @@ namespace ISUF.Base.Locator
         /// </summary>
         /// <param name="managerType">Type of manager</param>
         /// <returns>Collection of managers</returns>
-        public ObservableCollection<IFake<BaseItem>> GetManagersByType(Type managerType)
+        public ObservableCollection<IFake<AtomicItem>> GetManagersByType(Type managerType)
         {
-            return new ObservableCollection<IFake<BaseItem>>(managerDictionary.Where(x => (x.Value.GetType() == managerType)).Select(y => y.Value).ToList());
+            return new ObservableCollection<IFake<AtomicItem>>(managerDictionary.Where(x => (x.Value.GetType() == managerType)).Select(y => y.Value).ToList());
         }
     }
 }

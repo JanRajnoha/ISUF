@@ -24,35 +24,35 @@ namespace ISUF.Interface.Storage
 
         void RemoveDatabaseTable(Type tableType);
 
-        ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
+        ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
 
-        T GetItem<T>(int ID) where T : BaseItem;
+        T GetItem<T>(int ID) where T : AtomicItem;
 
-        Task<bool> EditItemInDatabase<T>(T editedItem) where T : BaseItem;
+        Task<bool> EditItemInDatabase<T>(T editedItem) where T : AtomicItem;
 
-        Task<bool> AddItemIntoDatabase<T>(T newItem) where T : BaseItem;
+        Task<bool> AddItemIntoDatabase<T>(T newItem) where T : AtomicItem;
 
         void RemoveAllItemsFromDatabase();
 
-        Task<bool> RemoveItemFromDatabase<T>(int ID) where T : BaseItem;
+        Task<bool> RemoveItemFromDatabase<T>(int ID) where T : AtomicItem;
 
-        bool IsItemInDatabase<T>(int ID) where T : BaseItem;
+        bool IsItemInDatabase<T>(int ID) where T : AtomicItem;
 
-        bool IsItemInDatabase<T>(T x) where T : BaseItem;
+        bool IsItemInDatabase<T>(T x) where T : AtomicItem;
 
-        Task WriteInMemoryCache<T>() where T : BaseItem;
+        Task WriteInMemoryCache<T>() where T : AtomicItem;
 
-        Task ClearChangesInMemoryCache<T>() where T : BaseItem;
+        Task ClearChangesInMemoryCache<T>() where T : AtomicItem;
 
-        Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoDB) where T : BaseItem;
+        Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoDB) where T : AtomicItem;
 
-        bool HasInMemoryCacheItem<T>() where T : BaseItem;
+        bool HasInMemoryCacheItem<T>() where T : AtomicItem;
 
-        bool CreateInMemoryCacheItem<T>() where T : BaseItem;
+        bool CreateInMemoryCacheItem<T>() where T : AtomicItem;
 
         void RegisterUserModule(Type userModuleType);
 
-        void RegisterHistoryModule(Type historyModuleType, IItemManager historyManager);
+        void RegisterHistoryModule(Type historyModuleType, IAtomicItemManager historyManager);
 
         //void WriteHistory();
     }

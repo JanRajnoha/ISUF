@@ -5,7 +5,7 @@ using ISUF.Storage.Templates;
 
 namespace ISUF.Storage.Manager
 {
-    public class UserItemManager : ItemManager
+    public class UserItemManager : AtomicItemManager
     {
         public UserItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName) : base(dbAccess, moduleItemType, moduleName)
         {

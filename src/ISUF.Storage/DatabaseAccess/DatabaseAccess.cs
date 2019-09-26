@@ -15,7 +15,7 @@ namespace ISUF.Storage.DatabaseAccess
     {
         protected string connectionsString;
         protected bool useInMemoryCache;
-        protected Dictionary<Type, ObservableCollection<BaseItem>> inMemoryCache = new Dictionary<Type, ObservableCollection<BaseItem>>();
+        protected Dictionary<Type, ObservableCollection<AtomicItem>> inMemoryCache = new Dictionary<Type, ObservableCollection<AtomicItem>>();
         protected Dictionary<Type, string> registeredModules = new Dictionary<Type, string>();
         protected List<StorageChange> dbChanges = new List<StorageChange>();
         protected Type historyModuleType;
@@ -88,11 +88,11 @@ namespace ISUF.Storage.DatabaseAccess
             dbChanges.Add(addStorageChange);
         }
 
-        public abstract ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
+        public abstract ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
 
-        public abstract T GetItem<T>(int ID) where T : BaseItem;
+        public abstract T GetItem<T>(int ID) where T : AtomicItem;
 
-        public virtual async Task<bool> EditItemInDatabase<T>(T editedItem) where T : BaseItem
+        public virtual async Task<bool> EditItemInDatabase<T>(T editedItem) where T : AtomicItem
         {
             StorageChange editStorageChange = new StorageChange()
             {
@@ -108,7 +108,7 @@ namespace ISUF.Storage.DatabaseAccess
             return true;
         }
 
-        public virtual async Task<bool> AddItemIntoDatabase<T>(T newItem) where T : BaseItem
+        public virtual async Task<bool> AddItemIntoDatabase<T>(T newItem) where T : AtomicItem
         {
             StorageChange addStorageChange = new StorageChange()
             {
@@ -126,7 +126,7 @@ namespace ISUF.Storage.DatabaseAccess
 
         public abstract void RemoveAllItemsFromDatabase();
 
-        public virtual async Task<bool> RemoveItemFromDatabase<T>(int ID) where T : BaseItem
+        public virtual async Task<bool> RemoveItemFromDatabase<T>(int ID) where T : AtomicItem
         {
             StorageChange removeStorageChange = new StorageChange()
             {
@@ -144,14 +144,14 @@ namespace ISUF.Storage.DatabaseAccess
 
         //protected abstract  ObservableCollection<T> GetFinalCollection<T>() where T : BaseItem;
 
-        public abstract bool IsItemInDatabase<T>(int ID) where T : BaseItem;
+        public abstract bool IsItemInDatabase<T>(int ID) where T : AtomicItem;
 
         /// <summary>
         /// Check, if item exist in collection
         /// </summary>
         /// <param name="x">Check item</param>
         /// <returns>True, if exist</returns>
-        public virtual bool IsItemInDatabase<T>(T x) where T : BaseItem
+        public virtual bool IsItemInDatabase<T>(T x) where T : AtomicItem
         {
             if (useInMemoryCache)
                 return inMemoryCache[typeof(T)].Contains(x);
@@ -159,36 +159,36 @@ namespace ISUF.Storage.DatabaseAccess
                 return IsItemInDatabase<T>(x.Id);
         }
 
-        public abstract Task WriteInMemoryCache<T>() where T : BaseItem;
+        public abstract Task WriteInMemoryCache<T>() where T : AtomicItem;
 
-        public abstract Task ClearChangesInMemoryCache<T>() where T : BaseItem;
+        public abstract Task ClearChangesInMemoryCache<T>() where T : AtomicItem;
 
-        public abstract Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB) where T : BaseItem;
+        public abstract Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB) where T : AtomicItem;
 
-        public abstract Task SetSourceCollection<T>(ObservableCollection<T> source) where T : BaseItem;
+        public abstract Task SetSourceCollection<T>(ObservableCollection<T> source) where T : AtomicItem;
 
         /// <summary>
         /// Get true/false statement for filtering items based on security
         /// </summary>
         /// <param name="x">Type of item</param>
         /// <returns>Result of logic. expression</returns>
-        protected virtual bool GetValidItems<T>(T x) where T : BaseItem
+        protected virtual bool GetValidItems<T>(T x) where T : AtomicItem
         {
             bool userLogged = CustomSettings.IsUserLogged;
 
             return x.Secured == userLogged || (x.Secured != userLogged && userLogged == true);
         }
 
-        public bool HasInMemoryCacheItem<T>() where T : BaseItem
+        public bool HasInMemoryCacheItem<T>() where T : AtomicItem
         {
             return inMemoryCache.ContainsKey(typeof(T));
         }
 
-        public bool CreateInMemoryCacheItem<T>() where T : BaseItem
+        public bool CreateInMemoryCacheItem<T>() where T : AtomicItem
         {
             if (!HasInMemoryCacheItem<T>())
             {
-                inMemoryCache.Add(typeof(T), (ObservableCollection<BaseItem>)new ObservableCollection<T>().Cast<BaseItem>());
+                inMemoryCache.Add(typeof(T), (ObservableCollection<AtomicItem>)new ObservableCollection<T>().Cast<AtomicItem>());
                 return true;
             }
             else
@@ -203,7 +203,7 @@ namespace ISUF.Storage.DatabaseAccess
             this.userModuleType = userModuleType;
         }
 
-        public void RegisterHistoryModule(Type historyModuleType, IItemManager historyManager)
+        public void RegisterHistoryModule(Type historyModuleType, IAtomicItemManager historyManager)
         {
             if (this.historyModuleType != null)
                 throw new Base.Exceptions.ArgumentException($"History module was defined. Defined hisory module: {this.historyModuleType.Name}");

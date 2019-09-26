@@ -10,7 +10,7 @@ namespace ISUF.Storage.Modules
     {
         protected Type itemManagerType;
 
-        protected IItemManager itemManager { get; set; }
+        protected IAtomicItemManager itemManager { get; set; }
 
         protected IDatabaseAccess dbAccess;
         protected string moduleTableName;
@@ -31,7 +31,7 @@ namespace ISUF.Storage.Modules
             this.moduleTableName = moduleTableName ?? moduleName;
         }
 
-        private void CreateItemManager() => itemManager = (IItemManager)Activator.CreateInstance(itemManagerType, dbAccess, moduleItemType, moduleName);
+        private void CreateItemManager() => itemManager = (IAtomicItemManager)Activator.CreateInstance(itemManagerType, dbAccess, moduleItemType, moduleName);
 
         public void SetDbAccess(IDatabaseAccess dbAccess)
         {
@@ -39,27 +39,27 @@ namespace ISUF.Storage.Modules
             CreateItemManager();
         }
 
-        public T GetItemById<T>(int id) where T : BaseItem
+        public T GetItemById<T>(int id) where T : AtomicItem
         {
             return itemManager.GetItem<T>(id);
         }
 
-        public bool AddItem<T>(T newItem) where T : BaseItem
+        public bool AddItem<T>(T newItem) where T : AtomicItem
         {
             return itemManager.AddItem(newItem);
         }
 
         public bool RemoveItemById(int id)
         {
-            return itemManager.RemoveItem<BaseItem>(id).Result;
+            return itemManager.RemoveItem<AtomicItem>(id).Result;
         }
 
-        public ObservableCollection<T> GetAllItems<T>() where T : BaseItem
+        public ObservableCollection<T> GetAllItems<T>() where T : AtomicItem
         {
             return itemManager.GetAllItems<T>().Result;
         }
 
-        public bool EditItem<T>(T editedItem) where T : BaseItem
+        public bool EditItem<T>(T editedItem) where T : AtomicItem
         {
             return itemManager.AddItem(editedItem);
         }

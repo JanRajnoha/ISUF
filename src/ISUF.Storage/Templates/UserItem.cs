@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
-    public class UserItem : BaseItem
+    public class UserItem : AtomicItem
     {
         public string Username { get; set; }
         public byte[] Hash { get; set; }

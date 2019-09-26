@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Enum
 {
-    public enum UserLogType
+    public enum UserActivity
     {
-        SignIn,
-        Register,
-        SignOut,
-        AccessDenied
+        LogIn,
+        LogOut,
+        Register
     }
 }

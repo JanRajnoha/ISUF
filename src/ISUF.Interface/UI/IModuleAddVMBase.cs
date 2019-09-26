@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ISUF.Interface.UI
 {
-    public interface IModuleAddVMBase<T> where T : BaseItem
+    public interface IModuleAddVMBase<T> where T : AtomicItem
     {
         ICommand Close { get; set; }
 
@@ -16,7 +16,7 @@ namespace ISUF.Interface.UI
 
         bool ErrorVisible { get; set; }
 
-        IItemManager Manager { get; set; }
+        IAtomicItemManager Manager { get; set; }
 
         void SetDetailItem(T currentItem);
 

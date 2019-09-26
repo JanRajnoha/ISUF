@@ -42,7 +42,7 @@ namespace ISUF.UI.ViewModel
         public ICommand ShareCommand { get; set; }
         public ICommand EditCommand { get; set; }
 
-        public ICommand DetailCommand => new DelegateCommand<BaseItem>((BaseItem item) =>
+        public ICommand DetailCommand => new DelegateCommand<AtomicItem>((AtomicItem item) =>
         {
             messenger.Send(new ItemDetailOpenMsg()
             {
@@ -72,7 +72,7 @@ namespace ISUF.UI.ViewModel
             this.messenger = messenger;
             ItemType = itemType;
 
-            EditCommand = new DelegateCommand<BaseItem>(EditItem);
+            EditCommand = new DelegateCommand<AtomicItem>(EditItem);
             ShareCommand = new DelegateCommand<T>(ShareItemAsync);
         }
 
@@ -177,7 +177,7 @@ namespace ISUF.UI.ViewModel
         /// Send message about selected item to edit
         /// </summary>
         /// <param name="obj">Selected item</param>
-        protected void EditItem(BaseItem obj)
+        protected void EditItem(AtomicItem obj)
         {
             messenger.Send(new ItemEditMsg()
             {

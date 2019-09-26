@@ -15,7 +15,7 @@ namespace ISUF.Storage.Manager
     /// <summary>
     /// Item manager class
     /// </summary>
-    public class ItemManager : IItemManager
+    public class AtomicItemManager : IAtomicItemManager
     {
         protected string id;
         protected string moduleName;
@@ -29,7 +29,7 @@ namespace ISUF.Storage.Manager
         /// <param name="dbAccess">Database Access object for working with database</param>
         /// <param name="moduleItemType"></param>
         /// <param name="moduleName"></param>
-        public ItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName)
+        public AtomicItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName)
         {
             this.dbAccess = dbAccess;
             this.moduleName = moduleName;
@@ -56,7 +56,7 @@ namespace ISUF.Storage.Manager
         /// <param name="item">New item</param>
         /// <param name="saveData">Save data after adding item into collection</param>
         /// <returns>True, if action was succesfull</returns>
-        public virtual bool AddItem<T>(T item) where T : BaseItem
+        public virtual bool AddItem<T>(T item) where T : AtomicItem
         {
             T newItem = item;
 
@@ -85,7 +85,7 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="item">New item</param>
         /// <returns>Result of addition check action. True = successful</returns>
-        public virtual bool AddItemAdditionCheck<T>(T item) where T : BaseItem
+        public virtual bool AddItemAdditionCheck<T>(T item) where T : AtomicItem
         {
             return true;
         }
@@ -96,7 +96,7 @@ namespace ISUF.Storage.Manager
         /// <param name="itemList">List of imported items</param>
         /// <param name="checkItems">Before add check items</param>
         /// <returns>True, if action was succesfull</returns>
-        public virtual async Task<bool> AddItemRange<T>(List<T> itemList, bool checkItems = true) where T : BaseItem
+        public virtual async Task<bool> AddItemRange<T>(List<T> itemList, bool checkItems = true) where T : AtomicItem
         {
             bool res = true;
 
@@ -118,14 +118,14 @@ namespace ISUF.Storage.Manager
         /// Remove item from collection and save it
         /// </summary>
         /// <param name="detailedItem">Removed item</param>
-        public virtual async Task<bool> RemoveItem<T>(T detailedItem) where T : BaseItem
+        public virtual async Task<bool> RemoveItem<T>(T detailedItem) where T : AtomicItem
         {
             //UpdatePhraseList();
 
             return await RemoveItem<T>(detailedItem.Id);
         }
 
-        public virtual async Task<bool> RemoveItem<T>(int id) where T : BaseItem
+        public virtual async Task<bool> RemoveItem<T>(int id) where T : AtomicItem
         {
             //UpdatePhraseList();
 
@@ -137,7 +137,7 @@ namespace ISUF.Storage.Manager
         /// If not, return next ID from row.
         /// </summary>
         /// <returns>New ID</returns>
-        protected virtual int GetID<T>(ObservableCollection<T> itemSource) where T : BaseItem
+        protected virtual int GetID<T>(ObservableCollection<T> itemSource) where T : AtomicItem
         {
             int index = 0;
 
@@ -159,7 +159,7 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="ID">Index of item</param>
         /// <returns>Item</returns>
-        public virtual T GetItem<T>(int ID) where T : BaseItem
+        public virtual T GetItem<T>(int ID) where T : AtomicItem
         {
             return dbAccess.GetItem<T>(ID);
         }
@@ -179,16 +179,7 @@ namespace ISUF.Storage.Manager
             dbAccess.RemoveDatabaseTable(moduleItemType);
         }
 
-        /// <summary>
-        /// Return list of names of items
-        /// </summary>
-        /// <returns>List of names of items</returns>
-        public virtual List<string> GetItemsNameList<T>() where T : BaseItem
-        {
-            return GetAllItems<T>().Result?.Select(x => x.Name).ToList() ?? new List<string>();
-        }
-
-        public virtual async Task<ObservableCollection<T>> GetAllItems<T>() where T : BaseItem
+        public virtual async Task<ObservableCollection<T>> GetAllItems<T>() where T : AtomicItem
         {
             var itemSource = dbAccess.GetAllItems<T>();
 
@@ -200,7 +191,7 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="reloadItems">Reload collection after changing security</param>
         /// <returns>Collection of items</returns>
-        public virtual async Task<ObservableCollection<T>> GetItemsAsync<T>() where T : BaseItem
+        public virtual async Task<ObservableCollection<T>> GetItemsAsync<T>() where T : AtomicItem
         {
             var itemSource = dbAccess.GetAllItems<T>();
 
@@ -209,11 +200,7 @@ namespace ISUF.Storage.Manager
                 item.ManagerID = id;
 
                 if (item.Secured && item.Encrypted)
-                {
-                    item.Name = Crypting.Decrypt(item.Name);
-                    item.Description = Crypting.Decrypt(item.Description);
                     item.Encrypted = false;
-                }
             }
 
             return itemSource;

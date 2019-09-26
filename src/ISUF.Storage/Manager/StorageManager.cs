@@ -20,7 +20,7 @@ namespace ISUF.Storage.Manager
     /// </summary>
     /// <typeparam name="T">Type of item</typeparam>
     [Obsolete("Will be removed")]
-    abstract public class StorageManager<T> : IStorageManager<T> where T : BaseItem
+    abstract public class StorageManager<T> : IStorageManager<T> where T : AtomicItem
     {
         PathType pathType { get; set; }
         string path { get; set; } = string.Empty;
@@ -117,8 +117,8 @@ namespace ISUF.Storage.Manager
             {
                 foreach (var item in ItemsSource.Where(x => x.Secured && !x.Encrypted))
                 {
-                    item.Name = Crypting.Encrypt(item.Name);
-                    item.Description = Crypting.Encrypt(item.Description);
+                    //item.Name = Crypting.Encrypt(item.Name);
+                    //item.Description = Crypting.Encrypt(item.Description);
                     item.Encrypted = true;
                 }
 
@@ -139,8 +139,8 @@ namespace ISUF.Storage.Manager
 
                 foreach (var item in ItemsSource.Where(x => x.Secured && x.Encrypted))
                 {
-                    item.Name = Crypting.Decrypt(item.Name);
-                    item.Description = Crypting.Decrypt(item.Description);
+                    //item.Name = Crypting.Decrypt(item.Name);
+                    //item.Description = Crypting.Decrypt(item.Description);
                     item.Encrypted = false;
                 }
 

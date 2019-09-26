@@ -167,6 +167,7 @@
     <Compile Include="Settings\ShowAdsChangedEventArgs.cs" />
     <Compile Include="Settings\UserLoggedEventArgs.cs" />
     <Compile Include="Storage\FileStream.cs" />
+    <Compile Include="Templates\AtomicItem.cs" />
     <Compile Include="Templates\BaseItem.cs" />
     <Compile Include="Templates\TaskBaseItem.cs" />
     <Compile Include="Update\UpdateHistory\UpdateHistory.cs" />

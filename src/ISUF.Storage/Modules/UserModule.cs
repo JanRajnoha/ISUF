@@ -1,4 +1,5 @@
 using ISUF.Security;
+using ISUF.Storage.Enum;
 using ISUF.Storage.Manager;
 using ISUF.Storage.Templates;
 using System;
@@ -30,25 +31,44 @@ namespace ISUF.Storage.Modules
             {
                 CurrentUserId = user.Id;
                 //CrateUserSession();
+
+                LogUserActivity(UserLogType.SignIn, CurrentUserId);
             }
-            else return false;
+            else
+            {
+                LogUserActivity(UserLogType.AccessDenied, CurrentUserId);
+                return false;
+            }
 
             return true;
         }
 
-        public bool RegisterUser(string username, string password)
+        private void LogUserActivity(UserLogType logType, int currentUserId)
         {
-            // toto predelat na registraci
-            var user = ((UserItemManager)itemManager).GetUserByUsername<UserItem>(username);
+            var userActivityLogItem = new LogUserActivityItem()
+            {
+                UserActivity = logType,
+                UserId = currentUserId
+            };
 
-            CurrentUserId = user.Id;
+            ((LogUserModule)moduleManager.GetModule(typeof(LogUserModule))).LogUserActivity(userActivityLogItem);
+        }
+
+        public bool RegisterUser(UserItem newUser)
+        {
+            if (!((UserItemManager)itemManager).AddItem(newUser))
+                return false;
+            
+            CurrentUserId = newUser.Id;
             //CrateUserSession();
+            LogUserActivity(UserLogType.Register, CurrentUserId);
 
             return true;
         }
 
         public void SignOutUser()
         {
+            LogUserActivity(UserLogType.SignOut, CurrentUserId);
             CurrentUserId = -1;
         }
 

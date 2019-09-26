@@ -14,7 +14,7 @@ using ISUF.Interface.Storage;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
+    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
     {
         public Messenger messenger;
         UserActivitySession currentActivity;
@@ -80,8 +80,8 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private IItemManager manager;
-        public IItemManager Manager
+        private IAtomicItemManager manager;
+        public IAtomicItemManager Manager
         {
             get { return manager; }
             set

@@ -13,9 +13,9 @@ namespace ISUF.Interface.Storage
 
         bool UpdateItem(object item);
 
-        ObservableCollection<T> GetAllItems<T>() where T : BaseItem;
+        ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
 
-        T GetItem<T>(int ID) where T : BaseItem;
+        T GetItem<T>(int ID) where T : AtomicItem;
 
         bool RemoveAllItems();
     }

@@ -413,7 +413,7 @@ namespace ISUF.UI.ViewModel
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(fileXmlString);
 
-            var helper = new ItemStorage<BaseItem>();
+            var helper = new ItemStorage<AtomicItem>();
             var sel = xmlDoc.SelectSingleNode("//" + nameof(helper.TypeOfItem));
 
             if (sel == null)
@@ -433,7 +433,7 @@ namespace ISUF.UI.ViewModel
         /// <typeparam name="T">Type of item</typeparam>
         /// <param name="fileXmlString">XML file</param>
         /// <returns>Collection of items</returns>
-        protected ItemStorage<ItemType> DecodeItemFile<ItemType>(string fileXmlString) where ItemType : BaseItem
+        protected ItemStorage<ItemType> DecodeItemFile<ItemType>(string fileXmlString) where ItemType : AtomicItem
         {
             StringReader stringReader = new StringReader(fileXmlString);
             XmlReader xmlReader = XmlReader.Create(stringReader);

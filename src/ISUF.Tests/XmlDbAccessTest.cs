@@ -24,8 +24,8 @@ namespace ISUF.Tests
         public void PrepareData()
         {
             storageTestManager = new StorageModuleManager(typeof(XmlDbAccess), ApplicationData.Current.LocalFolder.Path ,false);
-            storageTestModule = new StorageModule(typeof(TestClass), typeof(ItemManager));
-            storageTestModule2 = new StorageModule(typeof(TestClass2), typeof(ItemManager));
+            storageTestModule = new StorageModule(typeof(TestClass), typeof(AtomicItemManager));
+            storageTestModule2 = new StorageModule(typeof(TestClass2), typeof(AtomicItemManager));
 
             storageTestManager.RegisterModule(storageTestModule);
             storageTestManager.RegisterModule(storageTestModule2);

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Interface
 {
-    public interface IFake<out T> where T : BaseItem
+    public interface IFake<out T> where T : AtomicItem
     { }
 }

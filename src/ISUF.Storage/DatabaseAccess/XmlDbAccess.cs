@@ -118,7 +118,7 @@ namespace ISUF.Storage.DatabaseAccess
         /// </summary>
         /// <param name="Attempts">Number of attempts</param>
         /// <returns>Collection of items of type T</returns>
-        protected async Task<ObservableCollection<T>> ReadFileAsync<T>(string tableName, int Attempts = 0) where T : BaseItem
+        protected async Task<ObservableCollection<T>> ReadFileAsync<T>(string tableName, int Attempts = 0) where T : AtomicItem
         {
             try
             {
@@ -159,7 +159,7 @@ namespace ISUF.Storage.DatabaseAccess
         /// </summary>
         /// <param name="Attempts">Number of attempts</param>
         /// <returns>True, if save was succesful</returns>
-        protected async Task<bool> SaveFileAsync<T>(ObservableCollection<T> itemsToSave, string tableName, int Attempts = 0) where T : BaseItem
+        protected async Task<bool> SaveFileAsync<T>(ObservableCollection<T> itemsToSave, string tableName, int Attempts = 0) where T : AtomicItem
         {
             try
             {
@@ -238,8 +238,8 @@ namespace ISUF.Storage.DatabaseAccess
 
             if (useInMemoryCache)
             {
-                ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
-                BaseItem itemToRemove = allItems.FirstOrDefault(x => x.Id == ID);
+                ObservableCollection<AtomicItem> allItems = inMemoryCache[typeof(T)];
+                AtomicItem itemToRemove = allItems.FirstOrDefault(x => x.Id == ID);
 
                 if (itemToRemove != null)
                 {
@@ -270,7 +270,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             if (useInMemoryCache)
             {
-                inMemoryCache[typeof(T)] = (ObservableCollection<BaseItem>)source.Cast<BaseItem>();
+                inMemoryCache[typeof(T)] = (ObservableCollection<AtomicItem>)source.Cast<AtomicItem>();
             }
             else
             {
@@ -293,8 +293,8 @@ namespace ISUF.Storage.DatabaseAccess
 
             if (useInMemoryCache)
             {
-                ObservableCollection<BaseItem> allItems = inMemoryCache[typeof(T)];
-                BaseItem itemToUpdate = allItems.FirstOrDefault(x => x.Id == editedItem.Id);
+                ObservableCollection<AtomicItem> allItems = inMemoryCache[typeof(T)];
+                AtomicItem itemToUpdate = allItems.FirstOrDefault(x => x.Id == editedItem.Id);
                 int itemToUpdateIndex = allItems.IndexOf(itemToUpdate);
 
                 allItems[itemToUpdateIndex] = editedItem;
@@ -315,7 +315,7 @@ namespace ISUF.Storage.DatabaseAccess
         //TODO dopsat historii
         public override async Task WriteInMemoryCache<T>()
         {
-            ObservableCollection<BaseItem> itemsToSave = inMemoryCache[typeof(T)];
+            ObservableCollection<AtomicItem> itemsToSave = inMemoryCache[typeof(T)];
             string tableName = registeredModules[typeof(T)];
 
             await SaveFileAsync(itemsToSave, tableName);
@@ -328,7 +328,7 @@ namespace ISUF.Storage.DatabaseAccess
 
         public override async Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB)
         {
-            ObservableCollection<BaseItem> itemsToSave = inMemoryCache[typeof(T)];
+            ObservableCollection<AtomicItem> itemsToSave = inMemoryCache[typeof(T)];
             string tableName = registeredModules[typeof(T)];
 
             await SaveFileAsync(itemsToSave, tableName);

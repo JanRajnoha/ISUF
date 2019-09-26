@@ -53,7 +53,7 @@ namespace ISUF.Tests
 
             Assert.IsNull(storageMod);
 
-            storageMod = new StorageModule(typeof(TestClass), typeof(ItemManager));
+            storageMod = new StorageModule(typeof(TestClass), typeof(AtomicItemManager));
 
             Assert.IsNotNull(storageMod);
         }
