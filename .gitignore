@@ -30,3 +30,4 @@
 /src/ISUF.Tests/obj/x86/Debug
 /NuGet
 /Scripts/Publish-Packages.ps1
+/Scripts/nuget.exe

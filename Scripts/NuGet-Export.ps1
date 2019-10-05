@@ -1,20 +1,7 @@
 $CurrentDir = $PSScriptRoot
-$NuGetDirectoryName = "NuGet"
-$NuGetProgram = "$($CurrentDir)\nuget.exe"
+$NuGetProgram = "$CurrentDir\nuget.exe"
 
-Set-Location "$CurrentDir"
-Set-Location ..
-
-If (-Not (Test-Path ("$NuGetDirectoryName")))
-{
-    $NuGetDir = New-Item -Name "$NuGetDirectoryName" -ItemType "directory"
-}
-
-$NuGetDir =  "$(Get-Location)\$NuGetDirectoryName"
-
-Set-Location "$NuGetDir"
-
-Remove-Item -path "$(Get-Location)\*" -Filter *.nupkg -Force
+& $WriteMessage "Creating new packages"
 
 Set-Location ..
 Set-Location src
@@ -32,6 +19,12 @@ foreach ($Directory in $Directories)
     {
 		foreach ($File in $Files)
 		{
+
+            if ($IncrementVersionFile = Get-ChildItem $CurrentDir -Name "Increment-Version.ps1" -File)
+            {
+	            & "$CurrentDir\$IncrementVersionFile" $NuspecFile.FullName
+            }
+
 		    & $NuGetProgram pack $File -IncludeReferencedProjects -OutputDirectory $NuGetDir
 		}
 	}
@@ -39,7 +32,4 @@ foreach ($Directory in $Directories)
     Set-Location ..
 }
 
-if ($PublishPackagesFile = Get-ChildItem $CurrentDir -Name "Publish-Packages.ps1" -File)
-{
-	& "$PSScriptRoot\$PublishPackagesFile"
-}
+& $WriteMessage "Packages was exported"
