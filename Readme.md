@@ -11,11 +11,11 @@ Framework for information systems for UWP
 
 | Package part | NuGet link |
 |-|-|
-| ISUF.Base | ![Nuget](https://img.shields.io/nuget/v/ISUF.Base.svg?color=green&label=NuGet) |
-| ISUF.Interface | ![Nuget](https://img.shields.io/nuget/v/ISUF.Interface.svg?color=green&label=NuGet) |
-| ISUF.Security | ![Nuget](https://img.shields.io/nuget/v/ISUF.Security.svg?color=green&label=NuGet) |
-| ISUF.Storage | ![Nuget](https://img.shields.io/nuget/v/ISUF.Storage.svg?color=green&label=NuGet) |
-| ISUF.UI | ![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet) |
+| ISUF.Base | [![Nuget](https://img.shields.io/nuget/v/ISUF.Base.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Base/) |
+| ISUF.Interface | [![Nuget](https://img.shields.io/nuget/v/ISUF.Interface.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Interface/0.2.5-beta) |
+| ISUF.Security | [![Nuget](https://img.shields.io/nuget/v/ISUF.Security.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Security/0.2.5-beta) |
+| ISUF.Storage | [![Nuget](https://img.shields.io/nuget/v/ISUF.Storage.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Storage/0.2.5-beta) |
+| ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/0.2.5-beta) |
 
 
 ## To-Do (Phase 3)
