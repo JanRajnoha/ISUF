@@ -145,7 +145,7 @@ namespace ISUF.Tests
 
             Assert.AreEqual("asd", item.StringProp);
 
-            module.RemoveItemById(item.Id);
+            module.RemoveItemById<TestClass>(item.Id);
 
             var removedItem = module.GetItemById<TestClass>(1);
 

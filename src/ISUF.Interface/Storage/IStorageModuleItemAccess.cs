@@ -7,7 +7,7 @@ namespace ISUF.Interface.Storage
     {
         T GetItemById<T>(int id) where T : AtomicItem;
         bool AddItem<T>(T newItem) where T : AtomicItem;
-        bool RemoveItemById(int id);
+        bool RemoveItemById<T>(int id) where T : AtomicItem;
         ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
         bool EditItem<T>(T editedItem) where T : AtomicItem;
     }

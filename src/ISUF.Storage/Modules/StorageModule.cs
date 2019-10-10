@@ -49,9 +49,9 @@ namespace ISUF.Storage.Modules
             return itemManager.AddItem(newItem);
         }
 
-        public bool RemoveItemById(int id)
+        public bool RemoveItemById<T>(int id) where T : AtomicItem
         {
-            return itemManager.RemoveItem<AtomicItem>(id).Result;
+            return itemManager.RemoveItem<T>(id).Result;
         }
 
         public ObservableCollection<T> GetAllItems<T>() where T : AtomicItem
