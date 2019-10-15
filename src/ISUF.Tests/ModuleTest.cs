@@ -18,7 +18,7 @@ namespace ISUF.Tests
     {
         ModuleManager mEnum = new ModuleManager();
         Module mod;
-        
+
         [TestMethod]
         [Priority(0)]
         public void AnalyzerTest()
@@ -27,14 +27,16 @@ namespace ISUF.Tests
 
             var analyzeResult = analyzer.Analyze(typeof(TestClassNotBaseItem));
 
-            var expextedResult = new Dictionary<string, Type>
+            PropertyAnalyze prop1 = new PropertyAnalyze("StringProp", typeof(string), new List<Type>()
             {
-                { "StringProp", typeof(string) },
-                { "IntProp", typeof(int) },
-            };
+                typeof(UIIgnoreAttribute),
+                typeof(DbIgnoreAttribute)
+            });
 
-            Assert.IsTrue(true);
-            //Assert.IsTrue(expextedResult.ToList().SequenceEqual(analyzeResult.ToList()));
+            PropertyAnalyze prop2 = new PropertyAnalyze("IntProp", typeof(int), new List<Type>());
+
+            Assert.IsTrue(analyzeResult.Values.ToList()[0].Equals(prop1));
+            Assert.IsTrue(analyzeResult.Values.ToList()[1].Equals(prop2));
         }
 
         [TestMethod]

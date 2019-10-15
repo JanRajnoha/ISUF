@@ -18,5 +18,17 @@ namespace ISUF.Base.Modules
             PropertyType = type;
             PropertyAttributes = attributes;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PropertyAnalyze propAnal)
+            {
+                return PropertyName == propAnal.PropertyName &&
+                    PropertyType == propAnal.PropertyType &&
+                    PropertyAttributes.TrueForAll(x => propAnal.PropertyAttributes.Contains(x));
+            }
+            else
+                return false;
+        }
     }
 }
