@@ -4,10 +4,8 @@
 
 ### Project
 
-- [ ] Database providers
+- [x] Database providers
 
-- [ ] History of database operations
+- [x] History of database operations
 
-- [ ] Users
-
-- [ ] Security
+- [x] Users
