@@ -18,12 +18,16 @@ Framework for information systems for UWP
 | ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/0.2.5-beta) |
 
 
-## To-Do (Phase 3)
+## To-Do (Phase 4)
 
 ### Project
 
-- [x] Database providers
+- [ ] Security
 
-- [x] History of database operations
+- [ ] Dynamic forms
 
-- [x] Users
+- [ ] Dynamic panes
+
+- [ ] Dynamic menu
+
+- [ ] Dynamic Main Page
