@@ -7,7 +7,7 @@ using Template10.Mvvm;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleDetailVMBase<T> : ViewModelBase, IModuleDetailVMBase<T> where T : AtomicItem
+    public abstract class ModuleDetailVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleDetailVMBase<T> where T : AtomicItem
     {
         protected Messenger messenger;
 

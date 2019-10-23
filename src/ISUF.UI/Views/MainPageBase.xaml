@@ -1,0 +1,441 @@
+﻿<Page x:Class="ISUF.UI.Views.MainPageBase"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:ISUF.UI.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:Tools="using:Microsoft.Toolkit.Uwp.UI.Controls"
+      xmlns:Conv="using:Template10.Converters"
+      xmlns:FControls="using:ISUF.UI.Controls"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+
+    <RelativePanel Background="{ThemeResource SystemControlAcrylicWindowMediumHighBrush}">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                        <!--<AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />-->
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+
+                        <Setter Target="pageHeader.Margin" 
+                                Value="48 0 0 0" />
+
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="710" />
+                        <!--<AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />-->
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+
+                        <Setter Target="pageHeader.Margin" 
+                                Value="0 32 0 0" />
+
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1200" />
+                        <!--<AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />-->
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+
+                        <Setter Target="pageHeader.Margin"
+                                Value="0 32 0 0" />
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+
+            <!--<VisualStateGroup x:Name="AdaptiveVisaulStateGroupHeight">
+                <VisualState x:Name="VisualStateLow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="0" />
+                        --><!--<AdaptiveTrigger MinWindowHeight="{StaticResource LowMinHeight}" />--><!--
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ActivitiesText.FontSize" Value="20"/>
+                        <Setter Target="NotesText.FontSize" Value="20"/>
+                        <Setter Target="ToDosText.FontSize" Value="20"/>
+                        <Setter Target="FeedbackText.FontSize" Value="20"/>
+                        <Setter Target="SettingsText.FontSize" Value="20"/>
+                        <Setter Target="TimeScheduleText.FontSize" Value="20"/>
+
+                        <Setter Target="ActivitiesScale.ScaleX" Value="1.75"/>
+                        <Setter Target="NotesScale.ScaleX" Value="1.75"/>
+                        <Setter Target="ToDosScale.ScaleX" Value="1.75"/>
+                        <Setter Target="FeedbackScale.ScaleX" Value="1.75"/>
+                        <Setter Target="SettingsScale.ScaleX" Value="1.75"/>
+                        <Setter Target="TimeScheduleScale.ScaleX" Value="1.75"/>
+
+                        <Setter Target="ActivitiesScale.ScaleY" Value="1.75"/>
+                        <Setter Target="NotesScale.ScaleY" Value="1.75"/>
+                        <Setter Target="ToDosScale.ScaleY" Value="1.75"/>
+                        <Setter Target="FeedbackScale.ScaleY" Value="1.75"/>
+                        <Setter Target="SettingsScale.ScaleY" Value="1.75"/>
+                        <Setter Target="TimeScheduleScale.ScaleY" Value="1.75"/>
+
+                        <Setter Target="ActivitiesStack.Orientation" Value="Horizontal"/>
+                        <Setter Target="NotesStack.Orientation" Value="Horizontal"/>
+                        <Setter Target="ToDosStack.Orientation" Value="Horizontal"/>
+                        <Setter Target="FeedbackStack.Orientation" Value="Horizontal"/>
+                        <Setter Target="SettingsStack.Orientation" Value="Horizontal"/>
+                        <Setter Target="TimeScheduleStack.Orientation" Value="Horizontal"/>
+
+                        <Setter Target="ActivitiesSymbol.Margin" Value="10 0 25 0"/>
+                        <Setter Target="NotesSymbol.Margin" Value="10 0 25 0"/>
+                        <Setter Target="ToDosSymbol.Margin" Value="10 0 25 0"/>
+                        <Setter Target="FeedbackSymbol.Margin" Value="10 0 25 0"/>
+                        <Setter Target="SettingsSymbol.Margin" Value="10 0 25 0"/>
+                        <Setter Target="TimeScheduleSymbol.Margin" Value="10 0 25 0"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateHigh">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowHeight="400" />
+                        --><!--<AdaptiveTrigger MinWindowHeight="{StaticResource HighMinHeight}" />--><!--
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ActivitiesText.FontSize" Value="30"/>
+                        <Setter Target="NotesText.FontSize" Value="30"/>
+                        <Setter Target="ToDosText.FontSize" Value="30"/>
+                        <Setter Target="FeedbackText.FontSize" Value="30"/>
+                        <Setter Target="SettingsText.FontSize" Value="30"/>
+                        <Setter Target="TimeScheduleText.FontSize" Value="30"/>
+
+                        <Setter Target="ActivitiesScale.ScaleX" Value="2"/>
+                        <Setter Target="NotesScale.ScaleX" Value="2"/>
+                        <Setter Target="ToDosScale.ScaleX" Value="2"/>
+                        <Setter Target="FeedbackScale.ScaleX" Value="2"/>
+                        <Setter Target="SettingsScale.ScaleX" Value="2"/>
+                        <Setter Target="TimeScheduleScale.ScaleX" Value="2"/>
+
+                        <Setter Target="ActivitiesScale.ScaleY" Value="2"/>
+                        <Setter Target="NotesScale.ScaleY" Value="2"/>
+                        <Setter Target="ToDosScale.ScaleY" Value="2"/>
+                        <Setter Target="FeedbackScale.ScaleY" Value="2"/>
+                        <Setter Target="SettingsScale.ScaleY" Value="2"/>
+                        <Setter Target="TimeScheduleScale.ScaleY" Value="2"/>
+
+                        <Setter Target="ActivitiesStack.Orientation" Value="Vertical"/>
+                        <Setter Target="NotesStack.Orientation" Value="Vertical"/>
+                        <Setter Target="ToDosStack.Orientation" Value="Vertical"/>
+                        <Setter Target="FeedbackStack.Orientation" Value="Vertical"/>
+                        <Setter Target="SettingsStack.Orientation" Value="Vertical"/>
+                        <Setter Target="TimeScheduleStack.Orientation" Value="Vertical"/>
+
+                        <Setter Target="ActivitiesSymbol.Margin" Value="25"/>
+                        <Setter Target="NotesSymbol.Margin" Value="25"/>
+                        <Setter Target="ToDosSymbol.Margin" Value="25"/>
+                        <Setter Target="FeedbackSymbol.Margin" Value="25"/>
+                        <Setter Target="SettingsSymbol.Margin" Value="25"/>
+                        <Setter Target="TimeScheduleSymbol.Margin" Value="25"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>-->
+
+        </VisualStateManager.VisualStateGroups>
+
+        <CommandBar x:Name="pageHeader"
+                    Style="{ThemeResource PageHeader}">
+
+            <AppBarButton Label="Settings"
+                          Template="{ThemeResource ShadowAppBarButton}"
+                          Icon="Setting"/>
+            <!--Click="{x:Bind ViewModel.GotoSettings}"-->
+
+            <CommandBar.Content>
+
+                <TextBlock Text="Home"
+                           Style="{ThemeResource PageHeaderText}"/>
+
+            </CommandBar.Content>
+
+        </CommandBar>
+
+        <Tools:DropShadowPanel Style="{ThemeResource ShadowContent}"
+                               HorizontalContentAlignment="Stretch" 
+                               VerticalContentAlignment="Stretch"
+                               RelativePanel.Below="pageHeader"
+                               RelativePanel.AlignBottomWithPanel="True" 
+                               RelativePanel.AlignRightWithPanel="True"
+                               RelativePanel.AlignLeftWithPanel="True">
+
+            <Grid Style="{ThemeResource ContentGrid}">
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition/>
+                    <RowDefinition x:Name="MinorUpdateInfo"
+                                   Height="{Binding ShowMinorUpdate, Converter={StaticResource BoolToGridLength}}"/>
+
+                </Grid.RowDefinitions>
+
+                <ListView x:Name="MainPageMenu" 
+                          Padding="5 5 5 5"
+                          ItemsSource="{Binding AppModules}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <FControls:MainPageButton Content="asdasdasd"/>
+                        </DataTemplate>                        
+                    </ListView.ItemTemplate>
+                    
+                </ListView>
+
+                <!--<Grid x:Name="MainPageMenu" 
+                      Padding="5 5 5 5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>-->
+
+                    <!--<FControls:MainPageButton x:Name="ActivitiesButton"
+                                              Background="Transparent"
+                                              Grid.Row="0"
+                                              Grid.Column="0">
+
+                                              --><!--Click="NavButton_Click"--><!--
+                        <StackPanel x:Name="ActivitiesStack">
+
+                            <SymbolIcon x:Name="ActivitiesSymbol"
+                                    Symbol="Bullets"
+                                    RenderTransformOrigin="0.5, 0.5"
+                                    Margin="25">
+
+                                <SymbolIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="ActivitiesScale"
+                                                ScaleX="2"
+                                                ScaleY="2"/>
+
+                                </SymbolIcon.RenderTransform>
+
+                            </SymbolIcon>
+
+                            <TextBlock x:Name="ActivitiesText"
+                               Text="Activities"
+                               TextWrapping="WrapWholeWords"
+                               FontSize="36"/>
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>
+
+                    <FControls:MainPageButton x:Name="NotesButton"
+                                              Background="Transparent"
+                                              IsEnabled="True"
+                                              Grid.Row="0"
+                                              Grid.Column="1">
+
+                                              --><!--Click="NavButton_Click"--><!--
+                        <StackPanel x:Name="NotesStack">
+                            <SymbolIcon  x:Name="NotesSymbol"
+                                         Symbol="Message"
+                                         RenderTransformOrigin="0.5, 0.5"
+                                         Margin="25">
+                                --><!-- Symbol="Repair" --><!--
+
+                                <SymbolIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="NotesScale"
+                                                ScaleX="2"
+                                                ScaleY="2"/>
+
+                                </SymbolIcon.RenderTransform>
+
+                            </SymbolIcon>
+
+                            <TextBlock x:Name="NotesText"
+                               Text="Notes"
+                               TextWrapping="WrapWholeWords"
+                               FontSize="36"/>
+                            --><!-- Text="Coming soon" --><!--
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>
+
+                    <FControls:MainPageButton x:Name="ToDosButton"
+                                              Background="Transparent"
+                                              IsEnabled="True"
+                                              Grid.Row="1"
+                                              Grid.Column="0"
+                                              Visibility="Visible">
+                                              --><!--Click="NavButton_Click"--><!--
+
+                        <StackPanel x:Name="ToDosStack">
+                            <SymbolIcon  x:Name="ToDosSymbol"
+                                         Symbol="AllApps"
+                                         RenderTransformOrigin="0.5, 0.5"
+                                         Margin="25">
+
+                                <SymbolIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="ToDosScale"
+                                                ScaleX="2"
+                                                ScaleY="2"/>
+
+                                </SymbolIcon.RenderTransform>
+
+                            </SymbolIcon>
+
+                            <TextBlock x:Name="ToDosText"
+                               Text="To - Dos"
+                               FontSize="36"/>
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>
+
+                    <FControls:MainPageButton x:Name="SettingsButton"
+                                              Background="Transparent"
+                                              IsEnabled="True"
+                                              Grid.Row="1"
+                                              Grid.Column="1">
+
+                                              --><!--Click="NavButton_Click"--><!--
+                        <StackPanel x:Name="SettingsStack">
+                            <SymbolIcon x:Name="SettingsSymbol"
+                                    Symbol="Setting"
+                                RenderTransformOrigin="0.5, 0.5"
+                                Margin="25">
+
+                                <SymbolIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="SettingsScale"
+                                                ScaleX="2"
+                                                ScaleY="2"/>
+
+                                </SymbolIcon.RenderTransform>
+
+                            </SymbolIcon>
+
+                            <TextBlock x:Name="SettingsText"
+                               Text="Settings"
+                               TextWrapping="WrapWholeWords"
+                               FontSize="36"/>
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>
+
+                    <FControls:MainPageButton x:Name="FeedbackButton"
+                                              Background="Transparent"
+                                              Grid.Row="1"
+                                              IsEnabled="True"
+                                              Grid.Column="0"
+                                              Visibility="Collapsed">
+                                              --><!--Click="NavButton_Click"--><!--
+
+                        <StackPanel x:Name="FeedbackStack">
+                            <FontIcon x:Name="FeedbackSymbol"
+                                   Glyph="&#xED15;"
+                                   RenderTransformOrigin="0.5, 0.5"
+                                   Margin="25">
+
+                                <FontIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="FeedbackScale"
+                                                ScaleX="2"
+                                                ScaleY="2"/>
+
+                                </FontIcon.RenderTransform>
+
+                            </FontIcon>
+
+                            <TextBlock x:Name="FeedbackText"
+                               Text="Feedback"
+                               TextWrapping="WrapWholeWords"
+                               FontSize="36"/>
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>
+
+                    <FControls:MainPageButton x:Name="TimeScheduleButton"
+                                              Background="Transparent"
+                                              Grid.Row="1"
+                                              IsEnabled="True"
+                                              Grid.Column="1"
+                                              Visibility="Collapsed">
+                                              --><!--Click="NavButton_Click"--><!--
+
+                        <StackPanel x:Name="TimeScheduleStack">
+                            <SymbolIcon  x:Name="TimeScheduleSymbol"
+                                         Symbol="Clock"
+                                         RenderTransformOrigin="0.5, 0.5"
+                                         Margin="25">
+
+                                <SymbolIcon.RenderTransform>
+
+                                    <CompositeTransform x:Name="TimeScheduleScale"
+                                                        ScaleX="2"
+                                                        ScaleY="2"/>
+
+                                </SymbolIcon.RenderTransform>
+
+                            </SymbolIcon>
+
+                            <TextBlock x:Name="TimeScheduleText"
+                                       Text="Time schedule"
+                                       TextWrapping="WrapWholeWords"
+                                       FontSize="36"/>
+
+                        </StackPanel>
+
+                    </FControls:MainPageButton>-->
+
+                <!--</Grid>-->
+
+                <RelativePanel Grid.Row="1" Background="Red">
+
+                    <Tools:DropShadowPanel Style="{ThemeResource ShadowContent}"
+                                           HorizontalContentAlignment="Stretch" 
+                                           VerticalContentAlignment="Stretch"
+                                           RelativePanel.AlignBottomWithPanel="True" 
+                                           RelativePanel.AlignRightWithPanel="True"
+                                           RelativePanel.AlignLeftWithPanel="True"
+                                           RelativePanel.AlignTopWithPanel="True">
+
+                        <Grid Style="{ThemeResource ContentGrid}"
+                              HorizontalAlignment="Stretch">
+
+                            <Button x:Name="Close"
+                                    Background="Transparent"
+                                    Content="&#xE711;"
+                                    Height="40"
+                                    Width="40"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Command="{Binding CloseMinor}"
+                                    Margin="0 0 10 0"/>
+
+                            <TextBlock VerticalAlignment="Center"
+                                       Margin="10 10 50 10">
+                                <Run>Your app has been updated to version </Run>
+                                <Run Text="{Binding CurrentVersion}"/>
+                            </TextBlock>
+
+                        </Grid>
+                    </Tools:DropShadowPanel>
+                </RelativePanel>
+            </Grid>
+        </Tools:DropShadowPanel>
+    </RelativePanel>
+</Page>

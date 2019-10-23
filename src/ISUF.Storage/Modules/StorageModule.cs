@@ -8,12 +8,11 @@ namespace ISUF.Storage.Modules
 {
     public class StorageModule : Module, IStorageModuleItemAccess
     {
+        public string ModuleTableName { get; private set; }
+
         protected Type itemManagerType;
-
-        protected IAtomicItemManager itemManager { get; set; }
-
         protected IDatabaseAccess dbAccess;
-        protected string moduleTableName;
+        protected IAtomicItemManager itemManager;
 
         public StorageModule(Type moduleItemType, Type itemManagerType, string moduleTableName = null) : base(moduleItemType)
         {
@@ -28,10 +27,10 @@ namespace ISUF.Storage.Modules
         private void SetModuleInfo(Type itemManagerType, string moduleTableName)
         {
             this.itemManagerType = itemManagerType;
-            this.moduleTableName = moduleTableName ?? moduleName;
+            this.ModuleTableName = moduleTableName ?? ModuleName;
         }
 
-        private void CreateItemManager() => itemManager = (IAtomicItemManager)Activator.CreateInstance(itemManagerType, dbAccess, moduleItemType, moduleName);
+        private void CreateItemManager() => itemManager = (IAtomicItemManager)Activator.CreateInstance(itemManagerType, dbAccess, ModuleItemType, ModuleName);
 
         public void SetDbAccess(IDatabaseAccess dbAccess)
         {

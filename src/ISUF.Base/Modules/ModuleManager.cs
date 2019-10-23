@@ -26,7 +26,7 @@ namespace ISUF.Base.Modules
         /// <returns>Existence of module</returns>
         public bool ExistModule(Type moduleType)
         {
-            return registeredModules.Where(x => x.GetModuleType() == moduleType).Count() != 0;
+            return registeredModules.Where(x => x.ModuleItemType == moduleType).Count() != 0;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ISUF.Base.Modules
         /// <returns>Existence of module</returns>
         public bool ExistModule(string moduleName)
         {
-            return registeredModules.Where(x => x.GetModuleName() == moduleName).Count() != 0;
+            return registeredModules.Where(x => x.ModuleName == moduleName).Count() != 0;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ISUF.Base.Modules
             if (moduleType == null || moduleName == null)
                 return false;
 
-            return registeredModules.Where(x => x.GetModuleName() == moduleName && x.GetModuleType() == moduleType).Count() != 0;
+            return registeredModules.Where(x => x.ModuleName == moduleName && x.ModuleItemType == moduleType).Count() != 0;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ISUF.Base.Modules
             if (module == null)
                 return false;
 
-            return ExistModule(module.GetModuleType(), module.GetModuleName());
+            return ExistModule(module.ModuleItemType, module.ModuleName);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ISUF.Base.Modules
         /// <returns>Module</returns>
         public Module GetModule(Type moduleType)
         {
-            return registeredModules.Where(x => x.GetModuleType() == moduleType).FirstOrDefault();
+            return registeredModules.Where(x => x.ModuleItemType == moduleType).FirstOrDefault();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ISUF.Base.Modules
         /// <returns>Module</returns>
         public Module GetModule(Type moduleType, string moduleName)
         {
-            return registeredModules.Where(x => x.GetModuleType() == moduleType && x.GetModuleName() == moduleName).FirstOrDefault();
+            return registeredModules.Where(x => x.ModuleItemType == moduleType && x.ModuleName == moduleName).FirstOrDefault();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace ISUF.Base.Modules
         /// <returns>Module</returns>
         public Module GetModule(string moduleName)
         {
-            return registeredModules.Where(x => x.GetModuleName() == moduleName).FirstOrDefault();
+            return registeredModules.Where(x => x.ModuleName == moduleName).FirstOrDefault();
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace ISUF.Base.Modules
         public bool RemoveModule(Module module)
         {
             if (ExistModule(module))
-                registeredModules.Remove(GetModule(module.GetModuleType(), module.GetModuleName()));
+                registeredModules.Remove(GetModule(module.ModuleItemType, module.ModuleName));
             else
                 return false;
 

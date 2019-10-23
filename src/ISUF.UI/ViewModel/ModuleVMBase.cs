@@ -26,7 +26,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleVMBase<T> : ViewModelBase, IModuleVMBase<T> where T : BaseItem
+    public abstract class ModuleVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleVMBase<T> where T : BaseItem
     {
         protected const string addPivotItemName = "AddPivot";
         protected const string detailPivotItemName = "DetailPivot";

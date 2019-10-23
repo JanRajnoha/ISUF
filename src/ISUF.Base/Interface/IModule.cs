@@ -9,8 +9,5 @@ namespace ISUF.Base.Interface
 {
     public interface IModule
     {
-        Type GetModuleType();
-
-        string GetModuleName();
     }
 }

@@ -14,7 +14,7 @@ using ISUF.Interface.Storage;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
+    public abstract class ModuleAddVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
     {
         public Messenger messenger;
         UserActivitySession currentActivity;

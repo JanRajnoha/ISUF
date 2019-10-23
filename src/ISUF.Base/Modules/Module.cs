@@ -13,9 +13,10 @@ namespace ISUF.Base.Modules
     /// </summary>
     public class Module : IModule
     {
-        protected Type moduleItemType { get; set; }
-        protected string moduleName { get; set; }
-        protected ModuleManager moduleManager { get; set; }
+        public Type ModuleItemType { get; private set; }
+        public string ModuleName { get; private set; }
+
+        protected ModuleManager moduleManager;
 
         /// <summary>
         /// Create module by type. 
@@ -23,8 +24,8 @@ namespace ISUF.Base.Modules
         /// <param name="moduleItemType">Type of module</param>
         public Module(Type moduleItemType)
         {
-            this.moduleItemType = moduleItemType;
-            moduleName = moduleItemType.Name;
+            ModuleItemType = moduleItemType;
+            ModuleName = moduleItemType.Name;
         }
         
         /// <summary>
@@ -34,25 +35,7 @@ namespace ISUF.Base.Modules
         /// <param name="moduleName">Name of module</param>
         public Module(Type moduleItemType, string moduleName) : this(moduleItemType)
         {
-            this.moduleName = moduleName;
-        }
-
-        /// <summary>
-        /// Return name of module. Default value is type of item converted into string
-        /// </summary>
-        /// <returns>Name of module</returns>
-        public virtual string GetModuleName()
-        {
-            return moduleName;
-        }
-
-        /// <summary>
-        /// Return type of module
-        /// </summary>
-        /// <returns>Type of module</returns>
-        public virtual Type GetModuleType()
-        {
-            return moduleItemType;
+            ModuleName = moduleName;
         }
 
         public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;

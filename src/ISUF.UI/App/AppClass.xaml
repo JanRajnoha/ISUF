@@ -1,0 +1,21 @@
+﻿<common:BootStrapper x:Class="ISUF.UI.App.AppClass"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:common="using:Template10.Common"
+                     xmlns:controls="using:Template10.Controls"
+                     xmlns:ViewModels="using:ISUF.UI.Classes">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Controls\Colors.xaml" />
+                <ResourceDictionary Source="Controls\ControlTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ViewModels:VMLocator x:Key="VMLocator"/>
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+
+</common:BootStrapper>
