@@ -1,4 +1,5 @@
 using ISUF.Base.Classes;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace ISUF.UI.ViewModel
 {
     public class ViewModelBase : Template10.Mvvm.ViewModelBase
     {
+        public UIModuleManager ModuleManager { get; set; }
+
         private Messenger messenger;
         public Messenger Messenger
         {
