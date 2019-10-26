@@ -183,7 +183,7 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <FControls:MainPageButton Content="asdasdasd"/>
+                            <FControls:MainPageButton Content="{Binding ModuleItemName}"/>
                         </DataTemplate>                        
                     </ListView.ItemTemplate>
                     

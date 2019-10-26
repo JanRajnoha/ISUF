@@ -231,6 +231,9 @@
     <Folder Include="Enum\" />
     <Folder Include="Templates\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\ISUF_Icon.png" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
