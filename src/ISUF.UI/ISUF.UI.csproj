@@ -111,9 +111,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="App\AppClass.xaml.cs">
-      <DependentUpon>AppClass.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="App\AppClass.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\VMLocator.cs" />
     <Compile Include="Command\BackupItemsCommand.cs" />
@@ -177,10 +175,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="App\AppClass.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

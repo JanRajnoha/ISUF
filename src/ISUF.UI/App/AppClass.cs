@@ -1,4 +1,4 @@
-﻿using ISUF.UI.Classes;
+using ISUF.UI.Classes;
 using ISUF.UI.Modules;
 using System;
 using System.IO;
@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Markup;
 namespace ISUF.UI.App
 {
     [Bindable]
-    public partial class AppClass : BootStrapper
+    public class AppClass : BootStrapper
     {
         public VMLocator VMLocator { get; set; } = new VMLocator();
 

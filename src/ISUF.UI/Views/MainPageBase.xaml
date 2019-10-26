@@ -183,7 +183,33 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <FControls:MainPageButton Content="{Binding ModuleItemName}"/>
+                            <FControls:MainPageButton Background="Transparent"
+                                                      Grid.Row="0"
+                                                      Grid.Column="0">
+                                
+                                <!--Click="NavButton_Click"-->
+                                <StackPanel>
+                                    
+                                    <SymbolIcon Symbol="{Binding ModuleItemIcon}"
+                                                RenderTransformOrigin="0.5, 0.5"
+                                                Margin="25">
+                                        
+                                        <SymbolIcon.RenderTransform>
+                                            
+                                            <CompositeTransform ScaleX="2"
+                                                                ScaleY="2"/>
+                                            
+                                        </SymbolIcon.RenderTransform>
+                                        
+                                    </SymbolIcon>
+                                    
+                                    <TextBlock Text="{Binding ModuleItemName}"
+                                               TextWrapping="WrapWholeWords"
+                                               FontSize="36"/>
+                                    
+                                </StackPanel>
+                                
+                            </FControls:MainPageButton>
                         </DataTemplate>                        
                     </ListView.ItemTemplate>
                     
