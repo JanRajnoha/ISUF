@@ -12,12 +12,12 @@ foreach ($Directory in $Directories)
 {
     Set-Location $Directory
 
-    $Files = Get-ChildItem -Filter *.csproj
+    $CsprojFiles = Get-ChildItem -Filter *.csproj
 	$NuspecFile = Get-ChildItem -Filter *.nuspec
 
 	if ($null -ne $NuspecFile)
     {
-		foreach ($File in $Files)
+		foreach ($CsprojFile in $CsprojFiles)
 		{
 
             if ($IncrementVersionFile = Get-ChildItem $CurrentDir -Name "Increment-Version.ps1" -File)
@@ -25,7 +25,7 @@ foreach ($Directory in $Directories)
 	            & "$CurrentDir\$IncrementVersionFile" $NuspecFile.FullName
             }
 
-		    & $NuGetProgram pack $File -IncludeReferencedProjects -OutputDirectory $NuGetDir
+		    & $NuGetProgram pack $CsprojFile -Build -IncludeReferencedProjects -OutputDirectory $NuGetDir -Properties Configuration="Release"
 		}
 	}
 
