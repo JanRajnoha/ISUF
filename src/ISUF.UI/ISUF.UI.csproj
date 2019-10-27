@@ -114,7 +114,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App\AppClass.cs" />
-    <Compile Include="App\sss.cs" />
+    <Compile Include="App\XamlDictionaries.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\VMLocator.cs" />
     <Compile Include="Command\BackupItemsCommand.cs" />
