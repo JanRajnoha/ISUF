@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ISUF.UI.XamlStyles;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
@@ -26,6 +28,8 @@ namespace ISUF.UI.Views
 
         public MainPageBase(Type viewModelType)
         {
+            //LoadResources();
+
             InitializeComponent();
             this.viewModelType = viewModelType;
             Loading += MainPage_Loading;

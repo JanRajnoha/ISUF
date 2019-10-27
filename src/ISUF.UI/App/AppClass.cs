@@ -1,5 +1,6 @@
 using ISUF.UI.Classes;
 using ISUF.UI.Modules;
+using ISUF.UI.XamlStyles;
 using System;
 using System.IO;
 using System.Reflection;

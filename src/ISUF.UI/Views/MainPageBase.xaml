@@ -173,7 +173,7 @@
 
                     <RowDefinition/>
                     <RowDefinition x:Name="MinorUpdateInfo"
-                                   Height="{Binding ShowMinorUpdate, Converter={StaticResource BoolToGridLength}}"/>
+                                   Height="0"/>
 
                 </Grid.RowDefinitions>
 

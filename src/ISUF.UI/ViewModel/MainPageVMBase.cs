@@ -44,16 +44,16 @@ namespace ISUF.UI.ViewModel
 
         public ICommand CloseMinor { get; set; }
 
-        public MainPageVMBase(AppClass appClass)
+        public MainPageVMBase()
         {
-            AppClass = appClass;
+            AppClass = (AppClass)Application.Current;
             CloseMinor = new RelayCommand(() => ShowMinorUpdate = false);
 
             var v = Package.Current.Id.Version;
 
             CurrentVersion = new Version(v.Major, v.Minor, v.Build);
 
-            Messenger = (Application.Current.Resources["VMLocator"] as VMLocator).GetMessenger();
+            Messenger = AppClass.VMLocator.GetMessenger();
         }
 
         public void LoadAppModules()

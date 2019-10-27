@@ -114,7 +114,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App\AppClass.cs" />
-    <Compile Include="App\XamlDictionaries.cs" />
+    <Compile Include="Views\PageBase.xaml.cs">
+      <DependentUpon>PageBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XamlStyles\XamlDictionaries.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\VMLocator.cs" />
     <Compile Include="Command\BackupItemsCommand.cs" />
@@ -199,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPageBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PageBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
