@@ -26,8 +26,10 @@
 -->
 <Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
   <Library Name="ISUF.UI">
-
-  	<!-- add directives for your library here -->
+    <Assembly Name="*Application*" Dynamic="Required All"/>
+    <Namespace Name="System" Serialize="Required All">
+      <Type Name="Double`1" Browse ="Required All"/>
+    </Namespace>
 
   </Library>
 </Directives>

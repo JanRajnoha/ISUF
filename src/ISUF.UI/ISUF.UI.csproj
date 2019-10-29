@@ -114,9 +114,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App\AppClass.cs" />
-    <Compile Include="Views\PageBase.xaml.cs">
-      <DependentUpon>PageBase.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\MainPageBase.cs" />
     <Compile Include="XamlStyles\XamlDictionaries.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\VMLocator.cs" />
@@ -148,9 +146,6 @@
     <Compile Include="ViewModel\ModuleDetailVMBase.cs" />
     <Compile Include="ViewModel\ModuleItemVMBase.cs" />
     <Compile Include="ViewModel\ModuleVMBase.cs" />
-    <Compile Include="Views\MainPageBase.xaml.cs">
-      <DependentUpon>MainPageBase.xaml</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Properties\ISUF.UI.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -198,14 +193,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainPageBase.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PageBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
