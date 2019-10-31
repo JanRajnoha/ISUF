@@ -13,7 +13,7 @@ namespace ISUF.UI.Classes
     {
         private readonly Messenger messenger = new Messenger();
 
-        public Dictionary<Type, object> ViewModels { get; set; }
+        public Dictionary<Type, object> ViewModels { get; set; } = new Dictionary<Type, object>();
 
         public bool AddViewModel(object newViewModel)
         {

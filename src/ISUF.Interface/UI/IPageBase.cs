@@ -1,14 +1,13 @@
-﻿using ISUF.Storage.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ISUF.UI.Models
+namespace ISUF.Interface.UI
 {
-    class UIModule 
+    public interface IPageBase
     {
-
+        void AddControls();
     }
 }

@@ -113,8 +113,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="App\AppClass.cs" />
+    <Compile Include="App\ApplicationBase.cs" />
+    <Compile Include="Controls\Busy.xaml.cs">
+      <DependentUpon>Busy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPageBase.cs" />
+    <Compile Include="Views\PageBase.cs" />
+    <Compile Include="Views\ShellBase.cs" />
     <Compile Include="XamlStyles\XamlDictionaries.cs" />
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\VMLocator.cs" />
@@ -135,7 +140,6 @@
     <Compile Include="Controls\NavigationView.cs" />
     <Compile Include="Controls\ShadowCheckBox.cs" />
     <Compile Include="EventArgs\CommandCompletedEventArgs.cs" />
-    <Compile Include="Models\UIModule.cs" />
     <Compile Include="Modules\AppModuleItem.cs" />
     <Compile Include="Modules\UIModule.cs" />
     <Compile Include="Modules\UIModuleManager.cs" />
@@ -176,6 +180,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\Busy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -220,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enum\" />
+    <Folder Include="Models\" />
     <Folder Include="Templates\" />
   </ItemGroup>
   <ItemGroup>

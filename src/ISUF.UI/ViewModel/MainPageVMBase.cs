@@ -4,6 +4,8 @@ using ISUF.UI.Classes;
 using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Template10.Mvvm;
 using Windows.ApplicationModel;
@@ -25,10 +27,11 @@ namespace ISUF.UI.ViewModel
             set
             {
                 showMinorUpdate = value;
-                RaisePropertyChanged(nameof(ShowMinorUpdate));
+                RaisePropertyChanged(nameof(showMinorUpdate));
             }
         }
-        private List<AppModuleItem> appModules;
+
+        private List<AppModuleItem> appModules = new List<AppModuleItem>();
 
         public List<AppModuleItem> AppModules
         {
@@ -40,25 +43,25 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        public AppClass AppClass { get; set; }
+        public ApplicationBase ApplicationClass { get; set; }
 
         public ICommand CloseMinor { get; set; }
 
-        public MainPageVMBase()
+        public MainPageVMBase(ApplicationBase applicationClass)
         {
-            AppClass = (AppClass)Application.Current;
+            ApplicationClass = applicationClass;
             CloseMinor = new RelayCommand(() => ShowMinorUpdate = false);
 
             var v = Package.Current.Id.Version;
 
             CurrentVersion = new Version(v.Major, v.Minor, v.Build);
 
-            Messenger = AppClass.VMLocator.GetMessenger();
+            Messenger = ApplicationClass.VMLocator.GetMessenger();
         }
 
         public void LoadAppModules()
         {
-            AppModules = AppClass.ModuleManager.GetUIModules();
+            AppModules = ApplicationClass.ModuleManager.GetUIModules();
         }
     }
 }

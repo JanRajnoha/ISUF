@@ -18,7 +18,7 @@ namespace ISUF.UI.Modules
             {
                 if (module is UIModule uiModule)
                 {
-                    var appModuleItem = new AppModuleItem(uiModule.ModuleName, uiModule.ModuleIcon);
+                    uiModules.Add(new AppModuleItem(uiModule.ModuleName, uiModule.ModuleIcon));
                 }
             }
 

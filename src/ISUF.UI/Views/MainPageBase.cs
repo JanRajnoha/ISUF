@@ -1,4 +1,6 @@
-﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+﻿using ISUF.UI.App;
+using ISUF.UI.ViewModel;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Views
@@ -13,22 +17,34 @@ namespace ISUF.UI.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public abstract class MainPageBase : Page
+    public abstract class MainPageBase : PageBase
     {
         protected Type viewModelType;
+        protected object[] viewModelArgs;
 
-        public MainPageBase(Type viewModelType)
+        public MainPageBase(Type viewModelType, params object[] viewModelArgs)
         {
-            //LoadResources();
-
             this.viewModelType = viewModelType;
-            //AddControls();
+            this.viewModelArgs = viewModelArgs;
+
+            CreateViewModel();
+
             Loading += MainPage_Loading;
         }
 
-        protected abstract void MainPage_Loading(FrameworkElement sender, object args);
+        private void CreateViewModel()
+        {
+            object viewModel = Activator.CreateInstance(viewModelType, viewModelArgs);
+            (Application.Current as ApplicationBase).VMLocator.AddViewModel(viewModel);
+        }
 
-        public void AddControls()
+        protected void MainPage_Loading(FrameworkElement sender, object args)
+        {
+            DataContext = (Application.Current as ApplicationBase).VMLocator.GetViewModel(viewModelType);
+            AddControls();
+        }
+
+        public override void AddControls()
         {
             var container = AddContainer();
             AddCommandBar(container);
@@ -80,7 +96,7 @@ namespace ISUF.UI.Views
             if (container == null)
                 return;
 
-            var pageHeader = container.Children.FirstOrDefault(x => ((FrameworkElement)x).Name == "PageHeader");
+            var pageHeader = container.Children.FirstOrDefault(x => (x as FrameworkElement).Name == "PageHeader");
 
             DropShadowPanel ShadowPanel = new DropShadowPanel
             {
@@ -110,9 +126,28 @@ namespace ISUF.UI.Views
             ListView MainPageMenu = new ListView
             {
                 Name = "MainPageMenu",
-                Padding = new Thickness(5),
-                ItemsSource = new List<string>() // TODO
+                Padding = new Thickness(5)
             };
+
+            var menuItemTemplate = "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
+                "<Grid>" +
+                "<Grid.ColumnDefinitions>" +
+                "<ColumnDefinition Width=\"30\"/>" +
+                "<ColumnDefinition/>" +
+                "</Grid.ColumnDefinitions>" +
+                "<SymbolIcon Symbol=\"{Binding ModuleDisplayIcon}\" HorizontalAlignment=\"Left\" Margin=\"5 0 0 0\"/>" +
+                "<TextBlock Grid.Column=\"1\" Text=\"{Binding ModuleDisplayName}\" Margin=\"15 0 0 0\"/>" +
+                "</Grid>" +
+                "</DataTemplate>";
+            MainPageMenu.ItemTemplate = (DataTemplate)XamlReader.Load(menuItemTemplate);
+
+            Binding modulesMenuBinding = new Binding
+            {
+                Source = (DataContext as MainPageVMBase).AppModules,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            BindingOperations.SetBinding(MainPageMenu, ListView.ItemsSourceProperty, modulesMenuBinding);
 
             RelativePanel MinorUpdatePanel = new RelativePanel();
             Grid.SetRow(MinorUpdatePanel, 1);
