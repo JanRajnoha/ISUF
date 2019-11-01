@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ISUF.Base.Classes;
 using ISUF.Base.Enum;
 using ISUF.Base.Service;
 using ISUF.Base.Settings;
-using ISUF.UI.Controls;
+using ISUF.UI.App;
+using System;
+using System.Globalization;
+using System.Linq;
 using Template10.Controls;
 using Template10.Services.NavigationService;
 using Windows.ApplicationModel.Core;
@@ -30,9 +26,9 @@ namespace ISUF.UI.Views
         const string AccountClientId = "none";
         const string StoredAccountKey = "accountid";
         const string StoredAccountProviderKey = "accountProviderid";
-
-        string appDisplayName;
-        Type settingsPageType;
+        readonly string appDisplayName;
+        readonly Type settingsPageType;
+        readonly Type mainPageType;
         Controls.NavigationView navView;
         TextBlock appTitle;
 
@@ -41,14 +37,21 @@ namespace ISUF.UI.Views
         public static HamburgerMenu HamburgerMenu => Instance.HamMen;
         public HamburgerMenu HamMen { get; set; }
 
-        public ShellBase(string appDisplayName, Type settingsPageType)
+        /// <summary>
+        /// Set navigation service which is gived by argument
+        /// </summary>
+        /// <param name="navigationService">New navigation service</param>
+        public ShellBase(string appDisplayName, Type mainPageType, Type settingsPageType, INavigationService navigationService)
         {
             this.appDisplayName = appDisplayName;
             this.settingsPageType = settingsPageType;
+            this.mainPageType = mainPageType;
 
             Instance = this;
 
             HamMen = new HamburgerMenu();
+
+            SetNavigationService(ApplicationBase.Current.NavigationService);
 
             CustomSettings.ShowAdsChanged -= CustomSettings_ShowAdsChanged;
             CustomSettings.ShowAdsChanged += CustomSettings_ShowAdsChanged;
@@ -59,14 +62,7 @@ namespace ISUF.UI.Views
             titleBar.LayoutMetricsChanged += TitleBar_LayoutMetricsChanged;
 
             uiSettings.ColorValuesChanged += ThemeChanger;
-        }
 
-        /// <summary>
-        /// Set navigation service which is gived by argument
-        /// </summary>
-        /// <param name="navigationService">New navigation service</param>
-        public ShellBase(string appDisplayName, Type settingsPageType, INavigationService navigationService) : this(appDisplayName, settingsPageType)
-        {
             SetNavigationService(navigationService);
         }
 
@@ -87,7 +83,9 @@ namespace ISUF.UI.Views
         private void ThemeChanger(UISettings sender, object args)
         {
             if (SettingsService.Instance.UseSystemAppTheme)
+            {
                 ThemeSelectorService.SetTheme(AppTheme.Dark);
+            }
         }
 
         /// <summary>
@@ -97,7 +95,10 @@ namespace ISUF.UI.Views
         /// <param name="args"></param>
         private void TitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            if (appTitle == null) return;
+            if (appTitle == null)
+            {
+                return;
+            }
             //AppTitle.Margin = new Thickness(CoreApplication.GetCurrentView().TitleBar.SystemOverlayLeftInset + 12, 8, 0, 0);
             appTitle.Margin = new Thickness(0, 8, 0, 0);
         }
@@ -109,7 +110,11 @@ namespace ISUF.UI.Views
         /// <param name="e"></param>
         private void CustomSettings_ShowAdsChanged(object sender, ShowAdsChangedEventArgs e)
         {
-            if (navView == null) return;
+            if (navView == null)
+            {
+                return;
+            }
+
             navView.ShowAd = !e.ShowAdsChangedNewState ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -130,7 +135,7 @@ namespace ISUF.UI.Views
 
             NavView.MenuItems.Add(CreateNavigationItem("Home", Symbol.Home));
 
-            var navViewHeaderTemplate = "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
+            string navViewHeaderTemplate = "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
                 "<Grid Background=\"{ThemeResource SystemControlAcrylicWindowMediumHighBrush}\" Height=\"32\">" +
                 "</Grid>" +
                 "</DataTemplate>";
@@ -163,6 +168,8 @@ namespace ISUF.UI.Views
 
             navView = NavView;
             appTitle = AppTitle;
+
+            Content = Container;
         }
 
         private object CreateNavigationItem(string itemTitle, Symbol itemIcon)
@@ -196,10 +203,17 @@ namespace ISUF.UI.Views
             else
             {
                 if (args.InvokedItem is string itemText
-                    && navView.MenuItems.FirstOrDefault(x => ((x as NavigationViewItem).Content as string) == itemText) is NavigationViewItem navItem
-                    && navItem.Tag is Type modulePageType)
-
-                    HamMen.NavigationService.Navigate(modulePageType);
+                    && navView.MenuItems.FirstOrDefault(x => ((x as NavigationViewItem).Content as string) == itemText) is NavigationViewItem navItem)
+                {
+                    if (navItem.Tag is Type modulePageType)
+                    {
+                        HamMen.NavigationService.Navigate(modulePageType);
+                    }
+                    else
+                    {
+                        HamMen.NavigationService.Navigate(mainPageType);
+                    }
+                }
             }
         }
 
@@ -210,6 +224,11 @@ namespace ISUF.UI.Views
         /// <param name="e"></param>
         private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
+            if (HamMen.NavigationService == null)
+            {
+                return;
+            }
+
             navView.Content = HamMen.NavigationService.FrameFacade.Frame;
 
             foreach (NavigationViewItem item in navView.MenuItems)

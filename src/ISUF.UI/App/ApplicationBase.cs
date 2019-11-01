@@ -15,6 +15,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
@@ -27,7 +28,10 @@ namespace ISUF.UI.App
     [Bindable]
     public abstract class ApplicationBase : BootStrapper
     {
-        Type settingsPageType;
+        protected Type settingsPageType;
+        protected Type mainPageType;
+        protected Type shellPageType;
+        protected string appDisplayName;
 
         public new static ApplicationBase Current { get; set; }
 
@@ -35,9 +39,13 @@ namespace ISUF.UI.App
 
         public UIModuleManager ModuleManager { get; set; }
 
-        public ApplicationBase(Type settingsPageType)
+        public ApplicationBase(string appDisplayName, Type shellPageType, Type mainPageType, Type settingsPageType)
         {
+            this.appDisplayName = appDisplayName;
+            this.appDisplayName = appDisplayName;
+            this.mainPageType = mainPageType;
             this.settingsPageType = settingsPageType;
+
             Suspending += OnSuspending;
         }
 
@@ -75,6 +83,17 @@ namespace ISUF.UI.App
             throw new Exception("Failed to load Page " + e?.SourcePageType.FullName);
         }
 
+        public override UIElement CreateRootElement(IActivatedEventArgs e)
+        {
+            var navigationService = NavigationServiceFactory(BackButton.Ignore, ExistingContent.Exclude);
+            return new ModalDialog
+            {
+                DisableBackButtonWhenModal = true,
+                Content = Activator.CreateInstance(shellPageType, appDisplayName, mainPageType, settingsPageType, navigationService),
+                ModalContent = new Busy(),
+            };
+        }
+
         public override async Task OnInitializeAsync(IActivatedEventArgs args)
         {
             //draw into the title bar
@@ -101,21 +120,6 @@ namespace ISUF.UI.App
             titleBar.InactiveForegroundColor = btnForegroundColor.Color;
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveForegroundColor = btnForegroundColor.Color;
-
-            if (Window.Current.Content as ModalDialog == null)
-            {
-                // create a new frame 
-                var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
-
-                // create modal root
-                Window.Current.Content = new ModalDialog
-                {
-                    DisableBackButtonWhenModal = true,
-                    Content = new Views.ShellBase(Package.Current.DisplayName + (Constants.Instance.BetaMode ? " - Beta version" : ""), settingsPageType, nav),
-                    ModalContent = new Busy(),
-                };
-            }
-            await Task.CompletedTask;
         }
 
         /// <summary>

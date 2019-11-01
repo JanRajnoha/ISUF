@@ -70,7 +70,8 @@ namespace ISUF.UI.Views
             CommandBar PageHeader = new CommandBar
             {
                 Name = "PageHeader",
-                Style = Application.Current.Resources["PageHeader"] as Style
+                Style = Application.Current.Resources["PageHeader"] as Style,
+                Margin = new Thickness(0, 32, 0, 0)
             };
 
             AppBarButton settings = new AppBarButton
