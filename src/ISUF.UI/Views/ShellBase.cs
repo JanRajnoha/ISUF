@@ -43,9 +43,12 @@ namespace ISUF.UI.Views
         /// <param name="navigationService">New navigation service</param>
         public ShellBase(string appDisplayName, Type mainPageType, Type settingsPageType, INavigationService navigationService)
         {
+            if (navigationService == null)
+                throw new ArgumentNullException(nameof(navigationService), "Navigation service couldn't be null.");
+
             this.appDisplayName = appDisplayName;
             this.settingsPageType = settingsPageType;
-            this.mainPageType = mainPageType;
+            this.mainPageType = mainPageType ?? throw new ArgumentNullException(nameof(mainPageType), "Type for Main page couldn't be null.");
 
             Instance = this;
 
@@ -126,6 +129,7 @@ namespace ISUF.UI.Views
             {
                 ShowAd = Visibility.Collapsed,
                 AlwaysShowHeader = false,
+                IsSettingsVisible = settingsPageType != null,
                 CompactModeThresholdWidth = Application.Current.Resources["NormalMinWidth"] as double? ?? 0,
                 ExpandedModeThresholdWidth = Application.Current.Resources["WideMinWidth"] as double? ?? 0
             };

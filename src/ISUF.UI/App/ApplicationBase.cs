@@ -1,10 +1,10 @@
-using ISUF.Base.Classes;
 using ISUF.UI.Classes;
 using ISUF.UI.Controls;
 using ISUF.UI.Modules;
 using ISUF.UI.XamlStyles;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Template10.Common;
@@ -15,7 +15,6 @@ using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
@@ -28,10 +27,14 @@ namespace ISUF.UI.App
     [Bindable]
     public abstract class ApplicationBase : BootStrapper
     {
-        protected Type settingsPageType;
         protected Type mainPageType;
         protected Type shellPageType;
-        protected string appDisplayName;
+
+        public Type SettingsPageType { get; set; }
+
+        public string AppDisplayName { get; set; }
+
+        public string ReleaseNotes { get; set; }
 
         public new static ApplicationBase Current { get; set; }
 
@@ -39,12 +42,18 @@ namespace ISUF.UI.App
 
         public UIModuleManager ModuleManager { get; set; }
 
+        public List<AppModuleItem> AppUIModules { get; set; }
+
         public ApplicationBase(string appDisplayName, Type shellPageType, Type mainPageType, Type settingsPageType)
         {
-            this.appDisplayName = appDisplayName;
-            this.appDisplayName = appDisplayName;
+            this.shellPageType = shellPageType;
             this.mainPageType = mainPageType;
-            this.settingsPageType = settingsPageType;
+            this.SettingsPageType = settingsPageType;
+
+            AppDisplayName = appDisplayName;
+            Current = this;
+
+            RegisterModules();
 
             Suspending += OnSuspending;
         }
@@ -55,6 +64,13 @@ namespace ISUF.UI.App
             customResources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Load(XamlDictionaries.Controls));
 
             return customResources;
+        }
+
+        public abstract void RegisterModules();
+
+        public void LoadUIModules()
+        {
+            AppUIModules = ModuleManager.GetUIModules();
         }
 
         /// <summary>
@@ -89,13 +105,15 @@ namespace ISUF.UI.App
             return new ModalDialog
             {
                 DisableBackButtonWhenModal = true,
-                Content = Activator.CreateInstance(shellPageType, appDisplayName, mainPageType, settingsPageType, navigationService),
+                Content = Activator.CreateInstance(shellPageType, AppDisplayName, mainPageType, SettingsPageType, navigationService),
                 ModalContent = new Busy(),
             };
         }
 
         public override async Task OnInitializeAsync(IActivatedEventArgs args)
         {
+            Resources = (ResourceDictionary)ImportResources();
+
             //draw into the title bar
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
@@ -120,6 +138,8 @@ namespace ISUF.UI.App
             titleBar.InactiveForegroundColor = btnForegroundColor.Color;
             titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             titleBar.ButtonInactiveForegroundColor = btnForegroundColor.Color;
+
+            LoadUIModules();
         }
 
         /// <summary>

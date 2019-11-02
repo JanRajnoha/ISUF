@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Template10.Converters;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -21,6 +22,7 @@ namespace ISUF.UI.Views
     {
         protected Type viewModelType;
         protected object[] viewModelArgs;
+        protected ListView mainPageMenu;
 
         public MainPageBase(Type viewModelType, params object[] viewModelArgs)
         {
@@ -51,7 +53,7 @@ namespace ISUF.UI.Views
             AddModuleMenu(container);
         }
 
-        public Panel AddContainer()
+        public virtual Panel AddContainer()
         {
             RelativePanel Container = new RelativePanel
             {
@@ -65,7 +67,7 @@ namespace ISUF.UI.Views
             return Container;
         }
 
-        public void AddCommandBar(Panel container)
+        public virtual void AddCommandBar(Panel container)
         {
             CommandBar PageHeader = new CommandBar
             {
@@ -76,10 +78,10 @@ namespace ISUF.UI.Views
 
             AppBarButton settings = new AppBarButton
             {
-                Label = "Settings"
+                Label = "Settings",
+                Icon = new SymbolIcon(Symbol.Setting)
             };
-            SymbolIcon settingsSymbol = new SymbolIcon(Symbol.Setting);
-            settings.Icon = settingsSymbol;
+            settings.Click += GoToSettings;
             PageHeader.PrimaryCommands.Add(settings);
 
             TextBlock title = new TextBlock
@@ -92,7 +94,7 @@ namespace ISUF.UI.Views
             container.Children.Add(PageHeader);
         }
 
-        public void AddModuleMenu(Panel container)
+        public virtual void AddModuleMenu(Panel container)
         {
             if (container == null)
                 return;
@@ -116,14 +118,36 @@ namespace ISUF.UI.Views
             };
 
             RowDefinition RowMain = new RowDefinition();
-            RowDefinition MinorUpdateRow = new RowDefinition // TODO
+            RowDefinition MinorUpdateRow = new RowDefinition();
+
+            ValueWhenConverter boolToGridLength = new ValueWhenConverter
             {
-                Height = new GridLength(60)
+                When = true,
+                Value = new GridLength(50),
+                Otherwise = new GridLength(0)
             };
+
+            Binding minorUpdateRowBinding = new Binding
+            {
+                Source = (DataContext as MainPageVMBase).ShowMinorUpdate,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = boolToGridLength
+            };
+            BindingOperations.SetBinding(MinorUpdateRow, RowDefinition.HeightProperty, minorUpdateRowBinding);
 
             ContentGrid.RowDefinitions.Add(RowMain);
             ContentGrid.RowDefinitions.Add(MinorUpdateRow);
 
+            AddMenuList(ContentGrid);
+            AddMinorUpdateRow(ContentGrid);
+
+            ShadowPanel.Content = ContentGrid;
+            container.Children.Add(ShadowPanel);
+        }
+
+        private void AddMenuList(Panel moduleMenu)
+        {
             ListView MainPageMenu = new ListView
             {
                 Name = "MainPageMenu",
@@ -141,15 +165,22 @@ namespace ISUF.UI.Views
                 "</Grid>" +
                 "</DataTemplate>";
             MainPageMenu.ItemTemplate = (DataTemplate)XamlReader.Load(menuItemTemplate);
+            MainPageMenu.SelectionChanged += NavButton_Click;
 
             Binding modulesMenuBinding = new Binding
             {
-                Source = (DataContext as MainPageVMBase).AppModules,
+                Source = ApplicationBase.Current.AppUIModules,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
             BindingOperations.SetBinding(MainPageMenu, ListView.ItemsSourceProperty, modulesMenuBinding);
 
+            mainPageMenu = MainPageMenu;
+            moduleMenu.Children.Add(MainPageMenu);
+        }
+
+        private void AddMinorUpdateRow(Panel moduleMenu)
+        {
             RelativePanel MinorUpdatePanel = new RelativePanel();
             Grid.SetRow(MinorUpdatePanel, 1);
 
@@ -181,13 +212,18 @@ namespace ISUF.UI.Views
                 HorizontalAlignment = HorizontalAlignment.Right,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Command = null, // TODO
                 Margin = new Thickness(0, 0, 10, 0)
             };
 
+            Binding minorUpdateCloseBinding = new Binding
+            {
+                Source = (DataContext as MainPageVMBase).CloseMinor
+            };
+            BindingOperations.SetBinding(MinorUpdateClose, Button.CommandProperty, minorUpdateCloseBinding);
+
             TextBlock MinorUpdateText = new TextBlock
             {
-                Text = "Your app has been udpated to version " + "1.1.1", // TODO
+                Text = "Your app has been udpated to version " + (DataContext as MainPageVMBase).CurrentVersion,
                 Margin = new Thickness(10, 10, 50, 10),
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -196,10 +232,41 @@ namespace ISUF.UI.Views
             MinorUpdateContent.Children.Add(MinorUpdateText);
             MinorUpdateShadow.Content = MinorUpdateContent;
             MinorUpdatePanel.Children.Add(MinorUpdateShadow);
-            ContentGrid.Children.Add(MainPageMenu);
-            ContentGrid.Children.Add(MinorUpdatePanel);
-            ShadowPanel.Content = ContentGrid;
-            container.Children.Add(ShadowPanel);
+
+            moduleMenu.Children.Add(MinorUpdatePanel);
+        }
+
+        /// <summary>
+        /// Prepare connected animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void NavButton_Click(object sender, SelectionChangedEventArgs e)
+        {
+            //var ButtonName = (sender as Button).Name;
+            //TextBlock ButtonText = FindName(ButtonName.Substring(0, ButtonName.Length - 6) + "Text") as TextBlock;
+
+            //ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("header", ButtonText);
+            //((MainPageViewModel)DataContext).NavigatedPage = ButtonText.Name.Substring(0, ButtonText.Name.Length - 4);
+            //((MainPageVMBase)DataContext).GoToPage();
+        }
+
+        /// <summary>
+        /// Prepare connected animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void GoToSettings(object sender, RoutedEventArgs e)
+        {
+            //var ButtonName = (sender as Button).Name;
+            //TextBlock ButtonText = FindName(ButtonName.Substring(0, ButtonName.Length - 6) + "Text") as TextBlock;
+
+            //ConnectedAnimationService.GetForCurrentView().PrepareToAnimate("header", ButtonText);
+            //((MainPageViewModel)DataContext).NavigatedPage = ButtonText.Name.Substring(0, ButtonText.Name.Length - 4);
+            var settingsPageType = ApplicationBase.Current.SettingsPageType;
+
+            if (settingsPageType != null)
+                ((MainPageVMBase)DataContext).GoToPage(settingsPageType);
         }
     }
 }

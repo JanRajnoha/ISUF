@@ -1,15 +1,17 @@
 using ISUF.Base.Classes;
+using ISUF.Base.Messages;
+using ISUF.Base.Service;
 using ISUF.UI.App;
-using ISUF.UI.Classes;
-using ISUF.UI.Modules;
+using ISUF.UI.Controls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Template10.Mvvm;
+using Template10.Services.NavigationService;
 using Windows.ApplicationModel;
-using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
+
 
 namespace ISUF.UI.ViewModel
 {
@@ -31,18 +33,6 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private List<AppModuleItem> appModules = new List<AppModuleItem>();
-
-        public List<AppModuleItem> AppModules
-        {
-            get => appModules;
-            set
-            {
-                appModules = value;
-                RaisePropertyChanged(nameof(appModules));
-            }
-        }
-
         public ApplicationBase ApplicationClass { get; set; }
 
         public ICommand CloseMinor { get; set; }
@@ -59,9 +49,53 @@ namespace ISUF.UI.ViewModel
             Messenger = ApplicationClass.VMLocator.GetMessenger();
         }
 
-        public void LoadAppModules()
+        public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            AppModules = ApplicationClass.ModuleManager.GetUIModules();
+            var OldVer = new Version(SettingsService.Instance.CurrentAppVersion);
+            var CurVer = new Version(Package.Current.Id.Version.Major, Package.Current.Id.Version.Minor, Package.Current.Id.Version.Build);
+
+            if (OldVer != CurVer)
+            {
+                SettingsService.Instance.CurrentAppVersion = $"{CurVer.Major}.{CurVer.Minor}.{CurVer.Build}";
+
+                if (CurVer.Minor != OldVer.Minor || OldVer.Major == 0)
+                {
+                    ModalWindow.SetVisibility(true, new ReleaseNotes(), useAnimation: false);
+                }
+                else
+                {
+                    ShowMinorUpdate = true;
+                }
+            }
+
+            //Messenger.Register<ShowModalActivationMsg>(ShowModal);
+
+            await Task.CompletedTask;
+        }
+
+        public override async Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
+        {
+            //Messenger.UnRegister<ShowModalActivationMsg>(ShowModal);
+
+            await Task.CompletedTask;
+        }
+
+        public override async Task OnNavigatingFromAsync(NavigatingEventArgs args)
+        {
+            args.Cancel = false;
+            await Task.CompletedTask;
+        }
+
+        //public RelayCommand GoToFeedback() => new RelayCommand(async () =>
+        //{
+        //    var launcher = StoreServicesFeedbackLauncher.GetDefault();
+        //    await launcher.LaunchAsync();
+        //});
+
+        public void GoToPage(Type destinationPage)
+        {
+            if (destinationPage != null)
+                NavigationService.Navigate(destinationPage, infoOverride: new SuppressNavigationTransitionInfo());
         }
     }
 }

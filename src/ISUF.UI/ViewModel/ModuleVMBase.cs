@@ -407,7 +407,7 @@ namespace ISUF.UI.ViewModel
         /// <param name="fileXmlString">Decoded XML</param>
         /// <returns>Type of item</returns>
 
-        // To-Do solve - nmullable type
+        // To-Do solve - nullable type
         public string CategoryDecode(string fileXmlString)
         {
             XmlDocument xmlDoc = new XmlDocument();
