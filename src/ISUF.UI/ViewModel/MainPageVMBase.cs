@@ -30,6 +30,11 @@ namespace ISUF.UI.ViewModel
             {
                 showMinorUpdate = value;
                 RaisePropertyChanged(nameof(showMinorUpdate));
+                Messenger.Send(new PropertyChangedMsg()
+                {
+                    PropertyName = nameof(ShowMinorUpdate),
+                    PropertyValue = value
+                });
             }
         }
 

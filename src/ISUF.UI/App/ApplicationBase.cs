@@ -1,5 +1,6 @@
 using ISUF.UI.Classes;
 using ISUF.UI.Controls;
+using ISUF.UI.Design;
 using ISUF.UI.Modules;
 using ISUF.UI.XamlStyles;
 
@@ -38,6 +39,8 @@ namespace ISUF.UI.App
 
         public new static ApplicationBase Current { get; set; }
 
+        public PropertyChangedNotifier PropertyChangedNotifier { get; set; }
+
         public VMLocator VMLocator { get; set; } = new VMLocator();
 
         public UIModuleManager ModuleManager { get; set; }
@@ -52,6 +55,8 @@ namespace ISUF.UI.App
 
             AppDisplayName = appDisplayName;
             Current = this;
+
+            PropertyChangedNotifier = new PropertyChangedNotifier();
 
             RegisterModules();
 

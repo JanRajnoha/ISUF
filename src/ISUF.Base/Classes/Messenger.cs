@@ -1,17 +1,14 @@
 using ISUF.Base.Interface;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ISUF.Base.Classes
 {
     public class Messenger : IMessenger
     {
         private readonly ConcurrentDictionary<Type, ConcurrentBag<Delegate>> registeredActions = new ConcurrentDictionary<Type, ConcurrentBag<Delegate>>();
-        private readonly Object bagLock = new Object();
+        private readonly object bagLock = new object();
 
         /// <summary>
         /// Register for messages
@@ -24,8 +21,7 @@ namespace ISUF.Base.Classes
 
             lock (bagLock)
             {
-                ConcurrentBag<Delegate> actions;
-                if (!registeredActions.TryGetValue(typeof(TMessage), out actions))
+                if (!registeredActions.TryGetValue(key, out ConcurrentBag<Delegate> actions))
                 {
                     actions = new ConcurrentBag<Delegate>();
                     registeredActions[key] = actions;
@@ -33,7 +29,6 @@ namespace ISUF.Base.Classes
 
                 actions.Add(action);
             }
-
         }
 
         /// <summary>
@@ -61,8 +56,7 @@ namespace ISUF.Base.Classes
         {
             var key = typeof(TMessage);
 
-            ConcurrentBag<Delegate> actions;
-            if (registeredActions.TryGetValue(typeof(TMessage), out actions))
+            if (registeredActions.TryGetValue(key, out ConcurrentBag<Delegate> actions))
             {
                 lock (bagLock)
                 {

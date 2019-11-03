@@ -1,4 +1,5 @@
 ﻿using ISUF.UI.App;
+using ISUF.UI.Classes;
 using ISUF.UI.ViewModel;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
@@ -37,12 +38,12 @@ namespace ISUF.UI.Views
         private void CreateViewModel()
         {
             object viewModel = Activator.CreateInstance(viewModelType, viewModelArgs);
-            (Application.Current as ApplicationBase).VMLocator.AddViewModel(viewModel);
+            ApplicationBase.Current.VMLocator.AddViewModel(viewModel);
         }
 
         protected void MainPage_Loading(FrameworkElement sender, object args)
         {
-            DataContext = (Application.Current as ApplicationBase).VMLocator.GetViewModel(viewModelType);
+            DataContext = ApplicationBase.Current.VMLocator.GetViewModel(viewModelType);
             AddControls();
         }
 
@@ -60,7 +61,7 @@ namespace ISUF.UI.Views
                 Name = "Container",
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = Application.Current.Resources["PageHeader"] as Brush
+                Background = ApplicationBase.Current.Resources["PageHeader"] as Brush
             };
             Content = Container;
 
@@ -72,7 +73,7 @@ namespace ISUF.UI.Views
             CommandBar PageHeader = new CommandBar
             {
                 Name = "PageHeader",
-                Style = Application.Current.Resources["PageHeader"] as Style,
+                Style = ApplicationBase.Current.Resources["PageHeader"] as Style,
                 Margin = new Thickness(0, 32, 0, 0)
             };
 
@@ -87,7 +88,7 @@ namespace ISUF.UI.Views
             TextBlock title = new TextBlock
             {
                 Text = "Home",
-                Style = Application.Current.Resources["PageHeaderText"] as Style
+                Style = ApplicationBase.Current.Resources["PageHeaderText"] as Style
             };
             PageHeader.Content = title;
 
@@ -103,7 +104,7 @@ namespace ISUF.UI.Views
 
             DropShadowPanel ShadowPanel = new DropShadowPanel
             {
-                Style = Application.Current.Resources["ShadowContent"] as Style,
+                Style = ApplicationBase.Current.Resources["ShadowContent"] as Style,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 VerticalContentAlignment = VerticalAlignment.Stretch
             };
@@ -114,7 +115,7 @@ namespace ISUF.UI.Views
 
             Grid ContentGrid = new Grid
             {
-                Style = Application.Current.Resources["ContentGrid"] as Style
+                Style = ApplicationBase.Current.Resources["ContentGrid"] as Style
             };
 
             RowDefinition RowMain = new RowDefinition();
@@ -135,6 +136,9 @@ namespace ISUF.UI.Views
                 Converter = boolToGridLength
             };
             BindingOperations.SetBinding(MinorUpdateRow, RowDefinition.HeightProperty, minorUpdateRowBinding);
+
+            var MPVMB = DataContext as MainPageVMBase;
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(MinorUpdateRow, RowDefinition.HeightProperty, boolToGridLength, nameof(MPVMB.ShowMinorUpdate));
 
             ContentGrid.RowDefinitions.Add(RowMain);
             ContentGrid.RowDefinitions.Add(MinorUpdateRow);
@@ -186,7 +190,7 @@ namespace ISUF.UI.Views
 
             DropShadowPanel MinorUpdateShadow = new DropShadowPanel
             {
-                Style = Application.Current.Resources["ShadowContent"] as Style,
+                Style = ApplicationBase.Current.Resources["ShadowContent"] as Style,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
                 VerticalContentAlignment = VerticalAlignment.Stretch
             };
@@ -197,7 +201,7 @@ namespace ISUF.UI.Views
 
             Grid MinorUpdateContent = new Grid
             {
-                Style = Application.Current.Resources["ContentGrid"] as Style,
+                Style = ApplicationBase.Current.Resources["ContentGrid"] as Style,
                 HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
