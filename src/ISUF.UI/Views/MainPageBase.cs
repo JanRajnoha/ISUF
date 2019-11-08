@@ -21,30 +21,10 @@ namespace ISUF.UI.Views
     /// </summary>
     public abstract class MainPageBase : PageBase
     {
-        protected Type viewModelType;
-        protected object[] viewModelArgs;
         protected ListView mainPageMenu;
 
-        public MainPageBase(Type viewModelType, params object[] viewModelArgs)
-        {
-            this.viewModelType = viewModelType;
-            this.viewModelArgs = viewModelArgs;
-
-            CreateViewModel();
-
-            Loading += MainPage_Loading;
-        }
-
-        private void CreateViewModel()
-        {
-            object viewModel = Activator.CreateInstance(viewModelType, viewModelArgs);
-            ApplicationBase.Current.VMLocator.AddViewModel(viewModel);
-        }
-
-        protected void MainPage_Loading(FrameworkElement sender, object args)
-        {
-            DataContext = ApplicationBase.Current.VMLocator.GetViewModel(viewModelType);
-            AddControls();
+        public MainPageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
+        { 
         }
 
         public override void AddControls()

@@ -60,7 +60,7 @@ namespace ISUF.UI.Command
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
 
-                    using (Stream xmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.tdn", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult())
+                    using (Stream xmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.isuf", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult())
                     {
                         serializer.Serialize(xmlStream, sharedData);
                     }

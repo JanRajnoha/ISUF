@@ -3,9 +3,12 @@ using ISUF.Base.Messages;
 using ISUF.Base.Service;
 using ISUF.Base.Settings;
 using ISUF.Base.Template;
-using ISUF.Storage.Storage;
-using ISUF.UI.Command;
 using ISUF.Interface.UI;
+using ISUF.Storage.Storage;
+using ISUF.UI.App;
+using ISUF.UI.Command;
+using ISUF.UI.Design;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,13 +29,14 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleVMBase<T> where T : BaseItem
+    public abstract class ModuleVMBase<T> : ViewModelBase, IModuleVMBase<T> where T : BaseItem
     {
         protected const string addPivotItemName = "AddPivot";
         protected const string detailPivotItemName = "DetailPivot";
-        public const string ShareFileName = "Share.tdn";
+        public const string ShareFileName = "Share.isuf";
         protected string shareMessage = string.Empty;
         protected string shareHtml;
+        protected UIModule uiModule;
 
         // To-Do solve
         string ItemType;
@@ -40,132 +44,143 @@ namespace ISUF.UI.ViewModel
         private Messenger messenger;
         public Messenger Messenger
         {
-            get { return messenger; }
+            get => messenger;
             set
             {
                 messenger = value;
-                RaisePropertyChanged(nameof(Messenger));
+                PropertyChangedNotifier.NotifyPropertyChanged(Messenger);
             }
         }
 
         private DataTransferManager daTranManaItems;
         public DataTransferManager DaTranManaItems
         {
-            get { return daTranManaItems; }
+            get => daTranManaItems;
             set
             {
                 daTranManaItems = value;
-                RaisePropertyChanged(nameof(DaTranManaItems));
+                PropertyChangedNotifier.NotifyPropertyChanged(DaTranManaItems);
             }
         }
 
         private ListViewSelectionMode listSelectionMode;
         public ListViewSelectionMode ListSelectionMode
         {
-            get { return listSelectionMode; }
+            get => listSelectionMode;
             set
             {
                 listSelectionMode = value;
-                RaisePropertyChanged(nameof(ListSelectionMode));
+                PropertyChangedNotifier.NotifyPropertyChanged(ListSelectionMode);
             }
         }
 
         private ObservableCollection<T> source = new ObservableCollection<T>();
         public ObservableCollection<T> Source
         {
-            get { return source; }
+            get => source;
             set
             {
                 source = value;
-                RaisePropertyChanged(nameof(Source));
+                PropertyChangedNotifier.NotifyPropertyChanged(Source);
             }
         }
 
         private ObservableCollection<PivotItem> pivotPanes;
         public ObservableCollection<PivotItem> PivotPanes
         {
-            get { return pivotPanes; }
+            get => pivotPanes;
             set
             {
                 pivotPanes = value;
-                RaisePropertyChanged(nameof(PivotPanes));
+                PropertyChangedNotifier.NotifyPropertyChanged(PivotPanes);
             }
         }
 
         private bool paneVisibility;
         public bool PaneVisibility
         {
-            get { return paneVisibility; }
+            get => paneVisibility;
             set
             {
                 paneVisibility = value;
-                RaisePropertyChanged(nameof(PaneVisibility));
+                PropertyChangedNotifier.NotifyPropertyChanged(PaneVisibility);
             }
         }
 
         private bool startTileAdded;
         public bool StartTileAdded
         {
-            get { return startTileAdded; }
+            get => startTileAdded;
             set
             {
                 startTileAdded = value;
-                RaisePropertyChanged(nameof(StartTileAdded));
+                PropertyChangedNotifier.NotifyPropertyChanged(StartTileAdded);
             }
         }
 
         private string inAppNotifyText;
         public string InAppNotifyText
         {
-            get { return inAppNotifyText; }
+            get => inAppNotifyText;
             set
             {
                 inAppNotifyText = value;
-                RaisePropertyChanged(nameof(InAppNotifyText));
+                PropertyChangedNotifier.NotifyPropertyChanged(InAppNotifyText);
             }
         }
 
         private bool inAppNotifyShow = false;
         public bool InAppNotifyShow
         {
-            get { return inAppNotifyShow; }
+            get => inAppNotifyShow;
             set
             {
                 inAppNotifyShow = value;
-                RaisePropertyChanged(nameof(InAppNotifyShow));
+                PropertyChangedNotifier.NotifyPropertyChanged(InAppNotifyShow);
             }
         }
 
         private string moduleName;
         public string ModuleName
         {
-            get { return moduleName; }
+            get => moduleName;
             set
             {
                 moduleName = value;
-                RaisePropertyChanged(nameof(ModuleName));
+                PropertyChangedNotifier.NotifyPropertyChanged(ModuleName);
             }
         }
 
         private GridLength masterFrame;
         public GridLength MasterFrame
         {
-            get { return masterFrame; }
+            get => masterFrame;
             set
             {
                 masterFrame = value;
-                RaisePropertyChanged(nameof(MasterFrame));
+                PropertyChangedNotifier.NotifyPropertyChanged(MasterFrame);
             }
         }
 
         private GridLength slaveFrame;
         public GridLength SlaveFrame
         {
-            get { return slaveFrame; }
+            get => slaveFrame;
             set
             {
                 slaveFrame = value;
-                RaisePropertyChanged(nameof(SlaveFrame));
+                PropertyChangedNotifier.NotifyPropertyChanged(SlaveFrame);
+            }
+        }
+
+        private string moduleTitle;
+        public string ModuleTitle
+        {
+            get => moduleTitle;
+            set
+            {
+                moduleTitle = value;
+                PropertyChangedNotifier.NotifyPropertyChanged(ModuleTitle);
             }
         }
 
@@ -197,8 +212,9 @@ namespace ISUF.UI.ViewModel
 
         public abstract Task OnLoadAsync(bool SecureChanged = false);
 
-        public ModuleVMBase()
+        public ModuleVMBase(Type modulePage)
         {
+            Messenger = ApplicationBase.Current.VMLocator.GetMessenger();
             PivotPanes = new ObservableCollection<PivotItem>();
 
             PaneVisibility = false;
@@ -206,11 +222,6 @@ namespace ISUF.UI.ViewModel
             SlaveFrame = new GridLength(0);
 
             DataTransferManager daTranManaItems = DataTransferManager.GetForCurrentView();
-        }
-
-        public ModuleVMBase(Messenger messenger) : this()
-        {
-            Messenger = messenger;
 
             ChangeSelectionMode = new RelayCommand(() =>
             {
@@ -244,6 +255,17 @@ namespace ISUF.UI.ViewModel
             });
 
             CustomSettings.UserLogChanged += CustomSettings_UserLogChanged;
+
+            uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
+            ModuleTitle = uiModule.ModuleDisplayName;
+        }
+
+        // To-Do solve
+        public ModuleVMBase(Type modulePage, SecondaryTile secondaryTile, string itemType) : this(modulePage)
+        {
+            SecTile = secondaryTile;
+            StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
+            ItemType = itemType;
         }
 
         protected abstract void ShowModal(ShowModalActivationMsg obj);
@@ -280,15 +302,6 @@ namespace ISUF.UI.ViewModel
         protected virtual void CustomSettings_UserLogChanged(object sender, UserLoggedEventArgs e)
         {
             OnLoadAsync(true);
-        }
-
-
-        // To-Do solve
-        public ModuleVMBase(Messenger messenger, SecondaryTile secondaryTile, string itemType) : this(messenger)
-        {
-            SecTile = secondaryTile;
-            StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
-            ItemType = itemType;
         }
 
         /// <summary>

@@ -128,10 +128,36 @@
     <Compile Include="Controls\ReleaseNotes.xaml.cs">
       <DependentUpon>ReleaseNotes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BoolToGridLength.cs" />
+    <Compile Include="Converters\AddButtonTextConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\CompletedTodayConverter.cs" />
+    <Compile Include="Converters\ContainsTodayConverter.cs" />
+    <Compile Include="Converters\CurrentStateConverter.cs" />
+    <Compile Include="Converters\DateTimeToTimeSpanConverter.cs" />
+    <Compile Include="Converters\DateToDateTimeOffsetConverter.cs" />
+    <Compile Include="Converters\EnableTodayConverter.cs" />
+    <Compile Include="Converters\EndTaskBaseItemColorConverter.cs" />
+    <Compile Include="Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="Converters\ErrorMEssageConverter.cs" />
+    <Compile Include="Converters\ExtractDateTimeInfoConverter.cs" />
+    <Compile Include="Converters\GetStatisticConverter.cs" />
+    <Compile Include="Converters\GetStatusConverter.cs" />
+    <Compile Include="Converters\IdConverter.cs" />
+    <Compile Include="Converters\IntToBoolConverter.cs" />
+    <Compile Include="Converters\InvertBoolConverter.cs" />
+    <Compile Include="Converters\InvertVisibilityConverter.cs" />
+    <Compile Include="Converters\LabelConverter.cs" />
+    <Compile Include="Converters\NullToBoolConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\SecondaryTileExistConverter.cs" />
+    <Compile Include="Converters\SecureToWidthConverter.cs" />
+    <Compile Include="Converters\SlavePaneVisibilityConverter.cs" />
+    <Compile Include="Converters\StringConcatConverter.cs" />
+    <Compile Include="Converters\VisibilityToGridLength.cs" />
     <Compile Include="Design\PropertyChangedNotifier.cs" />
     <Compile Include="Design\RegisteredProperty.cs" />
     <Compile Include="Views\MainPageBase.cs" />
+    <Compile Include="Views\ModulePageBase.cs" />
     <Compile Include="Views\PageBase.cs" />
     <Compile Include="Views\ShellBase.cs" />
     <Compile Include="XamlStyles\XamlDictionaries.cs" />

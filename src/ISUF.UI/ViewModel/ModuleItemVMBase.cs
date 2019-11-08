@@ -19,7 +19,7 @@ namespace ISUF.UI.ViewModel
     public abstract class ModuleItemVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleItemVMBase<T> where T : BaseItem
     {
         public Messenger messenger;
-        const string ShareFileItem = "Share.tdn";
+        const string ShareFileItem = "Share.isuf";
         protected string shareMessage = string.Empty;
         protected string shareHtml;
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -20,6 +21,16 @@ namespace ISUF.UI.Design
         public PropertyChangedNotifier()
         {
             ApplicationBase.Current.VMLocator.GetMessenger().Register<PropertyChangedMsg>(PropertyChanged);
+        }
+
+        public static void NotifyPropertyChanged(object value, [CallerMemberName] string propertyname = "")
+        {
+            var messenger = ApplicationBase.Current.VMLocator.GetMessenger();
+            messenger.Send(new PropertyChangedMsg()
+            {
+                PropertyName = propertyname,
+                PropertyValue = value
+            });
         }
 
         private void PropertyChanged(PropertyChangedMsg obj)

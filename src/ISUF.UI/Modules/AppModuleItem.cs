@@ -13,10 +13,13 @@ namespace ISUF.UI.Modules
 
         public Symbol ModuleDisplayIcon { get; set; }
 
-        public AppModuleItem(string moduleDisplayName, Symbol moduleDisplayIcon)
+        public Type ModulePage { get; set; }
+
+        public AppModuleItem(string moduleDisplayName, Type modulePage, Symbol moduleDisplayIcon)
         {
             ModuleDisplayName = moduleDisplayName;
             ModuleDisplayIcon = moduleDisplayIcon;
+            ModulePage = modulePage;
         }
     }
 }

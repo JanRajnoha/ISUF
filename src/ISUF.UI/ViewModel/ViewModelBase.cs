@@ -1,4 +1,5 @@
 using ISUF.Base.Classes;
+using ISUF.UI.Design;
 using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace ISUF.UI.ViewModel
 {
     public class ViewModelBase : Template10.Mvvm.ViewModelBase
     {
-        public UIModuleManager ModuleManager { get; set; }
+        //public UIModuleManager ModuleManager { get; set; }
 
         private Messenger messenger;
         public Messenger Messenger
@@ -19,8 +20,17 @@ namespace ISUF.UI.ViewModel
             set
             {
                 messenger = value;
-                RaisePropertyChanged(nameof(Messenger));
+                PropertyChangedNotifier.NotifyPropertyChanged(Messenger);
             }
+        }
+
+        public object GetPropertyValue(string propertyName)
+        {
+            //GetType().GetProperty(propertyName).
+                 
+
+
+            return GetType().GetProperty(propertyName).GetValue(this, null);
         }
     }
 }

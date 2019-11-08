@@ -1,7 +1,9 @@
 using ISUF.Base.Enum;
 using ISUF.Base.Service;
 using ISUF.Base.Settings;
+using ISUF.Interface.UI;
 using ISUF.UI.App;
+using ISUF.UI.Modules;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -18,7 +20,7 @@ using NavigationView = Windows.UI.Xaml.Controls.NavigationView;
 
 namespace ISUF.UI.Views
 {
-    public class ShellBase : PageBase
+    public class ShellBase : Page, IPageBase
     {
         const string MSAProviderId = "https://login.microsoft.com";
         const string ConsumerAuthority = "consumers";
@@ -67,6 +69,13 @@ namespace ISUF.UI.Views
             uiSettings.ColorValuesChanged += ThemeChanger;
 
             SetNavigationService(navigationService);
+
+            Loading += ShellBase_Loading;
+        }
+
+        protected virtual void ShellBase_Loading(FrameworkElement sender, object args)
+        {
+            AddControls();
         }
 
         /// <summary>
@@ -121,7 +130,7 @@ namespace ISUF.UI.Views
             navView.ShowAd = !e.ShowAdsChangedNewState ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public override void AddControls()
+        public void AddControls()
         {
             Grid Container = new Grid();
 
@@ -137,8 +146,19 @@ namespace ISUF.UI.Views
             NavView.ItemInvoked += NavView_ItemInvoked;
             NavView.SelectionChanged += NavView_SelectionChanged;
 
-            NavView.MenuItems.Add(CreateNavigationItem("Home", Symbol.Home));
+            NavigationViewItem navHomeItem = new NavigationViewItem
+            {
+                Content = "Home",
+                Tag = "home",
+                Icon = new SymbolIcon(Symbol.Home)
+            };
+            NavView.MenuItems.Add(navHomeItem);
 
+            foreach (var navItem in ApplicationBase.Current.AppUIModules)
+            {
+                NavView.MenuItems.Add(CreateNavigationItem(navItem));
+            }
+            
             string navViewHeaderTemplate = "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
                 "<Grid Background=\"{ThemeResource SystemControlAcrylicWindowMediumHighBrush}\" Height=\"32\">" +
                 "</Grid>" +
@@ -176,13 +196,13 @@ namespace ISUF.UI.Views
             Content = Container;
         }
 
-        private object CreateNavigationItem(string itemTitle, Symbol itemIcon)
+        private object CreateNavigationItem(AppModuleItem appModuleItem)
         {
             NavigationViewItem navItem = new NavigationViewItem
             {
-                Content = itemTitle,
-                Tag = itemTitle.ToLower(CultureInfo.CurrentUICulture),
-                Icon = new SymbolIcon(itemIcon)
+                Content = appModuleItem.ModuleDisplayName,
+                Tag = appModuleItem.ModulePage,
+                Icon = new SymbolIcon(appModuleItem.ModuleDisplayIcon)
             };
 
             return navItem;
@@ -190,7 +210,7 @@ namespace ISUF.UI.Views
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            // It is really needed?
+            // Is it really needed?
         }
 
         /// <summary>

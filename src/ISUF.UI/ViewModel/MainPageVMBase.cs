@@ -3,6 +3,7 @@ using ISUF.Base.Messages;
 using ISUF.Base.Service;
 using ISUF.UI.App;
 using ISUF.UI.Controls;
+using ISUF.UI.Design;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,12 +30,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 showMinorUpdate = value;
-                RaisePropertyChanged(nameof(showMinorUpdate));
-                Messenger.Send(new PropertyChangedMsg()
-                {
-                    PropertyName = nameof(ShowMinorUpdate),
-                    PropertyValue = value
-                });
+                PropertyChangedNotifier.NotifyPropertyChanged(ShowMinorUpdate);
             }
         }
 
@@ -42,9 +38,9 @@ namespace ISUF.UI.ViewModel
 
         public ICommand CloseMinor { get; set; }
 
-        public MainPageVMBase(ApplicationBase applicationClass)
+        public MainPageVMBase()
         {
-            ApplicationClass = applicationClass;
+            ApplicationClass = ApplicationBase.Current;
             CloseMinor = new RelayCommand(() => ShowMinorUpdate = false);
 
             var v = Package.Current.Id.Version;
