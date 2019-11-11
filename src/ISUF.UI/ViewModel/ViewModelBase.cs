@@ -16,20 +16,16 @@ namespace ISUF.UI.ViewModel
         private Messenger messenger;
         public Messenger Messenger
         {
-            get { return messenger; }
+            get => messenger;
             set
             {
                 messenger = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(Messenger);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Messenger);
             }
         }
 
         public object GetPropertyValue(string propertyName)
         {
-            //GetType().GetProperty(propertyName).
-                 
-
-
             return GetType().GetProperty(propertyName).GetValue(this, null);
         }
     }

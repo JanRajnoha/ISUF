@@ -8,11 +8,11 @@ using Windows.UI.Xaml.Data;
 
 namespace ISUF.UI.Design
 {
-    public class RegisteredProperty
+    public class RegisteredDestinationProperty
     {
-        public DependencyObject Object { get; set; }
+        public DependencyObject DestinationObject { get; set; }
 
-        public DependencyProperty Property { get; set; }
+        public DependencyProperty DestinationProperty { get; set; }
 
         public IValueConverter Converter { get; set; }
 

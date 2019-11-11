@@ -48,7 +48,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 messenger = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(Messenger);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Messenger);
             }
         }
 
@@ -59,7 +59,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 daTranManaItems = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(DaTranManaItems);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), DaTranManaItems);
             }
         }
 
@@ -70,7 +70,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 listSelectionMode = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(ListSelectionMode);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ListSelectionMode);
             }
         }
 
@@ -81,7 +81,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 source = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(Source);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Source);
             }
         }
 
@@ -92,7 +92,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 pivotPanes = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(PivotPanes);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), PivotPanes);
             }
         }
 
@@ -103,7 +103,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 paneVisibility = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(PaneVisibility);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), PaneVisibility);
             }
         }
 
@@ -114,7 +114,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 startTileAdded = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(StartTileAdded);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), StartTileAdded);
             }
         }
 
@@ -125,7 +125,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 inAppNotifyText = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(InAppNotifyText);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), InAppNotifyText);
             }
         }
 
@@ -136,7 +136,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 inAppNotifyShow = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(InAppNotifyShow);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), InAppNotifyShow);
             }
         }
 
@@ -147,7 +147,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 moduleName = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(ModuleName);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ModuleName);
             }
         }
 
@@ -158,7 +158,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 masterFrame = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(MasterFrame);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), MasterFrame);
             }
         }
 
@@ -169,7 +169,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 slaveFrame = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(SlaveFrame);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), SlaveFrame);
             }
         }
 
@@ -180,7 +180,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 moduleTitle = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(ModuleTitle);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ModuleTitle);
             }
         }
 
@@ -226,13 +226,9 @@ namespace ISUF.UI.ViewModel
             ChangeSelectionMode = new RelayCommand(() =>
             {
                 if (ListSelectionMode == ListViewSelectionMode.None)
-                {
                     ListSelectionMode = ListViewSelectionMode.Multiple;
-                }
                 else
-                {
                     ListSelectionMode = ListViewSelectionMode.None;
-                }
             });
 
             Messenger.Register<ItemAddCloseMsg>(CloseAddPane);
@@ -251,13 +247,14 @@ namespace ISUF.UI.ViewModel
             {
                 daTranManaItems = DataTransferManager.GetForCurrentView();
                 daTranManaItems.DataRequested += DaTranManaItems_DataRequestedAsync;
-                (new ShareItemsCommand<T>(Messenger)).Execute(selectedItems);
+                new ShareItemsCommand<T>(Messenger).Execute(selectedItems);
             });
 
             CustomSettings.UserLogChanged += CustomSettings_UserLogChanged;
 
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
             ModuleTitle = uiModule.ModuleDisplayName;
+            ModuleName = uiModule.ModuleName;
         }
 
         // To-Do solve

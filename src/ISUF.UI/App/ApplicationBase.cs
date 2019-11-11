@@ -125,11 +125,11 @@ namespace ISUF.UI.App
             //remove the solid-colored backgrounds behind the caption controls and system back button
             ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-            SolidColorBrush btnForegroundColor = Current.Resources["TitleBarForegroundThemeBrush"] as SolidColorBrush;
-            SolidColorBrush btnBackgroundHoverColor = Current.Resources["TitleBarPressedBackgroundThemeBrush"] as SolidColorBrush;
-            SolidColorBrush btnHoverColor = Current.Resources["TitleBarButtonHoverThemeBrush"] as SolidColorBrush;
-            SolidColorBrush btnBackgroundPressedColor = Current.Resources["TitleBarHoverBackgroundThemeBrush"] as SolidColorBrush;
-            SolidColorBrush btnPressedColor = Current.Resources["TitleBarButtonPressedThemeBrush"] as SolidColorBrush;
+            SolidColorBrush btnForegroundColor = Resources["TitleBarForegroundThemeBrush"] as SolidColorBrush;
+            SolidColorBrush btnBackgroundHoverColor = Resources["TitleBarPressedBackgroundThemeBrush"] as SolidColorBrush;
+            SolidColorBrush btnHoverColor = Resources["TitleBarButtonHoverThemeBrush"] as SolidColorBrush;
+            SolidColorBrush btnBackgroundPressedColor = Resources["TitleBarHoverBackgroundThemeBrush"] as SolidColorBrush;
+            SolidColorBrush btnPressedColor = Resources["TitleBarButtonPressedThemeBrush"] as SolidColorBrush;
 
             titleBar.BackgroundColor = Colors.Transparent;
             titleBar.ForegroundColor = btnForegroundColor.Color;

@@ -19,7 +19,8 @@ namespace ISUF.UI.Modules
             SetModuleInfo(moduleDisplayName, moduleIcon, modulePage);
         }
 
-        public UIModule(Type moduleItemType, string moduleName, Type itemManagerType, string moduleDisplayName, Symbol moduleIcon, Type modulePage, string moduleTableName = null) : base(moduleItemType, moduleName, itemManagerType, moduleTableName)
+        public UIModule(Type moduleItemType, string moduleName, Type itemManagerType, string moduleDisplayName,
+                        Symbol moduleIcon, Type modulePage, string moduleTableName = null) : base(moduleItemType, moduleName, itemManagerType, moduleTableName)
         {
             SetModuleInfo(moduleDisplayName, moduleIcon, modulePage);
         }

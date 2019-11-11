@@ -10,6 +10,7 @@ namespace ISUF.UI.Converters
 {
     /// <summary>
     /// Create shortcut from value and parameter
+    /// Language is used as parameter for normal or reverse concatenation
     /// </summary>
     public class StringConcatConverter : IValueConverter
     {
@@ -17,7 +18,7 @@ namespace ISUF.UI.Converters
         {
             if (value is string text && parameter is string param)
             {
-                switch (param.ToLower())
+                switch (language.ToLower())
                 {
                     case "reverse":
                         return param + " " + text;
@@ -28,7 +29,7 @@ namespace ISUF.UI.Converters
                 }
             }
 
-            LogService.AddLogMessage($"StringConcatConverter: Value or parameter is wrong: Value: {value.ToString()}; Parameter: {parameter.ToString()}");
+            LogService.AddLogMessage($"StringConcatConverter: Value or parameter is wrong: Value: {value.ToString()}; Parameter: {language.ToString()}");
             return "err";
         }
 

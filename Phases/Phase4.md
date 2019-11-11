@@ -6,10 +6,10 @@
 
 - [ ] Security
 
-- [ ] Dynamic forms
+- [ ] Dynamic module page
 
 - [ ] Dynamic panes
 
-- [ ] Dynamic menu
+- [x] Dynamic menu
 
-- [ ] Dynamic Main Page
+- [x] Dynamic Main Page

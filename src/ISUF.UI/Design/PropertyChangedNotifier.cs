@@ -15,7 +15,7 @@ namespace ISUF.UI.Design
 {
     public class PropertyChangedNotifier
     {
-        private readonly ConcurrentDictionary<RegisteredProperty, string> registeredProperties = new ConcurrentDictionary<RegisteredProperty, string>();
+        private readonly ConcurrentDictionary<RegisteredDestinationProperty, RegisteredTargetProperty> registeredProperties = new ConcurrentDictionary<RegisteredDestinationProperty, RegisteredTargetProperty>();
         private readonly object bagLock = new object();
 
         public PropertyChangedNotifier()
@@ -23,7 +23,7 @@ namespace ISUF.UI.Design
             ApplicationBase.Current.VMLocator.GetMessenger().Register<PropertyChangedMsg>(PropertyChanged);
         }
 
-        public static void NotifyPropertyChanged(object value, [CallerMemberName] string propertyname = "")
+        public static void NotifyPropertyChanged(Type parentObjectType, object value, [CallerMemberName] string propertyname = "")
         {
             var messenger = ApplicationBase.Current.VMLocator.GetMessenger();
             messenger.Send(new PropertyChangedMsg()
@@ -35,34 +35,54 @@ namespace ISUF.UI.Design
 
         private void PropertyChanged(PropertyChangedMsg obj)
         {
-            var dependencies = registeredProperties.Where(x => x.Value == obj.PropertyName)?.Select(x => x.Key)?.ToList() ?? new List<RegisteredProperty>();
+            var selectedRegisteredProperties = registeredProperties.Where(x => x.Value.PropertyName == obj.PropertyName/* && x.Value.PropertyParentObjectType == obj.PropertyParentObjectType*/);
 
-            for (int i = 0; i < dependencies.Count; i++)
+            if (selectedRegisteredProperties == null)
+                return;
+
+            var destinationProperties = selectedRegisteredProperties.Select(x => x.Key)?.ToList();
+            var targetProperty = selectedRegisteredProperties.Select(x => x.Value)?.FirstOrDefault();
+
+            for (int i = 0; i < destinationProperties.Count; i++)
             {
                 object value = obj.PropertyValue;
 
-                if (dependencies[i].Converter != null)
-                    value = dependencies[i].Converter.Convert(obj.PropertyValue, dependencies[i].ConverterTargetType, dependencies[i].ConverterParameter, dependencies[i].ConverterLanguage);
+                if (!string.IsNullOrEmpty(targetProperty.PropertyInnerPropertyName))
+                    value.GetType().GetProperty(targetProperty.PropertyInnerPropertyName).GetValue(value);
 
-                dependencies[i].Object.SetValue(dependencies[i].Property, value);
+                if (destinationProperties[i].Converter != null)
+                    value = destinationProperties[i].Converter.Convert(obj.PropertyValue, destinationProperties[i].ConverterTargetType, destinationProperties[i].ConverterParameter, destinationProperties[i].ConverterLanguage);
+
+                destinationProperties[i].DestinationObject.SetValue(destinationProperties[i].DestinationProperty, value);
             }
         }
 
-        public void RegisterProperty(DependencyObject destinationObject, DependencyProperty destinationProperty, IValueConverter converter, string propertyName, Type targetType = null, string parameter = null, string language = null)
+        public void RegisterProperty(DependencyObject destinationObject, DependencyProperty destinationProperty,
+                                     string targetPropertyName, Type targetPropertyParentObjectType,
+                                     string targetInnerPropertyName = "", IValueConverter converter = null,
+                                     Type converterTargetType = null, string converterParameter = null,
+                                     string converterLanguage = null)
         {
             lock (bagLock)
             {
-                var registeredProperty = new RegisteredProperty()
+                var registeredDestinationProperty = new RegisteredDestinationProperty()
                 {
-                    Object = destinationObject,
-                    Property = destinationProperty,
+                    DestinationObject = destinationObject,
+                    DestinationProperty = destinationProperty,
                     Converter = converter,
-                    ConverterLanguage = language,
-                    ConverterParameter = parameter,
-                    ConverterTargetType = targetType
+                    ConverterLanguage = converterLanguage,
+                    ConverterParameter = converterParameter,
+                    ConverterTargetType = converterTargetType
+                };
+                
+                var registeredTargetProperty = new RegisteredTargetProperty()
+                {
+                    PropertyName = targetPropertyName,
+                    PropertyParentObjectType = targetPropertyParentObjectType,
+                    PropertyInnerPropertyName = targetInnerPropertyName
                 };
 
-                registeredProperties[registeredProperty] = propertyName;
+                registeredProperties[registeredDestinationProperty] = registeredTargetProperty;
             }
         }
 
@@ -70,7 +90,7 @@ namespace ISUF.UI.Design
         {
             lock (bagLock)
             {
-                var key = registeredProperties.Keys.FirstOrDefault(x => x.Object == destinationObject && x.Property == destinationProperty);
+                var key = registeredProperties.Keys.FirstOrDefault(x => x.DestinationObject == destinationObject && x.DestinationProperty == destinationProperty);
 
                 if (key == null)
                     return;

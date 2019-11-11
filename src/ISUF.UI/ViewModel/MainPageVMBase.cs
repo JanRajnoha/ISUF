@@ -30,7 +30,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 showMinorUpdate = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(ShowMinorUpdate);
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ShowMinorUpdate);
             }
         }
 

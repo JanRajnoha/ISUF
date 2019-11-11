@@ -12,10 +12,10 @@ Framework for information systems for UWP
 | Package part | NuGet link |
 |-|-|
 | ISUF.Base | [![Nuget](https://img.shields.io/nuget/v/ISUF.Base.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Base/) |
-| ISUF.Interface | [![Nuget](https://img.shields.io/nuget/v/ISUF.Interface.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Interface/0.2.5-beta) |
-| ISUF.Security | [![Nuget](https://img.shields.io/nuget/v/ISUF.Security.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Security/0.2.5-beta) |
-| ISUF.Storage | [![Nuget](https://img.shields.io/nuget/v/ISUF.Storage.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Storage/0.2.5-beta) |
-| ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/0.2.5-beta) |
+| ISUF.Interface | [![Nuget](https://img.shields.io/nuget/v/ISUF.Interface.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Interface/) |
+| ISUF.Security | [![Nuget](https://img.shields.io/nuget/v/ISUF.Security.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Security/) |
+| ISUF.Storage | [![Nuget](https://img.shields.io/nuget/v/ISUF.Storage.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.Storage/) |
+| ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/) |
 
 
 ## To-Do (Phase 4)
@@ -24,10 +24,10 @@ Framework for information systems for UWP
 
 - [ ] Security
 
-- [ ] Dynamic forms
+- [ ] Dynamic module page
 
 - [ ] Dynamic panes
 
-- [ ] Dynamic menu
+- [x] Dynamic menu
 
-- [ ] Dynamic Main Page
+- [x] Dynamic Main Page

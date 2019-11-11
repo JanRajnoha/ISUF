@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+using ArgumentNullException = ISUF.Base.Exceptions.ArgumentNullException;
 
 namespace ISUF.UI.Views
 {
@@ -24,7 +25,7 @@ namespace ISUF.UI.Views
         protected ListView mainPageMenu;
 
         public MainPageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
-        { 
+        {
         }
 
         public override void AddControls()
@@ -41,7 +42,7 @@ namespace ISUF.UI.Views
                 Name = "Container",
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = ApplicationBase.Current.Resources["PageHeader"] as Brush
+                Background = ApplicationBase.Current.Resources["SystemControlAcrylicWindowMediumHighBrush"] as Brush
             };
             Content = Container;
 
@@ -78,7 +79,7 @@ namespace ISUF.UI.Views
         public virtual void AddModuleMenu(Panel container)
         {
             if (container == null)
-                return;
+                throw new ArgumentNullException("Parameter container is null.");
 
             var pageHeader = container.Children.FirstOrDefault(x => (x as FrameworkElement).Name == "PageHeader");
 
@@ -118,7 +119,7 @@ namespace ISUF.UI.Views
             BindingOperations.SetBinding(MinorUpdateRow, RowDefinition.HeightProperty, minorUpdateRowBinding);
 
             var MPVMB = DataContext as MainPageVMBase;
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(MinorUpdateRow, RowDefinition.HeightProperty, boolToGridLength, nameof(MPVMB.ShowMinorUpdate));
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(MinorUpdateRow, RowDefinition.HeightProperty, nameof(MPVMB.ShowMinorUpdate), viewModelType, converter: boolToGridLength);
 
             ContentGrid.RowDefinitions.Add(RowMain);
             ContentGrid.RowDefinitions.Add(MinorUpdateRow);

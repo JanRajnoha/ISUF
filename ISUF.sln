@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.779
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Base", "src\ISUF.Base\ISUF.Base.csproj", "{FD100127-1C0C-4B0F-B40B-96C3AA646009}"
 EndProject
@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Phases", "Phases", "{BE9D3A
 		Phases\Phase1.md = Phases\Phase1.md
 		Phases\Phase2.md = Phases\Phase2.md
 		Phases\Phase3.md = Phases\Phase3.md
-		Phase4.md = Phase4.md
+		Phases\Phase4.md = Phases\Phase4.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISUF.Security", "src\ISUF.Security\ISUF.Security.csproj", "{D14D9A17-6376-4D1C-AB9E-8BD5CB0686D8}"

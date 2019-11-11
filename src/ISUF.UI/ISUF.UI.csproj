@@ -129,7 +129,11 @@
       <DependentUpon>ReleaseNotes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AddButtonTextConverter.cs" />
+    <Compile Include="Converters\AddCloseVisibilityConverter.cs" />
+    <Compile Include="Converters\AddEditButtonHeightConverter.cs" />
+    <Compile Include="Converters\BoolToGridVisibilityConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ButtonsRowHeightConverter.cs" />
     <Compile Include="Converters\CompletedTodayConverter.cs" />
     <Compile Include="Converters\ContainsTodayConverter.cs" />
     <Compile Include="Converters\CurrentStateConverter.cs" />
@@ -151,11 +155,13 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\SecondaryTileExistConverter.cs" />
     <Compile Include="Converters\SecureToWidthConverter.cs" />
+    <Compile Include="Converters\SlaveFrameWidthConverter.cs" />
     <Compile Include="Converters\SlavePaneVisibilityConverter.cs" />
     <Compile Include="Converters\StringConcatConverter.cs" />
     <Compile Include="Converters\VisibilityToGridLength.cs" />
     <Compile Include="Design\PropertyChangedNotifier.cs" />
-    <Compile Include="Design\RegisteredProperty.cs" />
+    <Compile Include="Design\RegisteredDestinationProperty.cs" />
+    <Compile Include="Design\RegisteredTargetProperty.cs" />
     <Compile Include="Views\MainPageBase.cs" />
     <Compile Include="Views\ModulePageBase.cs" />
     <Compile Include="Views\PageBase.cs" />
