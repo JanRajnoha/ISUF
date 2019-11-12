@@ -16,6 +16,8 @@ using Microsoft.Toolkit.Uwp.UI.Controls;
 using ArgumentNullException = ISUF.Base.Exceptions.ArgumentNullException;
 using Windows.UI;
 using Windows.UI.Xaml.Markup;
+using ISUF.UI.Controls;
+using Windows.UI.Xaml.Shapes;
 
 namespace ISUF.UI.Views
 {
@@ -88,8 +90,6 @@ namespace ISUF.UI.Views
             };
             AddItem.KeyboardAccelerators.Add(addItemKeyboardAccelerator);
 
-            PageHeader.PrimaryCommands.Add(AddItem);
-
             AppBarButton SlavePane = new AppBarButton()
             {
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
@@ -136,8 +136,6 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(SlavePane, AppBarButton.IsEnabledProperty, slavePaneIsEnabledBinding);
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(SlavePane, AppBarButton.IsEnabledProperty, "PivotPanes", viewModelType, "Count", converter: new IntToBoolConverter());
-
-            PageHeader.PrimaryCommands.Add(SlavePane);
 
             AppBarButton SelectItems = new AppBarButton()
             {
@@ -201,8 +199,6 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(SelectItems, AppBarButton.VisibilityProperty, selectItemsVisibilityBinding);
 
-            PageHeader.PrimaryCommands.Add(SelectItems);
-
             //xxx            ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
             KeyboardAccelerator cancelSelectItemsKeyboardAccelerator = new KeyboardAccelerator()
             {
@@ -247,8 +243,6 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(CancelSelectItems, AppBarButton.VisibilityProperty, cancelSelectItemsVisibilityBinding);
 
-            PageHeader.PrimaryCommands.Add(CancelSelectItems);
-
             AppBarButton SelectAllItems = new AppBarButton()
             {
                 Name = nameof(SelectAllItems),
@@ -276,8 +270,6 @@ namespace ISUF.UI.Views
                 Converter = SelectItemsMode
             };
             BindingOperations.SetBinding(SelectAllItems, AppBarButton.VisibilityProperty, selectAllItemsVisibilityBinding);
-
-            PageHeader.PrimaryCommands.Add(SelectAllItems);
 
             AppBarButton ShareItems = new AppBarButton()
             {
@@ -308,8 +300,6 @@ namespace ISUF.UI.Views
                 Converter = SelectItemsMode
             };
             BindingOperations.SetBinding(ShareItems, AppBarButton.VisibilityProperty, shareItemsVisibilityBinding);
-
-            PageHeader.PrimaryCommands.Add(ShareItems);
 
             AppBarButton DeleteItems = new AppBarButton()
             {
@@ -347,8 +337,6 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(DeleteItems, AppBarButton.IsEnabledProperty, deleteItemsVisibilityBinding);
 
-            PageHeader.PrimaryCommands.Add(DeleteItems);
-
             AppBarButton CreateSecondTile = new AppBarButton()
             {
                 Name = nameof(SelectAllItems),
@@ -383,15 +371,21 @@ namespace ISUF.UI.Views
             BindingOperations.SetBinding(CreateSecondTile, AppBarButton.IconProperty, createSecondTileIconBinding);
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(CreateSecondTile, AppBarButton.IconProperty, "StartTileAdded", viewModelType, converter: new SecondaryTileExistConverter(), converterParameter: "icon");
 
-            PageHeader.PrimaryCommands.Add(CreateSecondTile);
-
             TextBlock title = new TextBlock
             {
                 Text = (DataContext as ViewModelBase).GetPropertyValue("ModuleTitle") as string,
                 Style = ApplicationBase.Current.Resources["PageHeaderText"] as Style
             };
-            PageHeader.Content = title;
 
+            PageHeader.PrimaryCommands.Add(AddItem);
+            PageHeader.PrimaryCommands.Add(SlavePane);
+            PageHeader.PrimaryCommands.Add(SelectItems);
+            PageHeader.PrimaryCommands.Add(CancelSelectItems);
+            PageHeader.PrimaryCommands.Add(SelectAllItems);
+            PageHeader.PrimaryCommands.Add(ShareItems);
+            PageHeader.PrimaryCommands.Add(DeleteItems);
+            PageHeader.PrimaryCommands.Add(CreateSecondTile);
+            PageHeader.Content = title;
             container.Children.Add(PageHeader);
         }
 
@@ -443,6 +437,18 @@ namespace ISUF.UI.Views
             ContentGrid.ColumnDefinitions.Add(MasterFrame);
             ContentGrid.ColumnDefinitions.Add(slaveFrameCD);
 
+            AddDataViewPart(ContentGrid);
+            AddInAppNotify(ContentGrid);
+            AddLoading(ContentGrid);
+            AddSlavePane(ContentGrid);
+
+            ShadowPanel.Content = ContentGrid;
+            container.Children.Add(ShadowPanel);
+        }
+
+        private void AddDataViewPart(Panel container)
+        {
+
             //ListView asd = new ListView()
             //{
             //    Margin = new Thickness(0, 10, 0, 0),
@@ -451,9 +457,80 @@ namespace ISUF.UI.Views
             //};
 
             //ContentGrid.Children.Add(asd);
+        }
 
-            ShadowPanel.Content = ContentGrid;
-            container.Children.Add(ShadowPanel);
+        private void AddInAppNotify(Panel container)
+        {
+            InAppNotifyMVVM InAppNotify = new InAppNotifyMVVM()
+            {
+                Name = nameof(InAppNotify),
+                ShowDismissButton = true,
+                Mess = ApplicationBase.Current.VMLocator.GetMessenger()
+            };
+
+            container.Children.Add(InAppNotify);
+        }
+
+        private void AddLoading(Panel container)
+        {
+            StackPanel LoadingStack = new StackPanel()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            Binding loadingStackVisibilityBinding = new Binding()
+            {
+                Source = (DataContext as ViewModelBase).GetPropertyValue("Source"),
+                Converter = new NullToVisibilityConverter(),
+                ConverterParameter = "not"
+            };
+            BindingOperations.SetBinding(LoadingStack, StackPanel.VisibilityProperty, loadingStackVisibilityBinding);
+
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(LoadingStack, StackPanel.VisibilityProperty, "Source", viewModelType, converter: new NullToVisibilityConverter(), converterParameter:"not");
+
+            container.Children.Add(LoadingStack);
+        }
+
+        private void AddSlavePane(Panel container)
+        {
+            Grid ItemSlave = new Grid()
+            {
+                Name = nameof(ItemSlave)
+            };
+            Grid.SetColumn(ItemSlave, 1);
+
+            Rectangle SplitLine = new Rectangle()
+            {
+                Margin = new Thickness(0, 10, 0, 10),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Width = 1,
+                StrokeThickness = 0.5,
+                Stroke = new SolidColorBrush(Colors.Gray)
+            };
+
+            Pivot SlavePivot = new Pivot()
+            {
+                Margin = new Thickness(10, 0, 0, 0),
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                HeaderFocusVisualPlacement = PivotHeaderFocusVisualPlacement.ItemHeaders
+            };
+
+            Binding slavePivotItemsSourceBinding = new Binding()
+            {
+                Source = (DataContext as ViewModelBase).GetPropertyValue("PivotPanes"),
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            BindingOperations.SetBinding(SlavePivot, Pivot.ItemsSourceProperty, slavePivotItemsSourceBinding);
+
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(SlavePivot, Pivot.ItemsSourceProperty, "PivotPanes", viewModelType);
+
+            ItemSlave.Children.Add(SplitLine);
+            ItemSlave.Children.Add(SlavePivot);
+
+            container.Children.Add(ItemSlave);
         }
     }
 }
