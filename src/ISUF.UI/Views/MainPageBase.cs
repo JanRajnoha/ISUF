@@ -1,5 +1,6 @@
 ﻿using ISUF.UI.App;
 using ISUF.UI.Classes;
+using ISUF.UI.Modules;
 using ISUF.UI.ViewModel;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
@@ -228,6 +229,8 @@ namespace ISUF.UI.Views
         /// <param name="e"></param>
         protected void NavButton_Click(object sender, SelectionChangedEventArgs e)
         {
+            (DataContext as MainPageVMBase).GoToPage(((sender as ListView).SelectedItem as AppModuleItem).ModulePage);
+
             //var ButtonName = (sender as Button).Name;
             //TextBlock ButtonText = FindName(ButtonName.Substring(0, ButtonName.Length - 6) + "Text") as TextBlock;
 
@@ -251,7 +254,7 @@ namespace ISUF.UI.Views
             var settingsPageType = ApplicationBase.Current.SettingsPageType;
 
             if (settingsPageType != null)
-                ((MainPageVMBase)DataContext).GoToPage(settingsPageType);
+                (DataContext as MainPageVMBase).GoToPage(settingsPageType);
         }
     }
 }

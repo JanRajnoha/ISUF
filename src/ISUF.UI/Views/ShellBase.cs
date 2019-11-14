@@ -3,6 +3,7 @@ using ISUF.Base.Service;
 using ISUF.Base.Settings;
 using ISUF.Interface.UI;
 using ISUF.UI.App;
+using ISUF.UI.Classes;
 using ISUF.UI.Modules;
 using System;
 using System.Globalization;
@@ -88,6 +89,27 @@ namespace ISUF.UI.Views
         }
 
         /// <summary>
+        /// Set current selected item from NavView
+        /// </summary>
+        /// <param name="tag">Tag of item</param>
+        public void SetSelectedNavItem(object tag)
+        {
+            if (tag is string && tag != null && (tag as string).ToLower().Contains("settings"))
+                navView.SelectedItem = navView.SettingsItem;
+            else
+            {
+                navView.SelectedItem = navView.MenuItems.FirstOrDefault(x =>
+                {
+                    if (x is NavigationViewItem NavItem)
+                        if (NavItem.Tag == tag)
+                            return true;
+
+                    return false;
+                });
+            }
+        }
+
+        /// <summary>
         /// Change theme to system
         /// </summary>
         /// <param name="sender"></param>
@@ -136,6 +158,7 @@ namespace ISUF.UI.Views
 
             Controls.NavigationView NavView = new Controls.NavigationView
             {
+                Name = nameof(NavView),
                 ShowAd = Visibility.Collapsed,
                 AlwaysShowHeader = false,
                 IsSettingsVisible = settingsPageType != null,
@@ -231,11 +254,11 @@ namespace ISUF.UI.Views
                 {
                     if (navItem.Tag is Type modulePageType)
                     {
-                        HamMen.NavigationService.Navigate(modulePageType);
+                        HamMen.NavigationService.Navigate(modulePageType, infoOverride: new SuppressNavigationTransitionInfo());
                     }
                     else
                     {
-                        HamMen.NavigationService.Navigate(mainPageType);
+                        HamMen.NavigationService.Navigate(mainPageType, infoOverride: new SuppressNavigationTransitionInfo());
                     }
                 }
             }

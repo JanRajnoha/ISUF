@@ -18,6 +18,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Markup;
 using ISUF.UI.Controls;
 using Windows.UI.Xaml.Shapes;
+using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.Views
 {
@@ -31,6 +32,13 @@ namespace ISUF.UI.Views
         public ModulePageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == GetType());
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ShellBase.Instance.SetSelectedNavItem(uiModule.ModulePage);
         }
 
         protected override void CreateViewModel()
@@ -449,14 +457,14 @@ namespace ISUF.UI.Views
         private void AddDataViewPart(Panel container)
         {
 
-            //ListView asd = new ListView()
-            //{
-            //    Margin = new Thickness(0, 10, 0, 0),
-            //    HorizontalAlignment = HorizontalAlignment.Stretch,
-            //    Background = new SolidColorBrush(Color.FromArgb(125, 125, 0, 255))
-            //};
+            ListView ModuleData = new ListView()
+            {
+                Margin = new Thickness(0, 10, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Background = new SolidColorBrush(Color.FromArgb(125, 125, 0, 255))
+            };
 
-            //ContentGrid.Children.Add(asd);
+            container.Children.Add(ModuleData);
         }
 
         private void AddInAppNotify(Panel container)

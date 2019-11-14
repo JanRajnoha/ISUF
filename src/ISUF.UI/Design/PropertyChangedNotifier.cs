@@ -1,5 +1,6 @@
 using ISUF.Base.Classes;
 using ISUF.Base.Messages;
+using ISUF.Base.Service;
 using ISUF.UI.App;
 using System;
 using System.Collections.Concurrent;
@@ -25,17 +26,20 @@ namespace ISUF.UI.Design
 
         public static void NotifyPropertyChanged(Type parentObjectType, object value, [CallerMemberName] string propertyname = "")
         {
+            LogService.AddLogMessage("PropertyName: " + propertyname);
+
             var messenger = ApplicationBase.Current.VMLocator.GetMessenger();
             messenger.Send(new PropertyChangedMsg()
             {
                 PropertyName = propertyname,
-                PropertyValue = value
+                PropertyValue = value,
+                PropertyParentObjectType = parentObjectType
             });
         }
 
         private void PropertyChanged(PropertyChangedMsg obj)
         {
-            var selectedRegisteredProperties = registeredProperties.Where(x => x.Value.PropertyName == obj.PropertyName/* && x.Value.PropertyParentObjectType == obj.PropertyParentObjectType*/);
+            var selectedRegisteredProperties = registeredProperties.Where(x => x.Value.PropertyName == obj.PropertyName && x.Value.PropertyParentObjectType == obj.PropertyParentObjectType);
 
             if (selectedRegisteredProperties == null)
                 return;

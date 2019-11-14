@@ -48,6 +48,7 @@ namespace ISUF.UI.ViewModel
             CurrentVersion = new Version(v.Major, v.Minor, v.Build);
 
             Messenger = ApplicationClass.VMLocator.GetMessenger();
+            NavigationService = ApplicationBase.Current.NavigationService;
         }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
