@@ -47,6 +47,9 @@ namespace ISUF.UI.Classes
 
                 if (child is ContentControl contentChild && contentChild.Content is UIElement innerContent)
                 {
+                    if (contentChild.Name == ControlName)
+                        return (T)child;
+
                     child = innerContent;
                 }
 

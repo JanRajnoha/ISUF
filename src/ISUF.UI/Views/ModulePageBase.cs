@@ -19,6 +19,8 @@ using Windows.UI.Xaml.Markup;
 using ISUF.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Navigation;
+using ISUF.UI.Classes;
+using System.Windows.Input;
 
 namespace ISUF.UI.Views
 {
@@ -27,7 +29,6 @@ namespace ISUF.UI.Views
         UIModule uiModule;
 
         protected ColumnDefinition slaveFrameCD = new ColumnDefinition();
-        protected ListView itemsList = new ListView();
 
         public ModulePageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
@@ -87,7 +88,7 @@ namespace ISUF.UI.Views
                 IsEnabled = true,
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Command = null
+                Command = (DataContext as ViewModelBase).GetPropertyValue("AddItem") as ICommand
             };
 
             ToolTipService.SetToolTip(AddItem, "Add new " + (DataContext as ViewModelBase).GetPropertyValue("ModuleName") as string + " (Ctrl + N)");
@@ -102,14 +103,14 @@ namespace ISUF.UI.Views
             {
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Command = null
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangePaneVisibility") as ICommand
             };
 
             ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
             KeyboardAccelerator openSlavePaneKeyboardAccelerator = new KeyboardAccelerator()
             {
                 Modifiers = VirtualKeyModifiers.Control,
-                Key = VirtualKey.N
+                Key = VirtualKey.O
             };
             SlavePane.KeyboardAccelerators.Add(openSlavePaneKeyboardAccelerator);
 
@@ -147,25 +148,17 @@ namespace ISUF.UI.Views
 
             AppBarButton SelectItems = new AppBarButton()
             {
+                Name = nameof(SelectItems),
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Bullets),
-                Name = nameof(SelectItems),
-                Command = null
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionMode") as ICommand
             };
-
-            //xxx            ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
-            //KeyboardAccelerator selectItemsKeyboardAccelerator = new KeyboardAccelerator()
-            //{
-            //    Modifiers = VirtualKeyModifiers.Control,
-            //    Key = VirtualKey.X
-            //};
-            //SlavePane.KeyboardAccelerators.Add(selectItemsKeyboardAccelerator);
 
             Binding selectItemsLabelBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new LabelConverter()
@@ -182,20 +175,35 @@ namespace ISUF.UI.Views
             Binding selectItemsIsEnabledBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SlidableItemIsEnabled
             };
             BindingOperations.SetBinding(SelectItems, AppBarButton.IsEnabledProperty, selectItemsIsEnabledBinding);
+            //ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
+            //KeyboardAccelerator selectItemsKeyboardAccelerator = new KeyboardAccelerator()
+            //{
+            //    Modifiers = VirtualKeyModifiers.Control,
+            //    Key = VirtualKey.X
+            //};
+            //SlavePane.KeyboardAccelerators.Add(selectItemsKeyboardAccelerator);
 
             AppBarButton CancelSelectItems = new AppBarButton()
             {
+                Name = nameof(CancelSelectItems),
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Icon = new SymbolIcon(Symbol.Bullets),
-                Command = null
+                Icon = new SymbolIcon(Symbol.Cancel),
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionMode") as ICommand
             };
+            ToolTipService.SetToolTip(SlavePane, "Cancel select items (Esc)");
+
+            KeyboardAccelerator cancelSelectItemsKeyboardAccelerator = new KeyboardAccelerator()
+            {
+                Key = VirtualKey.Escape
+            };
+            CancelSelectItems.KeyboardAccelerators.Add(cancelSelectItemsKeyboardAccelerator);
 
             Binding selectItemsVisibilityBinding = new Binding()
             {
@@ -207,17 +215,10 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(SelectItems, AppBarButton.VisibilityProperty, selectItemsVisibilityBinding);
 
-            //xxx            ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
-            KeyboardAccelerator cancelSelectItemsKeyboardAccelerator = new KeyboardAccelerator()
-            {
-                Key = VirtualKey.Escape
-            };
-            CancelSelectItems.KeyboardAccelerators.Add(cancelSelectItemsKeyboardAccelerator);
-
             Binding cancelSelectItemsLabelBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new LabelConverter()
@@ -244,7 +245,7 @@ namespace ISUF.UI.Views
             Binding cancelSelectItemsVisibilityBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SelectItemsMode
@@ -272,7 +273,7 @@ namespace ISUF.UI.Views
             Binding selectAllItemsVisibilityBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SelectItemsMode
@@ -285,15 +286,15 @@ namespace ISUF.UI.Views
                 Label = "Share",
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Icon = new SymbolIcon(Symbol.SelectAll),
-                Command = null
+                Icon = new SymbolIcon(Symbol.Share),
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ShareItems") as ICommand
             };
 
             ToolTipService.SetToolTip(ShareItems, "Share");
 
-            Binding shareItemsCommandParameterBinding = new Binding() 
+            Binding shareItemsCommandParameterBinding = new Binding()
             {
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
@@ -302,7 +303,7 @@ namespace ISUF.UI.Views
             Binding shareItemsVisibilityBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SelectItemsMode
@@ -311,15 +312,15 @@ namespace ISUF.UI.Views
 
             AppBarButton DeleteItems = new AppBarButton()
             {
-                Name = nameof(SelectAllItems),
+                Name = nameof(DeleteItems),
                 Label = "Delete items",
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Delete),
-                Command = null
+                Command = (DataContext as ViewModelBase).GetPropertyValue("DeleteItems") as ICommand
             };
-
             ToolTipService.SetToolTip(DeleteItems, "Delete (Delete)");
+
             KeyboardAccelerator deleteItemsKeyboardAccelerator = new KeyboardAccelerator()
             {
                 Key = VirtualKey.Delete,
@@ -329,7 +330,7 @@ namespace ISUF.UI.Views
 
             Binding deleteItemsCommandParameterBinding = new Binding()
             {
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
@@ -338,12 +339,12 @@ namespace ISUF.UI.Views
             Binding deleteItemsVisibilityBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
-                ElementName = nameof(itemsList),
+                ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SelectItemsMode
             };
-            BindingOperations.SetBinding(DeleteItems, AppBarButton.IsEnabledProperty, deleteItemsVisibilityBinding);
+            BindingOperations.SetBinding(DeleteItems, AppBarButton.VisibilityProperty, deleteItemsVisibilityBinding);
 
             AppBarButton CreateSecondTile = new AppBarButton()
             {
@@ -352,7 +353,7 @@ namespace ISUF.UI.Views
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.SelectAll),
-                Command = null
+                Command = (DataContext as ViewModelBase).GetPropertyValue("AddStartTile") as ICommand
             };
 
             ToolTipService.SetToolTip(CreateSecondTile, "Add/Remove second tile");
@@ -387,11 +388,13 @@ namespace ISUF.UI.Views
 
             PageHeader.PrimaryCommands.Add(AddItem);
             PageHeader.PrimaryCommands.Add(SlavePane);
+            PageHeader.PrimaryCommands.Add(new AppBarSeparator());
             PageHeader.PrimaryCommands.Add(SelectItems);
             PageHeader.PrimaryCommands.Add(CancelSelectItems);
             PageHeader.PrimaryCommands.Add(SelectAllItems);
             PageHeader.PrimaryCommands.Add(ShareItems);
             PageHeader.PrimaryCommands.Add(DeleteItems);
+            PageHeader.PrimaryCommands.Add(new AppBarSeparator());
             PageHeader.PrimaryCommands.Add(CreateSecondTile);
             PageHeader.Content = title;
             container.Children.Add(PageHeader);
@@ -456,13 +459,21 @@ namespace ISUF.UI.Views
 
         private void AddDataViewPart(Panel container)
         {
-
             ListView ModuleData = new ListView()
             {
+                Name = nameof(ModuleData),
                 Margin = new Thickness(0, 10, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 Background = new SolidColorBrush(Color.FromArgb(125, 125, 0, 255))
             };
+
+            Binding moduleDataSelectionModeBinding = new Binding()
+            {
+                Source = (DataContext as ViewModelBase).GetPropertyValue("ListSelectionMode"),
+                Mode = BindingMode.OneWay
+            };
+            BindingOperations.SetBinding(ModuleData, ListView.SelectionModeProperty, moduleDataSelectionModeBinding);
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(ModuleData, ListView.SelectionModeProperty, "ListSelectionMode", viewModelType);
 
             container.Children.Add(ModuleData);
         }
@@ -495,7 +506,7 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(LoadingStack, StackPanel.VisibilityProperty, loadingStackVisibilityBinding);
 
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(LoadingStack, StackPanel.VisibilityProperty, "Source", viewModelType, converter: new NullToVisibilityConverter(), converterParameter:"not");
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(LoadingStack, StackPanel.VisibilityProperty, "Source", viewModelType, converter: new NullToVisibilityConverter(), converterParameter: "not");
 
             container.Children.Add(LoadingStack);
         }
