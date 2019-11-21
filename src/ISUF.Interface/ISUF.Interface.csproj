@@ -141,6 +141,7 @@
     <Compile Include="Storage\IDatabaseAccess.cs" />
     <Compile Include="Storage\IAtomicItemManager.cs" />
     <Compile Include="Storage\IStorageModuleItemAccess.cs" />
+    <Compile Include="UI\IControlBase.cs" />
     <Compile Include="UI\IModuleAddVMBase.cs" />
     <Compile Include="UI\IModuleDetailVMBase.cs" />
     <Compile Include="UI\IModuleItemVMBase.cs" />
