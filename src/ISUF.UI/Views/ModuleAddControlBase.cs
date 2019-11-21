@@ -15,7 +15,7 @@ namespace ISUF.UI.Views
     {
         Panel mainContent;
 
-        public ModuleAddControlBase()
+        public ModuleAddControlBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
 
         }
