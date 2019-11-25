@@ -1,3 +1,7 @@
+using ISUF.Base.Attributes;
+using ISUF.Base.Modules;
+using ISUF.UI.Design;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +18,11 @@ namespace ISUF.UI.Views
     public class ModuleAddControlBase : ControlBase
     {
         Panel mainContent;
+        UIModule uiModule;
 
-        public ModuleAddControlBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
+        public ModuleAddControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
-
+            this.uiModule = uiModule;
         }
 
         public override void AddControls()
@@ -63,7 +68,7 @@ namespace ISUF.UI.Views
             ColumnDefinition col2 = new ColumnDefinition()
             {
                 Width = new GridLength(1, GridUnitType.Star)
-            }; 
+            };
 
             buttonsPart.ColumnDefinitions.Add(col1);
             buttonsPart.ColumnDefinitions.Add(col2);
@@ -169,8 +174,8 @@ namespace ISUF.UI.Views
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch
             };
-            Grid.SetRow(Add, 1);
-            Grid.SetColumn(Add, 1);
+            Grid.SetRow(Cancel, 1);
+            Grid.SetColumn(Cancel, 1);
 
             StackPanel cancelContent = new StackPanel()
             {
@@ -198,10 +203,29 @@ namespace ISUF.UI.Views
                 Key = VirtualKey.Escape
             };
             Cancel.KeyboardAccelerators.Add(cancelKeyboardAccelerator);
+
+            buttonsPart.Children.Add(AddClose);
+            buttonsPart.Children.Add(Add);
+            buttonsPart.Children.Add(Cancel);
+            content.Children.Add(buttonsPart);
+
+            Content = content;
         }
 
         public override void CreateControlsForModule()
         {
+            ModuleAnalyser analyser = new ModuleAnalyser(uiModule.ModuleItemType);
+
+            var result = analyser.Analyze();
+            UIElement previousControl = null;
+
+            foreach (var item in result)
+            {
+                if (item.Value.PropertyAttributes.Contains(typeof(UIIgnoreAttribute)))
+                    continue;
+
+                mainContent.Children.Add(ControlCreator.CreateControl(item, ref previousControl));
+            }
         }
     }
 }

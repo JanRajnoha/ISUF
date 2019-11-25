@@ -14,7 +14,7 @@ namespace ISUF.Base.Exceptions
     /// </summary>
     public class Exception : System.Exception
     {
-        public Exception()
+        public Exception() : base()
         {
         }
 

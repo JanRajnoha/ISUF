@@ -7,22 +7,36 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
-    public class ModuleAnalyzer
+    public class ModuleAnalyser
     {
-        public Dictionary<string, PropertyAnalyze> Analyze(Type analyzedClass)
-        {
-            var dict = new Dictionary<string, PropertyAnalyze>();
+        Type analysedClassType;
+        Dictionary<string, PropertyAnalyze> analysedClassDictionary;
 
-            foreach (var prop in analyzedClass.GetProperties())
+        public ModuleAnalyser(Type analysedClass)
+        {
+            analysedClassType = analysedClass;
+        }
+
+        public Dictionary<string, PropertyAnalyze> Analyze()
+        {
+            if (analysedClassDictionary == null)
+                DoAnalysis();
+
+            return analysedClassDictionary;
+        }
+
+        private void DoAnalysis()
+        {
+            analysedClassDictionary = new Dictionary<string, PropertyAnalyze>();
+
+            foreach (var prop in analysedClassType.GetProperties())
             {
                 var attributes = prop.GetCustomAttributes(true).Select(x => x.GetType()).ToList();
 
                 var analyze = new PropertyAnalyze(prop.Name, prop.PropertyType, attributes);
 
-                dict.Add(prop.Name, analyze);
+                analysedClassDictionary.Add(prop.Name, analyze);
             }
-
-            return dict;
         }
     }
 }

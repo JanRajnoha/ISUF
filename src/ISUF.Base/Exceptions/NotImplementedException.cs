@@ -14,7 +14,7 @@ namespace ISUF.Base.Exceptions
     /// </summary>
     public class NotImplementedException : System.NotImplementedException
     {
-        public NotImplementedException()
+        public NotImplementedException() : base()
         {
         }
 

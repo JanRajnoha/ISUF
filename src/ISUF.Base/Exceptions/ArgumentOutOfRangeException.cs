@@ -11,7 +11,7 @@ namespace ISUF.Base.Exceptions
 {
     public class ArgumentOutOfRangeException : System.ArgumentOutOfRangeException
     {
-        public ArgumentOutOfRangeException()
+        public ArgumentOutOfRangeException() : base()
         {
         }
 
