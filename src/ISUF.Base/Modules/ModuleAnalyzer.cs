@@ -31,7 +31,7 @@ namespace ISUF.Base.Modules
 
             foreach (var prop in analysedClassType.GetProperties())
             {
-                var attributes = prop.GetCustomAttributes(true).Select(x => x.GetType()).ToList();
+                var attributes = prop.GetCustomAttributes(true).ToList();
 
                 var analyze = new PropertyAnalyze(prop.Name, prop.PropertyType, attributes);
 

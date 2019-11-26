@@ -10,9 +10,9 @@ namespace ISUF.Base.Modules
     {
         public string PropertyName { get; set; }
         public Type PropertyType { get; set; }
-        public List<Type> PropertyAttributes { get; set; }
+        public List<object> PropertyAttributes { get; set; }
 
-        public PropertyAnalyze(string name, Type type, List<Type> attributes)
+        public PropertyAnalyze(string name, Type type, List<object> attributes)
         {
             PropertyName = name;
             PropertyType = type;
@@ -25,7 +25,7 @@ namespace ISUF.Base.Modules
             {
                 return PropertyName == propAnal.PropertyName &&
                     PropertyType == propAnal.PropertyType &&
-                    PropertyAttributes.TrueForAll(x => propAnal.PropertyAttributes.Contains(x));
+                    PropertyAttributes.TrueForAll(x => propAnal.PropertyAttributes.FirstOrDefault(y => y.GetType() == x.GetType()).Equals(x));
             }
             else
                 return false;

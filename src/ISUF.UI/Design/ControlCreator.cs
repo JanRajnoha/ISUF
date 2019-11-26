@@ -19,23 +19,19 @@ namespace ISUF.UI.Design
             string controlName = controlAnalyze.Key;
             PropertyAnalyze controlData = controlAnalyze.Value;
             string contorlTypeName = controlData.PropertyType.Name.ToLower();
+            UIElement control;
 
             switch (contorlTypeName)
             {
                 case "string":
-                    TextBox textInput = new TextBox()
+                    control = new TextBox()
                     {
                         Name = controlName,
                         Margin = new Thickness(10),
                         TextWrapping = TextWrapping.Wrap,
                         PlaceholderText = "Insert " + controlName
                     };
-
-                    RelativePanel.SetAlignLeftWithPanel(textInput, true);
-                    RelativePanel.SetAlignRightWithPanel(textInput, true);
-                    AddControlUnder(textInput, ref previousControl);
-
-                    return textInput;
+                    break;
 
                 case "char":
                 case "int":
@@ -43,20 +39,24 @@ namespace ISUF.UI.Design
                 case "double":
                 case "boolean":
                 case "datetime":
-                    Grid panel = new Grid()
+                    control = new Grid()
                     {
                         Background = new SolidColorBrush(Colors.Red),
-                        Margin = new Thickness(10)
+                        Margin = new Thickness(10),
+                        Height = 25
                     };
-
-                    RelativePanel.SetAlignLeftWithPanel(panel, true);
-                    RelativePanel.SetAlignRightWithPanel(panel, true);
-
-                    return panel;
+                    break;
 
                 default:
                     throw new NotSupportedPropertyType();
             }
+
+            RelativePanel.SetAlignLeftWithPanel(control, true);
+            RelativePanel.SetAlignRightWithPanel(control, true);
+
+            AddControlUnder(control, ref previousControl);
+
+            return control;
         }
 
         private static void AddControlUnder(UIElement control, ref UIElement upperControl)

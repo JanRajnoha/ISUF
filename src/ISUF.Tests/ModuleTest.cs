@@ -27,13 +27,17 @@ namespace ISUF.Tests
 
             var analyzeResult = analyzer.Analyze();
 
-            PropertyAnalyze prop1 = new PropertyAnalyze("StringProp", typeof(string), new List<Type>()
+            PropertyAnalyze prop1 = new PropertyAnalyze("StringProp", typeof(string), new List<object>()
             {
-                typeof(UIIgnoreAttribute),
-                typeof(DbIgnoreAttribute)
+                new UIIgnoreAttribute(),
+                new DbIgnoreAttribute(),
+                new UIParamsAttribute()
+                {
+                    UseLongTextInput = true
+                }
             });
 
-            PropertyAnalyze prop2 = new PropertyAnalyze("IntProp", typeof(int), new List<Type>());
+            PropertyAnalyze prop2 = new PropertyAnalyze("IntProp", typeof(int), new List<object>());
 
             Assert.IsTrue(analyzeResult.Values.ToList()[0].Equals(prop1));
             Assert.IsTrue(analyzeResult.Values.ToList()[1].Equals(prop2));
@@ -82,6 +86,7 @@ namespace ISUF.Tests
     {
         [UIIgnore]
         [DbIgnore]
+        [UIParams(UseLongTextInput = true)]
         public string StringProp { get; set; }
 
         public int IntProp { get; set; }

@@ -221,7 +221,7 @@ namespace ISUF.UI.Views
 
             foreach (var item in result)
             {
-                if (item.Value.PropertyAttributes.Contains(typeof(UIIgnoreAttribute)))
+                if (item.Value.PropertyAttributes.Select(x => x.GetType()).Contains(typeof(UIIgnoreAttribute)))
                     continue;
 
                 mainContent.Children.Add(ControlCreator.CreateControl(item, ref previousControl));

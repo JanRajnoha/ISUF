@@ -15,10 +15,12 @@ namespace ISUF.Base.Template
 
         [JsonIgnore]
         [XmlIgnore]
+        [UIIgnore]
         public string ManagerID { get; set; } = string.Empty;
 
         [JsonIgnore]
         [XmlIgnore]
+        [UIIgnore]
         public bool Encrypted { get; set; } = true;
 
         public AtomicItem()
