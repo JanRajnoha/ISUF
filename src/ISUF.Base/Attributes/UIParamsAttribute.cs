@@ -1,3 +1,4 @@
+using ISUF.Base.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace ISUF.Base.Attributes
         public bool UseLongTextInput { get; set; }
         public bool UseLabelDescription { get; set; }
         public string LabelDescription { get; set; }
+        public string DateLabel { get; set; }
+        public DatePickerMode DateTimeMode { get; set; } = DatePickerMode.Date;
     }
 }

@@ -11,6 +11,8 @@ namespace ISUF.Base.Template
     {
         public int Id { get; set; } = -1;
         public bool Secured { get; set; }
+
+        [UIIgnore] // TODO opravit
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
         [JsonIgnore]

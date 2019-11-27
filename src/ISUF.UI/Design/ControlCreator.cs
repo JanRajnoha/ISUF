@@ -21,6 +21,7 @@ namespace ISUF.UI.Design
             PropertyAnalyze controlData = controlAnalyze.Value;
             string contorlTypeName = controlData.PropertyType.Name.ToLower();
             UIElement control;
+            UIParamsAttribute customization;
 
             switch (contorlTypeName)
             {
@@ -37,7 +38,7 @@ namespace ISUF.UI.Design
                         PlaceholderText = "Insert " + controlName
                     };
 
-                    var customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                    customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
                     if (customization != null && customization.UseLongTextInput)
                         (control as TextBox).Height = 150;
 
@@ -52,13 +53,72 @@ namespace ISUF.UI.Design
                     break;
 
                 case "datetime":
-                    control = new CalendarDatePicker()
+
+                    customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                    if (customization == null)
+                        throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
+
+                    control = new Grid()
                     {
-                        Date = DateTime.Today,
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        Margin = new Thickness(10),
-                        PlaceholderText = "Select a date"
+                        Margin = new Thickness(10)
                     };
+
+                    RowDefinition labelRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    RowDefinition dateTimeRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    (control as Grid).RowDefinitions.Add(labelRow);
+                    (control as Grid).RowDefinitions.Add(dateTimeRow);
+
+                    TextBlock label = new TextBlock()
+                    {
+                        Text = customization.LabelDescription,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(0, 0, 0, 5)
+                    };
+                    Grid.SetRow(label, 0);
+                    (control as Grid).Children.Add(label);
+
+                    UIElement dateTimeControl;
+
+                    switch (customization.DateTimeMode)
+                    {
+                        case Base.Enum.DatePickerMode.Date:
+                            dateTimeControl = new CalendarDatePicker()
+                            {
+                                Date = DateTime.Today,
+                                HorizontalAlignment = HorizontalAlignment.Stretch,
+                                Margin = new Thickness(0, 5, 0, 0),
+                                PlaceholderText = "Select a date"
+                            };
+                            break;
+
+                        case Base.Enum.DatePickerMode.Time:
+                            dateTimeControl = new TimePicker()
+                            {
+                                Time = DateTime.Now.TimeOfDay,
+                                HorizontalAlignment = HorizontalAlignment.Stretch,
+                                Margin = new Thickness(0, 5, 0, 0)
+                            };
+                            break;
+
+                        case Base.Enum.DatePickerMode.DateAndTime:
+                            throw new Base.Exceptions.NotSupportedException();
+
+                        default:
+                            throw new Base.Exceptions.NotSupportedException();
+                    }
+
+                    Grid.SetRow(dateTimeControl as FrameworkElement, 1);
+
+                    (control as Grid).Children.Add(dateTimeControl);
+
                     break;
 
                 case "notImplementedYet":

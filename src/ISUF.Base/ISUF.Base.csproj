@@ -131,6 +131,7 @@
     <Compile Include="Classes\Functions.cs" />
     <Compile Include="Classes\Messenger.cs" />
     <Compile Include="Classes\RelacyCommand.cs" />
+    <Compile Include="Enum\DatePickerMode.cs" />
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\MessageDialogButtons.cs" />
     <Compile Include="Enum\MessageDialogResult.cs" />
@@ -139,7 +140,9 @@
     <Compile Include="Exceptions\ArgumentOutOfRangeException.cs" />
     <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Exceptions\NotImplementedException.cs" />
+    <Compile Include="Exceptions\NotSupportedException.cs" />
     <Compile Include="Exceptions\NotSupportedPropertyType.cs" />
+    <Compile Include="Exceptions\MissingRequiredAdditionalDataException.cs" />
     <Compile Include="Interface\IFake.cs" />
     <Compile Include="Interface\IMessenger.cs" />
     <Compile Include="Enum\AppTheme.cs" />

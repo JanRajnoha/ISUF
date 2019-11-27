@@ -16,7 +16,7 @@ namespace ISUF.Base.Template
     {
         public string Name { get; set; }
 
-        [UIParams(UseLongTextInput =true)]
+        [UIParams(UseLongTextInput = true)]
         public string Description { get; set; }
 
         public BaseItem()
