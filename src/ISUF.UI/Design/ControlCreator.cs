@@ -1,3 +1,4 @@
+using ISUF.Base.Attributes;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
 using System;
@@ -24,6 +25,10 @@ namespace ISUF.UI.Design
             switch (contorlTypeName)
             {
                 case "string":
+                case "int":
+                case "int32":
+                case "double":
+                case "char":
                     control = new TextBox()
                     {
                         Name = controlName,
@@ -31,14 +36,32 @@ namespace ISUF.UI.Design
                         TextWrapping = TextWrapping.Wrap,
                         PlaceholderText = "Insert " + controlName
                     };
+
+                    var customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                    if (customization != null && customization.UseLongTextInput)
+                        (control as TextBox).Height = 150;
+
                     break;
 
-                case "char":
-                case "int":
-                case "int32":
-                case "double":
                 case "boolean":
+                    control = new CheckBox()
+                    {
+                        Content = controlName,
+                        Margin = new Thickness(10)
+                    };
+                    break;
+
                 case "datetime":
+                    control = new CalendarDatePicker()
+                    {
+                        Date = DateTime.Today,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        Margin = new Thickness(10),
+                        PlaceholderText = "Select a date"
+                    };
+                    break;
+
+                case "notImplementedYet":
                     control = new Grid()
                     {
                         Background = new SolidColorBrush(Colors.Red),

@@ -216,6 +216,7 @@ namespace ISUF.UI.ViewModel
         {
             Messenger = ApplicationBase.Current.VMLocator.GetMessenger();
             PivotPanes = new ObservableCollection<PivotItem>();
+            PivotPanes.CollectionChanged += PivotPanes_CollectionChanged;
 
             PaneVisibility = false;
             MasterFrame = new GridLength(1, GridUnitType.Star);
@@ -255,6 +256,11 @@ namespace ISUF.UI.ViewModel
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
             ModuleTitle = uiModule.ModuleDisplayName;
             ModuleName = uiModule.ModuleName;
+        }
+
+        private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            PropertyChangedNotifier.NotifyPropertyChanged(GetType(), PivotPanes, nameof(PivotPanes));
         }
 
         // To-Do solve

@@ -45,17 +45,17 @@ namespace ISUF.UI.Design
                 return;
 
             var destinationProperties = selectedRegisteredProperties.Select(x => x.Key)?.ToList();
-            var targetProperty = selectedRegisteredProperties.Select(x => x.Value)?.FirstOrDefault();
+            var targetProperty = selectedRegisteredProperties.Select(x => x.Value)?.ToList();
 
             for (int i = 0; i < destinationProperties.Count; i++)
             {
                 object value = obj.PropertyValue;
 
-                if (!string.IsNullOrEmpty(targetProperty.PropertyInnerPropertyName))
-                    value.GetType().GetProperty(targetProperty.PropertyInnerPropertyName).GetValue(value);
+                if (!string.IsNullOrEmpty(targetProperty[i].PropertyInnerPropertyName))
+                    value = value.GetType().GetProperty(targetProperty[i].PropertyInnerPropertyName).GetValue(value);
 
                 if (destinationProperties[i].Converter != null)
-                    value = destinationProperties[i].Converter.Convert(obj.PropertyValue, destinationProperties[i].ConverterTargetType, destinationProperties[i].ConverterParameter, destinationProperties[i].ConverterLanguage);
+                    value = destinationProperties[i].Converter.Convert(value, destinationProperties[i].ConverterTargetType, destinationProperties[i].ConverterParameter, destinationProperties[i].ConverterLanguage);
 
                 destinationProperties[i].DestinationObject.SetValue(destinationProperties[i].DestinationProperty, value);
             }

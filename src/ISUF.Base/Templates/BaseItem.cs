@@ -1,3 +1,4 @@
+using ISUF.Base.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace ISUF.Base.Template
     public class BaseItem : AtomicItem
     {
         public string Name { get; set; }
+
+        [UIParams(UseLongTextInput =true)]
         public string Description { get; set; }
 
         public BaseItem()
