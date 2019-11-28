@@ -14,6 +14,9 @@ namespace ISUF.UI.ViewModel
         //public UIModuleManager ModuleManager { get; set; }
 
         private Messenger messenger;
+        protected UIModule uiModule;
+        protected Type modulePage;
+
         public Messenger Messenger
         {
             get => messenger;

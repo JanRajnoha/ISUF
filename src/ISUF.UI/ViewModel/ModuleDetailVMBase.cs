@@ -2,6 +2,7 @@
 using ISUF.Base.Messages;
 using ISUF.Base.Template;
 using ISUF.Interface.UI;
+using System;
 using System.Windows.Input;
 using Template10.Mvvm;
 
@@ -11,8 +12,7 @@ namespace ISUF.UI.ViewModel
     {
         protected Messenger messenger;
 
-        // To-Do solve
-        string ItemType;
+        Type ItemType;
 
         private T detailItem;
         public T DetailItem
@@ -35,8 +35,7 @@ namespace ISUF.UI.ViewModel
         }
 
 
-        // To-Do solve
-        public ModuleDetailVMBase(Messenger messenger, string itemType) : this()
+        public ModuleDetailVMBase(Messenger messenger, Type itemType) : this()
         {
             this.messenger = messenger;
             ItemType = itemType;

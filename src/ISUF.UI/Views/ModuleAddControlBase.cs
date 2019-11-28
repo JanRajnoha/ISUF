@@ -1,16 +1,19 @@
 using ISUF.Base.Attributes;
 using ISUF.Base.Modules;
+using ISUF.Base.Template;
+using ISUF.UI.App;
+using ISUF.UI.Converters;
 using ISUF.UI.Design;
 using ISUF.UI.Modules;
+using ISUF.UI.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using System.Windows.Input;
 
 namespace ISUF.UI.Views
 {
@@ -75,7 +78,6 @@ namespace ISUF.UI.Views
 
             RowDefinition AddCloseRow = new RowDefinition();
             AddCloseRow.SetValue(FrameworkElement.NameProperty, nameof(AddCloseRow));
-            // binding
 
             RowDefinition row2 = new RowDefinition()
             {
@@ -91,10 +93,43 @@ namespace ISUF.UI.Views
                 Margin = new Thickness(0, 0, 0, 1),
                 FontSize = 15,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemClose") as ICommand,
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
             };
             Grid.SetRow(AddClose, 0);
             Grid.SetColumnSpan(AddClose, 2);
+
+            Binding addCloseRowHeightBinding = new Binding()
+            {
+                Path = new PropertyPath(nameof(Button.Visibility)),
+                ElementName = nameof(AddClose),
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = new VisibilityToGridLength()
+            };
+            BindingOperations.SetBinding(AddCloseRow, RowDefinition.HeightProperty, addCloseRowHeightBinding);
+
+            Binding gridRowHeightBinding = new Binding()
+            {
+                Path = new PropertyPath(nameof(Button.Visibility)),
+                ElementName = nameof(AddClose),
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = new AddCloseVisibilityConverter()
+            };
+            BindingOperations.SetBinding(buttonsRow, RowDefinition.HeightProperty, gridRowHeightBinding);
+
+            Binding addCloseVisibilityBinding = new Binding()
+            {
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = new IdConverter(),
+                ConverterParameter = "visibility"
+            };
+            BindingOperations.SetBinding(AddClose, Button.VisibilityProperty, addCloseVisibilityBinding);
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddClose, Button.VisibilityProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "visibility");
 
             StackPanel addCloseContent = new StackPanel()
             {
@@ -131,7 +166,9 @@ namespace ISUF.UI.Views
                 FontSize = 15,
                 IsEnabled = true,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItem") as ICommand,
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
             };
             Grid.SetRow(Add, 1);
             Grid.SetColumn(Add, 0);
@@ -150,7 +187,17 @@ namespace ISUF.UI.Views
             {
                 Name = nameof(AddText)
             };
-            // Binding
+
+            Binding addTextBinding = new Binding()
+            {
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Converter = new IdConverter(),
+                ConverterParameter = "text"
+            };
+            BindingOperations.SetBinding(AddText, TextBlock.TextProperty, addTextBinding);
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddText, TextBlock.TextProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "text");
 
             addContent.Children.Add(addIcon);
             addContent.Children.Add(AddText);
@@ -172,7 +219,8 @@ namespace ISUF.UI.Views
                 FontSize = 15,
                 IsEnabled = true,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Command = (DataContext as ViewModelBase).GetPropertyValue("Close") as ICommand
             };
             Grid.SetRow(Cancel, 1);
             Grid.SetColumn(Cancel, 1);
@@ -196,7 +244,6 @@ namespace ISUF.UI.Views
             cancelContent.Children.Add(cancelText);
             Cancel.Content = cancelContent;
             ToolTipService.SetToolTip(Cancel, "Cancel (Esc)");
-            // BInding
 
             KeyboardAccelerator cancelKeyboardAccelerator = new KeyboardAccelerator()
             {

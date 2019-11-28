@@ -11,17 +11,19 @@ using Template10.Mvvm;
 using Windows.ApplicationModel.UserActivities;
 using ISUF.Interface.UI;
 using ISUF.Interface.Storage;
+using ISUF.UI.App;
+using ISUF.UI.Modules;
+using System.Linq;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleAddVMBase<T> : Template10.Mvvm.ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
+    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
     {
         public Messenger messenger;
         UserActivitySession currentActivity;
         public bool ModalActivation = false;
 
-        // To-Do solve
-        string ItemType;
+        Type ItemType;
 
         public ICommand Close { get; set; }
 
@@ -94,9 +96,9 @@ namespace ISUF.UI.ViewModel
         protected abstract void AddNewItem(ItemAddNewMsg obj);
         protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
 
-        //  public abstract DelegateCommand<T> SaveItem { get; set; }
+        public abstract DelegateCommand<T> SaveItem { get; set; }
 
-        //public abstract DelegateCommand<T> SaveItemClose { get; set; }
+        public abstract DelegateCommand<T> SaveItemClose { get; set; }
 
         public ModuleAddVMBase()
         {
@@ -105,10 +107,10 @@ namespace ISUF.UI.ViewModel
 
 
         // To-Do solve
-        public ModuleAddVMBase(Messenger messenger, string itemType) : this()
+        public ModuleAddVMBase(Messenger messenger, Type modulePage) : this()
         {
             this.messenger = messenger;
-            ItemType = itemType;
+            this.modulePage = modulePage;
 
             this.messenger.Register<ItemAddNewMsg>(AddNewItem);
 
@@ -131,6 +133,9 @@ namespace ISUF.UI.ViewModel
 
             CustomSettings.UserLogChanged += CustomSettings_UserLogChanged;
             CustomSettings.ShowAdsChanged += CustomSettings_ShowAdsChanged;
+
+            uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
+            ItemType = uiModule.ModuleItemType;
         }
 
         public void CloseModal()

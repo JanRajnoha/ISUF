@@ -15,11 +15,9 @@ using System.Collections;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using ArgumentNullException = ISUF.Base.Exceptions.ArgumentNullException;
 using Windows.UI;
-using Windows.UI.Xaml.Markup;
 using ISUF.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Navigation;
-using ISUF.UI.Classes;
 using System.Windows.Input;
 
 namespace ISUF.UI.Views

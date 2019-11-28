@@ -23,8 +23,7 @@ namespace ISUF.UI.ViewModel
         protected string shareMessage = string.Empty;
         protected string shareHtml;
 
-        // To-Do solve
-        string ItemType;
+        Type ItemType;
 
         protected List<StorageFile> shareFileList;
 
@@ -67,7 +66,7 @@ namespace ISUF.UI.ViewModel
 
 
         // To-Do solve
-        public ModuleItemVMBase(Messenger messenger, string itemType) : this()
+        public ModuleItemVMBase(Messenger messenger, Type itemType) : this()
         {
             this.messenger = messenger;
             ItemType = itemType;

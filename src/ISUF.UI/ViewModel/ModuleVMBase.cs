@@ -36,10 +36,8 @@ namespace ISUF.UI.ViewModel
         public const string ShareFileName = "Share.isuf";
         protected string shareMessage = string.Empty;
         protected string shareHtml;
-        protected UIModule uiModule;
 
-        // To-Do solve
-        string ItemType;
+        Type ItemType;
 
         private Messenger messenger;
         public Messenger Messenger
@@ -215,6 +213,8 @@ namespace ISUF.UI.ViewModel
         public ModuleVMBase(Type modulePage)
         {
             Messenger = ApplicationBase.Current.VMLocator.GetMessenger();
+            this.modulePage = modulePage;
+
             PivotPanes = new ObservableCollection<PivotItem>();
             PivotPanes.CollectionChanged += PivotPanes_CollectionChanged;
 
@@ -256,6 +256,7 @@ namespace ISUF.UI.ViewModel
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
             ModuleTitle = uiModule.ModuleDisplayName;
             ModuleName = uiModule.ModuleName;
+            ItemType = uiModule.ModuleItemType;
         }
 
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -263,12 +264,10 @@ namespace ISUF.UI.ViewModel
             PropertyChangedNotifier.NotifyPropertyChanged(GetType(), PivotPanes, nameof(PivotPanes));
         }
 
-        // To-Do solve
-        public ModuleVMBase(Type modulePage, SecondaryTile secondaryTile, string itemType) : this(modulePage)
+        public ModuleVMBase(Type modulePage, SecondaryTile secondaryTile) : this(modulePage)
         {
             SecTile = secondaryTile;
             StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
-            ItemType = itemType;
         }
 
         protected abstract void ShowModal(ShowModalActivationMsg obj);
