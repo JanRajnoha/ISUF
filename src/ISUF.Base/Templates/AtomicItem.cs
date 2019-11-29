@@ -10,6 +10,8 @@ namespace ISUF.Base.Template
     public class AtomicItem: INotifyPropertyChanged, ICloneable
     {
         public int Id { get; set; } = -1;
+
+        [UIParams(UseLongTextInput = true, UIOrder = 30)]
         public bool Secured { get; set; }
 
         [UIIgnore] // TODO opravit

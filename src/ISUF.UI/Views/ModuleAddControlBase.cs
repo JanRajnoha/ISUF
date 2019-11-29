@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace ISUF.UI.Views
 {
@@ -263,7 +264,9 @@ namespace ISUF.UI.Views
         {
             ModuleAnalyser analyser = new ModuleAnalyser(uiModule.ModuleItemType);
 
-            var result = analyser.Analyze();
+            analyser.Analyze();
+            var result = analyser.SortProperties();
+
             UIElement previousControl = null;
 
             foreach (var item in result)

@@ -10,6 +10,7 @@ namespace ISUF.Base.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class UIParamsAttribute : Attribute
     {
+        public int UIOrder { get; set; } = 0;
         public bool UseLongTextInput { get; set; }
         public bool UseLabelDescription { get; set; }
         public string LabelDescription { get; set; }
