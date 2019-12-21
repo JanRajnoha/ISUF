@@ -15,7 +15,7 @@ namespace ISUF.Base.Exceptions
         {
         }
 
-        public ArgumentOutOfRangeException(string message) : base(message)
+        public ArgumentOutOfRangeException(string paramName) : base(paramName)
         {
         }
 
@@ -24,6 +24,14 @@ namespace ISUF.Base.Exceptions
         }
 
         protected ArgumentOutOfRangeException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public ArgumentOutOfRangeException(string paramName, string message) : base(paramName, message)
+        {
+        }
+
+        public ArgumentOutOfRangeException(string paramName, object actualValue, string message) : base(paramName, actualValue, message)
         {
         }
     }

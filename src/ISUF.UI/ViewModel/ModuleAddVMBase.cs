@@ -27,14 +27,14 @@ namespace ISUF.UI.ViewModel
 
         public ICommand Close { get; set; }
 
-        private T detailItem;
-        public T DetailItem
+        private T addEditItem;
+        public T AddEditItem
         {
-            get { return detailItem; }
+            get { return addEditItem; }
             set
             {
-                detailItem = value;
-                RaisePropertyChanged(nameof(detailItem));
+                addEditItem = value;
+                RaisePropertyChanged(nameof(addEditItem));
             }
         }
 
@@ -146,7 +146,7 @@ namespace ISUF.UI.ViewModel
 
         public void SetDetailItem(T currentItem)
         {
-            DetailItem = currentItem;
+            AddEditItem = currentItem;
         }
 
         /// <summary>

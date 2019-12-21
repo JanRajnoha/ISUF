@@ -158,9 +158,10 @@ namespace ISUF.UI.Design
         public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, string controlTypeName)
         {
             if (controlData is null)
-            {
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
-            }
+
+            if (controlTypeName != "int" || controlTypeName != "int32")
+                throw new Base.Exceptions.ArgumentOutOfRangeException(nameof(controlData), "Type of linked table property must be integer.");
 
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
@@ -218,6 +219,7 @@ namespace ISUF.UI.Design
 
             TextBlock linkedTableSelectedRowText = new TextBlock()
             {
+                Name = controlName + "Label",
                 Text = "Selected ID:",
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(5, 0, 0, 0)
