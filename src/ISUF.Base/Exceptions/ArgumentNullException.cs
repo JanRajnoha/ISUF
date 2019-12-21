@@ -9,17 +9,21 @@ using ISUF.Base.Service;
 
 namespace ISUF.Base.Exceptions
 {
-    public class ArgumentNullException : System.ArgumentOutOfRangeException
+    public class ArgumentNullException : System.ArgumentNullException
     {
         public ArgumentNullException() : base()
         {
         }
 
-        public ArgumentNullException(string message) : base(message)
+        public ArgumentNullException(string paramName) : base(paramName)
         {
         }
 
         public ArgumentNullException(string message, System.Exception inner) : base(message, inner)
+        {
+        }
+
+        public ArgumentNullException(string paramName, string message) : base(paramName, message)
         {
         }
 

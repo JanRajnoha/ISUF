@@ -204,7 +204,6 @@ namespace ISUF.UI.ViewModel
 
         public ICommand EditCommand { get; set; }
 
-        protected abstract void AddPane<TMessage>(string paneName, TMessage msg);
         protected abstract void NewItemAdded(ItemAddSavedMsg obj);
         protected abstract Task UpdateSourceAsync(bool secureChanged = false);
 
@@ -291,6 +290,10 @@ namespace ISUF.UI.ViewModel
 
             daTranManaItems = DataTransferManager.GetForCurrentView();
             daTranManaItems.DataRequested -= DaTranManaItems_DataRequestedAsync;
+        }
+
+        protected virtual void AddPane<TMessage>(string paneName, TMessage msg)
+        { 
         }
 
         private void Data_ShareCompleted(DataPackage sender, ShareCompletedEventArgs args)
