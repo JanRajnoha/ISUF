@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Design
 {
-    public class ControlCreator
+    public static class ControlCreator
     {
         public static UIElement CreateControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
         {
