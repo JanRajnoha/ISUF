@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ISUF.Base.Enum;
+using ISUF.Base.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +11,16 @@ namespace ISUF.Base.Modules
     public class PropertyAnalyze
     {
         public string PropertyName { get; set; }
-        public Type PropertyType { get; set; }
+        public PropertyType PropertyType { get; set; }
         public List<object> PropertyAttributes { get; set; }
+        private Type fullPropertyType;
 
         public PropertyAnalyze(string name, Type type, List<object> attributes)
         {
+            fullPropertyType = type;
+
             PropertyName = name;
-            PropertyType = type;
+            PropertyType = PropertyTypeNameToEnum(fullPropertyType);
             PropertyAttributes = attributes;
         }
 
@@ -29,6 +34,17 @@ namespace ISUF.Base.Modules
             }
             else
                 return false;
+        }
+
+        private PropertyType PropertyTypeNameToEnum(Type propertyType)
+        {
+            List<PropertyType> propTypeEnumValuesList = System.Enum.GetValues(typeof(PropertyType)).Cast<PropertyType>().ToList();
+            var result = propTypeEnumValuesList.FirstOrDefault(x => x.ToString().ToLower() == propertyType.ToString().ToLower());
+
+            if (result == null)
+                throw new NotSupportedPropertyType();
+
+            return result;
         }
     }
 }

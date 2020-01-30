@@ -1,4 +1,5 @@
 using ISUF.Base.Attributes;
+using ISUF.Base.Enum;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
 using System;
@@ -15,11 +16,11 @@ namespace ISUF.UI.Design
 {
     public static class ControlCreator
     {
-        public static UIElement CreateControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
+        public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
         {
             string controlName = controlAnalyze.Key;
             PropertyAnalyze controlData = controlAnalyze.Value;
-            string controlTypeName = controlData.PropertyType.Name.ToLower();
+            PropertyType controlTypeName = controlData.PropertyType;
             UIElement control;
             UIParamsAttribute customization;
 
@@ -30,11 +31,12 @@ namespace ISUF.UI.Design
             else
                 switch (controlTypeName)
                 {
-                    case "string":
-                    case "int":
-                    case "int32":
-                    case "double":
-                    case "char":
+                    case PropertyType.String:
+                    case PropertyType.Int:
+                    case PropertyType.Int32:
+                    case PropertyType.Double:
+                    case PropertyType.Char:
+
                         control = new TextBox()
                         {
                             Name = controlName,
@@ -49,7 +51,7 @@ namespace ISUF.UI.Design
 
                         break;
 
-                    case "boolean":
+                    case PropertyType.Boolean:
                         control = new CheckBox()
                         {
                             Content = controlName,
@@ -57,7 +59,7 @@ namespace ISUF.UI.Design
                         };
                         break;
 
-                    case "datetime":
+                    case PropertyType.DateTime:
 
                         customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
                         if (customization == null)
@@ -94,7 +96,7 @@ namespace ISUF.UI.Design
 
                         switch (customization.DateTimeMode)
                         {
-                            case Base.Enum.DatePickerMode.Date:
+                            case DatePickerMode.Date:
                                 dateTimeControl = new CalendarDatePicker()
                                 {
                                     Date = DateTime.Today,
@@ -104,7 +106,7 @@ namespace ISUF.UI.Design
                                 };
                                 break;
 
-                            case Base.Enum.DatePickerMode.Time:
+                            case DatePickerMode.Time:
                                 dateTimeControl = new TimePicker()
                                 {
                                     Time = DateTime.Now.TimeOfDay,
@@ -113,7 +115,7 @@ namespace ISUF.UI.Design
                                 };
                                 break;
 
-                            case Base.Enum.DatePickerMode.DateAndTime:
+                            case DatePickerMode.DateAndTime:
                                 throw new Base.Exceptions.NotSupportedException();
 
                             default:
@@ -126,7 +128,124 @@ namespace ISUF.UI.Design
 
                         break;
 
-                    case "notImplementedYet":
+                    case PropertyType.notImplementedYet:
+                        control = new Grid()
+                        {
+                            Background = new SolidColorBrush(Colors.Red),
+                            Margin = new Thickness(10),
+                            Height = 25
+                        };
+                        break;
+
+                    default:
+                        throw new NotSupportedPropertyType();
+                }
+
+            RelativePanel.SetAlignLeftWithPanel(control, true);
+            RelativePanel.SetAlignRightWithPanel(control, true);
+
+            AddControlUnder(control, ref previousControl);
+
+            return control;
+        }
+
+        internal static UIElement CreateDetailControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
+        {
+            string controlName = controlAnalyze.Key;
+            PropertyAnalyze controlData = controlAnalyze.Value;
+            PropertyType controlTypeName = controlData.PropertyType;
+            UIElement control;
+            UIParamsAttribute customization;
+
+            if (controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) != null)
+            {
+                control = CreateLinkedTableControl(controlName, controlData, controlTypeName);
+            }
+            else
+                switch (controlTypeName)
+                {
+                    case PropertyType.String:
+                    case PropertyType.Int:
+                    case PropertyType.Int32:
+                    case PropertyType.Double:
+                    case PropertyType.Char:
+                    case PropertyType.DateTime:
+
+                        customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                        if (customization == null && controlTypeName == PropertyType.DateTime)
+                            throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
+
+                        control = new Grid()
+                        {
+                            Margin = new Thickness(10)
+                        };
+
+                        RowDefinition labelRow = new RowDefinition()
+                        {
+                            Height = new GridLength(1, GridUnitType.Auto)
+                        };
+
+                        RowDefinition dateTimeRow = new RowDefinition()
+                        {
+                            Height = new GridLength(1, GridUnitType.Auto)
+                        };
+
+                        (control as Grid).RowDefinitions.Add(labelRow);
+                        (control as Grid).RowDefinitions.Add(dateTimeRow);
+
+                        TextBlock label = new TextBlock()
+                        {
+                            Text = customization == null ? controlTypeName.ToString() : customization.LabelDescription,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+                        Grid.SetRow(label, 0);
+                        (control as Grid).Children.Add(label);
+
+                        TextBlock data = new TextBlock()
+                        {
+                            //Text = controlData.,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        UIElement dateTimeControl;
+
+                        switch (customization.DateTimeMode)
+                        {
+                            case DatePickerMode.Date:
+                                dateTimeControl = new CalendarDatePicker()
+                                {
+                                    Date = DateTime.Today,
+                                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                                    Margin = new Thickness(0, 5, 0, 0),
+                                    PlaceholderText = "Select a date"
+                                };
+                                break;
+
+                            case DatePickerMode.Time:
+                                dateTimeControl = new TimePicker()
+                                {
+                                    Time = DateTime.Now.TimeOfDay,
+                                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                                    Margin = new Thickness(0, 5, 0, 0)
+                                };
+                                break;
+
+                            case DatePickerMode.DateAndTime:
+                                throw new Base.Exceptions.NotSupportedException();
+
+                            default:
+                                throw new Base.Exceptions.NotSupportedException();
+                        }
+
+                        Grid.SetRow(dateTimeControl as FrameworkElement, 1);
+
+                        (control as Grid).Children.Add(dateTimeControl);
+
+                        break;
+
+                    case PropertyType.notImplementedYet:
                         control = new Grid()
                         {
                             Background = new SolidColorBrush(Colors.Red),
@@ -155,12 +274,12 @@ namespace ISUF.UI.Design
             upperControl = control;
         }
 
-        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, string controlTypeName)
+        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
         {
             if (controlData is null)
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
 
-            if (controlTypeName != "int" || controlTypeName != "int32")
+            if (controlType != PropertyType.Int || controlType != PropertyType.Int32)
                 throw new Base.Exceptions.ArgumentOutOfRangeException(nameof(controlData), "Type of linked table property must be integer.");
 
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))

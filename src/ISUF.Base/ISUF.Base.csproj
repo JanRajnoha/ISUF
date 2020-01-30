@@ -136,6 +136,7 @@
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\MessageDialogButtons.cs" />
     <Compile Include="Enum\MessageDialogResult.cs" />
+    <Compile Include="Enum\PropertyType.cs" />
     <Compile Include="Exceptions\ArgumentException.cs" />
     <Compile Include="Exceptions\ArgumentNullException.cs" />
     <Compile Include="Exceptions\ArgumentOutOfRangeException.cs" />

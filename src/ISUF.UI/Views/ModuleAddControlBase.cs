@@ -274,7 +274,7 @@ namespace ISUF.UI.Views
                 if (item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIIgnoreAttribute)) != null)
                     continue;
 
-                mainContent.Children.Add(ControlCreator.CreateControl(item, ref previousControl));
+                mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl));
             }
         }
     }
