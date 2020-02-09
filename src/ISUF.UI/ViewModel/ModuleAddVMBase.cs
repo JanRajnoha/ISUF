@@ -14,12 +14,12 @@ using ISUF.Interface.Storage;
 using ISUF.UI.App;
 using ISUF.UI.Modules;
 using System.Linq;
+using ISUF.UI.Design;
 
 namespace ISUF.UI.ViewModel
 {
     public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
     {
-        public Messenger messenger;
         UserActivitySession currentActivity;
         public bool ModalActivation = false;
 
@@ -34,7 +34,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 addEditItem = value;
-                RaisePropertyChanged(nameof(addEditItem));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), AddEditItem);
             }
         }
 
@@ -45,7 +45,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 secBtnVisibility = value;
-                RaisePropertyChanged(nameof(SecBtnVisibility));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), SecBtnVisibility);
             }
         }
 
@@ -56,7 +56,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 adVisibility = value;
-                RaisePropertyChanged(nameof(AdVisibility));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), AdVisibility);
             }
         }
 
@@ -67,7 +67,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 errorMessage = value;
-                RaisePropertyChanged(nameof(ErrorMessage));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ErrorMessage);
             }
         }
 
@@ -78,7 +78,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 errorVisible = value;
-                RaisePropertyChanged(nameof(ErrorVisible));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ErrorVisible);
             }
         }
 
@@ -89,7 +89,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 manager = value;
-                RaisePropertyChanged(nameof(manager));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Manager);
             }
         }
 

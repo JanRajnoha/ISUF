@@ -14,10 +14,10 @@ namespace ISUF.Base.Template
 {
     public class BaseItem : AtomicItem
     {
-        [UIParams(UIOrder = 0)]
+        [UIParams(UIOrder = 1)]
         public string Name { get; set; }
 
-        [UIParams(UseLongTextInput = true, UIOrder = 1)]
+        [UIParams(UseLongTextInput = true, UIOrder = 2)]
         public string Description { get; set; }
 
         public BaseItem()

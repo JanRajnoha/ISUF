@@ -21,7 +21,7 @@ namespace ISUF.UI.Views
     public class ModuleDetailControlBase : ControlBase
     {
         Panel mainContent;
-        UIModule uiModule;
+        readonly UIModule uiModule;
 
         public ModuleDetailControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {

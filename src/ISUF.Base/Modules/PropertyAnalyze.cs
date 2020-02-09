@@ -39,7 +39,7 @@ namespace ISUF.Base.Modules
         private PropertyType PropertyTypeNameToEnum(Type propertyType)
         {
             List<PropertyType> propTypeEnumValuesList = System.Enum.GetValues(typeof(PropertyType)).Cast<PropertyType>().ToList();
-            var result = propTypeEnumValuesList.FirstOrDefault(x => x.ToString().ToLower() == propertyType.ToString().ToLower());
+            var result = propTypeEnumValuesList.FirstOrDefault(x => x.ToString().ToLower() == propertyType.Name.ToLower());
 
             if (result == null)
                 throw new NotSupportedPropertyType();

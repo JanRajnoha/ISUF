@@ -22,7 +22,7 @@ namespace ISUF.UI.Views
     public class ModuleAddControlBase : ControlBase
     {
         Panel mainContent;
-        UIModule uiModule;
+        readonly UIModule uiModule;
 
         public ModuleAddControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
@@ -78,7 +78,7 @@ namespace ISUF.UI.Views
             buttonsPart.ColumnDefinitions.Add(col2);
 
             RowDefinition AddCloseRow = new RowDefinition();
-            AddCloseRow.SetValue(FrameworkElement.NameProperty, nameof(AddCloseRow));
+            AddCloseRow.SetValue(NameProperty, nameof(AddCloseRow));
 
             RowDefinition row2 = new RowDefinition()
             {
@@ -96,7 +96,7 @@ namespace ISUF.UI.Views
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemClose") as ICommand,
-                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(AddClose, 0);
             Grid.SetColumnSpan(AddClose, 2);
@@ -123,14 +123,14 @@ namespace ISUF.UI.Views
 
             Binding addCloseVisibilityBinding = new Binding()
             {
-                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("AddEditItem") as AtomicItem).Id,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new IdConverter(),
                 ConverterParameter = "visibility"
             };
             BindingOperations.SetBinding(AddClose, Button.VisibilityProperty, addCloseVisibilityBinding);
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddClose, Button.VisibilityProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "visibility");
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddClose, Button.VisibilityProperty, "AddEditItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "visibility");
 
             StackPanel addCloseContent = new StackPanel()
             {
@@ -169,7 +169,7 @@ namespace ISUF.UI.Views
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItem") as ICommand,
-                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(Add, 1);
             Grid.SetColumn(Add, 0);
@@ -191,20 +191,19 @@ namespace ISUF.UI.Views
 
             Binding addTextBinding = new Binding()
             {
-                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("AddEditItem") as AtomicItem).Id,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new IdConverter(),
                 ConverterParameter = "text"
             };
             BindingOperations.SetBinding(AddText, TextBlock.TextProperty, addTextBinding);
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddText, TextBlock.TextProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "text");
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddText, TextBlock.TextProperty, "AddEditItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "text");
 
             addContent.Children.Add(addIcon);
             addContent.Children.Add(AddText);
             Add.Content = addContent;
             ToolTipService.SetToolTip(Add, "Add (Ctrl + S)");
-            // BInding
 
             KeyboardAccelerator addKeyboardAccelerator = new KeyboardAccelerator()
             {

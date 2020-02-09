@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="Attributes\DbIgnoreAttribute.cs" />
     <Compile Include="Attributes\LinkedTableAttribute.cs" />
+    <Compile Include="Enum\LinkedTableRelation.cs" />
     <Compile Include="Attributes\UIIgnoreAttribute.cs" />
     <Compile Include="Attributes\UIParamsAttribute.cs" />
     <Compile Include="Classes\Constants.cs" />

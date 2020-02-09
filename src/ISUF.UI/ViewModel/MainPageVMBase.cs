@@ -47,7 +47,7 @@ namespace ISUF.UI.ViewModel
 
             CurrentVersion = new Version(v.Major, v.Minor, v.Build);
 
-            Messenger = ApplicationClass.VMLocator.GetMessenger();
+            messenger = ApplicationClass.VMLocator.GetMessenger();
             NavigationService = ApplicationBase.Current.NavigationService;
         }
 

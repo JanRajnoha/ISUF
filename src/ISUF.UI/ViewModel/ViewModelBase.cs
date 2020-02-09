@@ -13,19 +13,19 @@ namespace ISUF.UI.ViewModel
     {
         //public UIModuleManager ModuleManager { get; set; }
 
-        private Messenger messenger;
+        protected Messenger messenger;
         protected UIModule uiModule;
         protected Type modulePage;
 
-        public Messenger Messenger
-        {
-            get => messenger;
-            set
-            {
-                messenger = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Messenger);
-            }
-        }
+        //public Messenger Messenger
+        //{
+        //    get => messenger;
+        //    set
+        //    {
+        //        messenger = value;
+        //        PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Messenger);
+        //    }
+        //}
 
         public object GetPropertyValue(string propertyName)
         {
