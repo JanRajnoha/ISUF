@@ -128,10 +128,7 @@ namespace ISUF.UI.Views
 
         public override void CreateControlsForModule()
         {
-            ModuleAnalyser analyser = new ModuleAnalyser(uiModule.ModuleItemType);
-
-            analyser.Analyze();
-            var result = analyser.SortProperties();
+            var result = ApplicationBase.Current.ModuleAnalyser.SortProperties(uiModule.ModuleItemType);
 
             UIElement previousControl = null;
 

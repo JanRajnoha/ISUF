@@ -143,6 +143,7 @@
     <Compile Include="Exceptions\ArgumentOutOfRangeException.cs" />
     <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Exceptions\NotImplementedException.cs" />
+    <Compile Include="Exceptions\NotSupportedAttributeCombination.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
     <Compile Include="Exceptions\NotSupportedPropertyType.cs" />
     <Compile Include="Exceptions\MissingRequiredAdditionalDataException.cs" />

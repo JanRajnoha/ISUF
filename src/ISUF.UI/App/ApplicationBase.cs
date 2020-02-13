@@ -1,3 +1,4 @@
+using ISUF.Base.Modules;
 using ISUF.UI.Classes;
 using ISUF.UI.Controls;
 using ISUF.UI.Design;
@@ -47,11 +48,14 @@ namespace ISUF.UI.App
 
         public List<AppModuleItem> AppUIModules { get; set; }
 
+        public ModuleAnalyser ModuleAnalyser { get; set; }
+
         public ApplicationBase(string appDisplayName, Type shellPageType, Type mainPageType, Type settingsPageType)
         {
             this.shellPageType = shellPageType;
             this.mainPageType = mainPageType;
             this.SettingsPageType = settingsPageType;
+            ModuleAnalyser = new ModuleAnalyser();
 
             AppDisplayName = appDisplayName;
             Current = this;
@@ -59,8 +63,15 @@ namespace ISUF.UI.App
             PropertyChangedNotifier = new PropertyChangedNotifier();
 
             RegisterModules();
+            AnalyseModules();
 
             Suspending += OnSuspending;
+        }
+
+        private void AnalyseModules()
+        {
+            foreach (var module in ModuleManager.GetModules())
+                ModuleAnalyser.Analyse(module.ModuleItemType.GetType());
         }
 
         public object ImportResources()
