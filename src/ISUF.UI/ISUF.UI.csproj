@@ -122,6 +122,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App\ApplicationBase.cs" />
+    <Compile Include="Classes\Constants.cs" />
     <Compile Include="Controls\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
     </Compile>

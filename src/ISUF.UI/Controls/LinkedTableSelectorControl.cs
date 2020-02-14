@@ -18,6 +18,12 @@ namespace ISUF.UI.Controls
 
         public LinkedTableSelectorControl()
         {
+
+        }
+
+        public int GetSelectedId()
+        {
+            return selectedLinkedID;
         }
 
         public static UIElement CreateLinkedTableSelectorControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)

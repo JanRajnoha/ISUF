@@ -2,6 +2,7 @@ using ISUF.Base.Attributes;
 using ISUF.Base.Enum;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
+using ISUF.UI.Classes;
 using ISUF.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,6 @@ namespace ISUF.UI.Design
 {
     public static class ControlCreator
     {
-        private const string DATA_CONTROL_IDENTIFIER = "_data";
-
         public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
         {
             string controlName = controlAnalyze.Key;
@@ -66,7 +65,7 @@ namespace ISUF.UI.Design
 
                             var dataLabel = new TextBlock()
                             {
-                                Name = controlName + DATA_CONTROL_IDENTIFIER,
+                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                                 Margin = new Thickness(10),
                                 TextWrapping = TextWrapping.Wrap
                             };
@@ -79,7 +78,7 @@ namespace ISUF.UI.Design
                         {
                             control = new TextBox()
                             {
-                                Name = controlName + DATA_CONTROL_IDENTIFIER,
+                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                                 Margin = new Thickness(10),
                                 TextWrapping = TextWrapping.Wrap,
                                 PlaceholderText = "Insert " + controlName
@@ -96,7 +95,7 @@ namespace ISUF.UI.Design
                         {
                             Content = controlName,
                             Margin = new Thickness(10),
-                            Name = controlName + DATA_CONTROL_IDENTIFIER
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                         };
                         break;
 
@@ -164,7 +163,7 @@ namespace ISUF.UI.Design
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
                                     PlaceholderText = "Select a date",
-                                    Name = controlName + DATA_CONTROL_IDENTIFIER
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                                 };
                                 break;
 
@@ -174,7 +173,7 @@ namespace ISUF.UI.Design
                                     Time = DateTime.Now.TimeOfDay,
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
-                                    Name = controlName + DATA_CONTROL_IDENTIFIER
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                                 };
                                 break;
 
@@ -272,7 +271,7 @@ namespace ISUF.UI.Design
                             Text = "",
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(0, 0, 0, 5),
-                            Name = controlName + DATA_CONTROL_IDENTIFIER
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                         };
 
                         UIElement dateTimeControl;
@@ -286,7 +285,7 @@ namespace ISUF.UI.Design
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
                                     PlaceholderText = "Select a date",
-                                    Name = controlName + DATA_CONTROL_IDENTIFIER,
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                                     IsEnabled = true
                                 };
                                 break;
@@ -297,7 +296,7 @@ namespace ISUF.UI.Design
                                     Time = DateTime.Now.TimeOfDay,
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
-                                    Name = controlName + DATA_CONTROL_IDENTIFIER,
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                                     IsEnabled = true
                                 };
                                 break;

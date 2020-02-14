@@ -4,6 +4,7 @@ using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Base.Service;
 using ISUF.UI.Controls;
+using ISUF.UI.Classes;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,15 +16,17 @@ using ISUF.UI.App;
 using ISUF.UI.Modules;
 using System.Linq;
 using ISUF.UI.Design;
+using ISUF.UI.Views;
 
 namespace ISUF.UI.ViewModel
 {
     public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
     {
         UserActivitySession currentActivity;
-        public bool ModalActivation = false;
+        ModuleAddControlBase form;
+        Type itemType;
 
-        Type ItemType;
+        public bool ModalActivation { get; set; } = false;
 
         public ICommand Close { get; set; }
 
@@ -107,10 +110,11 @@ namespace ISUF.UI.ViewModel
 
 
         // To-Do solve
-        public ModuleAddVMBase(Messenger messenger, Type modulePage) : this()
+        public ModuleAddVMBase(Messenger messenger, Type modulePage, ModuleAddControlBase form) : this()
         {
             this.messenger = messenger;
             this.modulePage = modulePage;
+            this.form = form;
 
             this.messenger.Register<ItemAddNewMsg>(AddNewItem);
 
@@ -124,7 +128,7 @@ namespace ISUF.UI.ViewModel
 
             Close = new RelayCommand(() => messenger.Send(new ItemAddCloseMsg()
             {
-                ItemType = ItemType
+                ItemType = itemType
             }));
 
             SecBtnVisibility = CustomSettings.IsUserLogged;
@@ -135,7 +139,7 @@ namespace ISUF.UI.ViewModel
             CustomSettings.ShowAdsChanged += CustomSettings_ShowAdsChanged;
 
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
-            ItemType = uiModule.ModuleItemType;
+            itemType = uiModule.ModuleItemType;
         }
 
         public void CloseModal()
@@ -147,6 +151,11 @@ namespace ISUF.UI.ViewModel
         public void SetDetailItem(T currentItem)
         {
             AddEditItem = currentItem;
+        }
+
+        private void ReadValuesFromForm()
+        {
+            var test = Classes.Functions.GetControlsByName(form, Classes.Constants.DATA_CONTROL_IDENTIFIER, true);
         }
 
         /// <summary>
@@ -219,7 +228,7 @@ namespace ISUF.UI.ViewModel
         /// <param name="obj">Message</param>
         private async void ErrorInput(ItemAddErrorMsg obj)
         {
-            if (obj.ItemType != ItemType)
+            if (obj.ItemType != itemType)
                 return;
 
             ErrorVisible = true;
@@ -237,7 +246,7 @@ namespace ISUF.UI.ViewModel
         /// <param name="obj">Message</param>
         private void ValidInput(ItemAddValidMsg obj)
         {
-            if (obj.ItemType == ItemType)
+            if (obj.ItemType == itemType)
                 ErrorVisible = false;
         }
     }

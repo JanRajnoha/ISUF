@@ -16,11 +16,16 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTablePresenterControl : Grid
     {
-        private List<int> presentedLinkedIds = new List<int>();
+        private IList<int> presentedLinkedIds = new List<int>();
 
         public LinkedTablePresenterControl()
         {
 
+        }
+
+        public IList<int> GetSelectedIds()
+        {
+            return presentedLinkedIds;
         }
 
         public static UIElement CreateLinkedTablePresenterControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
