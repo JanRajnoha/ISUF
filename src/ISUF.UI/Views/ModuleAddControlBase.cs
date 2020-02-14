@@ -29,6 +29,15 @@ namespace ISUF.UI.Views
             this.uiModule = uiModule;
         }
 
+        protected override void CreateViewModel()
+        {
+            var vma = viewModelArgs.ToList();
+            vma.Add(this);
+            viewModelArgs = vma.ToArray();
+
+            base.CreateViewModel();
+        }
+
         public override void AddControls()
         {
             Grid content = new Grid();

@@ -26,9 +26,23 @@ namespace ISUF.UI.Design
             UIElement control;
             UIParamsAttribute customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 
-            if (controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) != null)
+            var linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+            if (linkedTableAttribute != null)
             {
-                control = LinkedTableSelectorControl.CreateLinkedTableSelectorControl(controlName, controlData, controlTypeName);
+                switch (linkedTableAttribute.LinkedTableRelation)
+                {
+                    case LinkedTableRelation.One:
+                        control = LinkedTableSelectorControl.CreateLinkedTableSelectorControl(controlName, controlData, controlTypeName);
+                        break;
+
+                    case LinkedTableRelation.Many:
+                        control = LinkedTablePresenterControl.CreateLinkedTablePresenterControl(controlName, controlData, controlTypeName);
+                        break;
+
+                    default:
+                        throw new NotSupportedPropertyType();
+                }
+
             }
             else
                 switch (controlTypeName)
@@ -58,6 +72,7 @@ namespace ISUF.UI.Design
 
                             var nameLabel = new TextBlock()
                             {
+                                Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
                                 Text = controlName + ":",
                                 Margin = new Thickness(10),
                                 TextWrapping = TextWrapping.Wrap
@@ -124,6 +139,7 @@ namespace ISUF.UI.Design
 
                         TextBlock label = new TextBlock()
                         {
+                            Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
                             Text = customization == null ? controlTypeName.ToString() : customization.LabelDescription,
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(0, 0, 0, 5)

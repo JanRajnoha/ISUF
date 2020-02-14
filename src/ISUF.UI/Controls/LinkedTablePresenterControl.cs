@@ -2,6 +2,7 @@ using ISUF.Base.Attributes;
 using ISUF.Base.Enum;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
+using ISUF.UI.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,8 +40,9 @@ namespace ISUF.UI.Controls
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
 
-            var control = new Grid()
+            var control = new LinkedTablePresenterControl()
             {
+                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                 Margin = new Thickness(10)
             };
 
@@ -65,6 +67,7 @@ namespace ISUF.UI.Controls
 
             TextBlock label = new TextBlock()
             {
+                Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
                 Text = customization.LabelDescription,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 0, 0, 5)

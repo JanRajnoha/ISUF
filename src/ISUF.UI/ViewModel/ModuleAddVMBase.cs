@@ -17,10 +17,12 @@ using ISUF.UI.Modules;
 using System.Linq;
 using ISUF.UI.Design;
 using ISUF.UI.Views;
+using Windows.UI.Xaml;
+using System.Collections.Generic;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
+    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
     {
         UserActivitySession currentActivity;
         ModuleAddControlBase form;
@@ -153,9 +155,14 @@ namespace ISUF.UI.ViewModel
             AddEditItem = currentItem;
         }
 
-        private void ReadValuesFromForm()
+        protected virtual IList<FrameworkElement> GetControlsFromForm()
         {
-            var test = Classes.Functions.GetControlsByName(form, Classes.Constants.DATA_CONTROL_IDENTIFIER, true);
+            return Classes.Functions.GetControlsByName(form, Classes.Constants.DATA_CONTROL_IDENTIFIER, true);
+        }
+
+        public void ReadValuesFromForm()
+        {
+
         }
 
         /// <summary>
