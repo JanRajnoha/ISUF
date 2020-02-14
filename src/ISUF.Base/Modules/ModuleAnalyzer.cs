@@ -18,12 +18,17 @@ namespace ISUF.Base.Modules
 
         }
 
-        public Dictionary<string, PropertyAnalyze> Analyse(Type analysedClass)
+        public Dictionary<string, PropertyAnalyze> AnalyseAndGet(Type analysedClass)
         {
             if (!analysedClassesDictionary.ContainsKey(analysedClass))
                 DoAnalysis(analysedClass);
 
             return analysedClassesDictionary[analysedClass];
+        }
+
+        public void Analyse(Type analysedClass)
+        {
+            _ = AnalyseAndGet(analysedClass);
         }
 
         private void DoAnalysis(Type analysedClass)

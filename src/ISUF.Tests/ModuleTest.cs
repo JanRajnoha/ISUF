@@ -25,7 +25,7 @@ namespace ISUF.Tests
         {
             ModuleAnalyser analyzer = new ModuleAnalyser();
 
-            var analyzeResult = analyzer.Analyse(typeof(TestClassNotBaseItem));
+            var analyzeResult = analyzer.AnalyseAndGet(typeof(TestClassNotBaseItem));
 
             PropertyAnalyze prop1 = new PropertyAnalyze("StringProp", typeof(string), new List<object>()
             {

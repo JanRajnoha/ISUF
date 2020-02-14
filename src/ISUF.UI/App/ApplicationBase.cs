@@ -71,7 +71,7 @@ namespace ISUF.UI.App
         private void AnalyseModules()
         {
             foreach (var module in ModuleManager.GetModules())
-                ModuleAnalyser.Analyse(module.ModuleItemType.GetType());
+                ModuleAnalyser.Analyse(module.ModuleItemType);
         }
 
         public object ImportResources()
