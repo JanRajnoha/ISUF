@@ -40,7 +40,7 @@ namespace ISUF.Base.Modules
                 var attributes = prop.GetCustomAttributes(true).ToList();
 
                 if (attributes.Contains(typeof(DbIgnoreAttribute)) && (attributes.Contains(typeof(LinkedTableAttribute))))
-                    throw new NotSupportedAttributeCombination("Linked tables properties can't be ignored in DB.");
+                    throw new NotSupportedAttributeCombinationException("Linked tables properties can't be ignored in DB.");
 
                 var analyze = new PropertyAnalyze(prop.Name, prop.PropertyType, attributes);
 

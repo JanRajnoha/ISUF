@@ -40,7 +40,7 @@ namespace ISUF.UI.Design
                         break;
 
                     default:
-                        throw new NotSupportedPropertyType();
+                        throw new NotSupportedPropertyTypeException("Not supported LinkedTableRelation.");
                 }
 
             }
@@ -194,10 +194,10 @@ namespace ISUF.UI.Design
                                 break;
 
                             case DatePickerMode.DateAndTime:
-                                throw new Base.Exceptions.NotSupportedException();
+                                throw new Base.Exceptions.NotSupportedException("DateTime combination is not supported.");
 
                             default:
-                                throw new Base.Exceptions.NotSupportedException();
+                                throw new Base.Exceptions.NotSupportedException("Not supported DatePickerMode.");
                         }
 
                         Grid.SetRow(dateTimeControl as FrameworkElement, 1);
@@ -216,7 +216,7 @@ namespace ISUF.UI.Design
                         break;
 
                     default:
-                        throw new NotSupportedPropertyType();
+                        throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
                 }
 
             RelativePanel.SetAlignLeftWithPanel(control, true);
@@ -318,10 +318,10 @@ namespace ISUF.UI.Design
                                 break;
 
                             case DatePickerMode.DateAndTime:
-                                throw new Base.Exceptions.NotSupportedException();
+                                throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
 
                             default:
-                                throw new Base.Exceptions.NotSupportedException();
+                                throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
                         }
 
                         Grid.SetRow(dateTimeControl as FrameworkElement, 1);
@@ -340,7 +340,7 @@ namespace ISUF.UI.Design
                         break;
 
                     default:
-                        throw new NotSupportedPropertyType();
+                        throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
                 }
 
             RelativePanel.SetAlignLeftWithPanel(control, true);

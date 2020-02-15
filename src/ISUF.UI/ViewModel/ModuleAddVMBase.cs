@@ -19,6 +19,8 @@ using ISUF.UI.Design;
 using ISUF.UI.Views;
 using Windows.UI.Xaml;
 using System.Collections.Generic;
+using System.Reflection;
+using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.ViewModel
 {
@@ -160,9 +162,42 @@ namespace ISUF.UI.ViewModel
             return Classes.Functions.GetControlsByName(form, Classes.Constants.DATA_CONTROL_IDENTIFIER, true);
         }
 
-        public void ReadValuesFromForm()
+        public void FillValuesFromFormIntoItem()
         {
+            var formControls = GetControlsFromForm();
 
+            FillValues(formControls);
+        }
+
+        private void FillValues(IList<FrameworkElement> formControls)
+        {
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                var formControl = formControls.FirstOrDefault(x => x.Name == prop.Name);
+
+                if (formControls == null)
+                    throw new Base.Exceptions.ArgumentException("None of controls not match property name.");
+
+                object value = GetValueFromControl(formControl);
+
+                if (value.GetType() != prop.PropertyType)
+                    value = ConvertValueToPropValue(value, prop);
+
+                prop.SetValue(AddEditItem, value);
+            }
+        }
+
+        private object ConvertValueToPropValue(object value, PropertyInfo prop)
+        {
+            return null;
+        }
+
+        private object GetValueFromControl(FrameworkElement formControl)
+        {
+            if (formControl.GetType() == typeof(TextBox))
+                return (formControl as TextBox).Text;
+            else
+                throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }
 
         /// <summary>

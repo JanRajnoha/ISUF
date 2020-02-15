@@ -42,7 +42,7 @@ namespace ISUF.Base.Modules
             var result = propTypeEnumValuesList.FirstOrDefault(x => x.ToString().ToLower() == propertyType.Name.ToLower());
 
             if (result == null)
-                throw new NotSupportedPropertyType();
+                throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
 
             return result;
         }

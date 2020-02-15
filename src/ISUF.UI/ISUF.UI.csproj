@@ -145,7 +145,7 @@
     <Compile Include="Converters\EnableTodayConverter.cs" />
     <Compile Include="Converters\EndTaskBaseItemColorConverter.cs" />
     <Compile Include="Converters\EnumToBooleanConverter.cs" />
-    <Compile Include="Converters\ErrorMEssageConverter.cs" />
+    <Compile Include="Converters\ErrorMessageConverter.cs" />
     <Compile Include="Converters\ExtractDateTimeInfoConverter.cs" />
     <Compile Include="Converters\GetStatisticConverter.cs" />
     <Compile Include="Converters\GetStatusConverter.cs" />
