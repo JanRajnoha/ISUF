@@ -197,13 +197,72 @@ namespace ISUF.UI.ViewModel
 
         private object ConvertValueToPropValue(object value, PropertyInfo prop)
         {
-            return null;
+            object convertedValue;
+            bool conversionResult = true;
+
+            if (value.GetType() == typeof(string))
+                if (prop.PropertyType == typeof(int))
+                {
+                    conversionResult = int.TryParse(value as string, out int convertedNumber);
+                    convertedValue = convertedNumber;
+                }
+                else if (prop.PropertyType == typeof(byte))
+                {
+                    conversionResult = byte.TryParse(value as string, out byte convertedNumber);
+                    convertedValue = convertedNumber;
+                }
+                else if (prop.PropertyType == typeof(double))
+                {
+                    conversionResult = double.TryParse(value as string, out double convertedNumber);
+                    convertedValue = convertedNumber;
+                }
+                else if (prop.PropertyType == typeof(decimal))
+                {
+                    conversionResult = decimal.TryParse(value as string, out decimal convertedNumber);
+                    convertedValue = convertedNumber;
+                }
+                else if (prop.PropertyType == typeof(float))
+                {
+                    conversionResult = float.TryParse(value as string, out float convertedNumber);
+                    convertedValue = convertedNumber;
+                }
+                else if (prop.PropertyType == typeof(char))
+                    return value;
+                else
+                    throw new Base.Exceptions.NotSupportedException("Not supported type conversion between control and property. \n" +
+                    $"Value type: {value.GetType()}\n\n" +
+                    $"Target type: {prop.PropertyType}");
+            else if (value.GetType() == typeof(TimeSpan))
+                convertedValue = DateTime.Today + (TimeSpan)value;
+            else if (value.GetType() == typeof(DateTimeOffset))
+                convertedValue = ((DateTimeOffset)value).DateTime;
+            else
+                throw new Base.Exceptions.NotSupportedException("Not supported type conversion between control and property. \n" +
+                    $"Value type: {value.GetType()}\n" +
+                    $"Target type: {prop.PropertyType}");
+
+            if (!conversionResult)
+                throw new Base.Exceptions.UnsuccessfulConversionException("Conversion was unsuccessful. \n" +
+                    $"Value type: {value.GetType().ToString()}\n" +
+                    $"Target type: {prop.PropertyType.Name}");
+
+            return convertedValue;
         }
 
         private object GetValueFromControl(FrameworkElement formControl)
         {
             if (formControl.GetType() == typeof(TextBox))
                 return (formControl as TextBox).Text;
+            else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
+                return (formControl as LinkedTablePresenterControl).GetSelectedIds();
+            else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
+                return (formControl as LinkedTableSelectorControl).GetSelectedId();
+            else if (formControl.GetType() == typeof(CalendarDatePicker))
+                return (formControl as CalendarDatePicker).Date;
+            else if (formControl.GetType() == typeof(TimePicker))
+                return (formControl as TimePicker).Time;
+            else if (formControl.GetType() == typeof(CheckBox))
+                return (formControl as CheckBox).IsChecked;
             else
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }

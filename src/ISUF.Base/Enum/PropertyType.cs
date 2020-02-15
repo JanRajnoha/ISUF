@@ -15,6 +15,8 @@ namespace ISUF.Base.Enum
         Boolean,
         Char,
         Double,
+        Decimal,
+        Float,
         notImplementedYet
     }
 }

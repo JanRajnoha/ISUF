@@ -52,6 +52,8 @@ namespace ISUF.UI.Design
                     case PropertyType.Int32:
                     case PropertyType.Double:
                     case PropertyType.Char:
+                    case PropertyType.Decimal:
+                    case PropertyType.Float:
 
                         if (customization.ReadOnlyMode)
                         {
@@ -80,7 +82,7 @@ namespace ISUF.UI.Design
 
                             var dataLabel = new TextBlock()
                             {
-                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                                Name = controlName,
                                 Margin = new Thickness(10),
                                 TextWrapping = TextWrapping.Wrap
                             };
@@ -98,6 +100,9 @@ namespace ISUF.UI.Design
                                 TextWrapping = TextWrapping.Wrap,
                                 PlaceholderText = "Insert " + controlName
                             };
+
+                            if (controlTypeName == PropertyType.Char)
+                                (control as TextBox).MaxLength = 1;
 
                             if (customization != null && customization.UseLongTextInput)
                                 (control as TextBox).Height = 150;
