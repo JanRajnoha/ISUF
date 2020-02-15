@@ -38,6 +38,14 @@ namespace ISUF.UI.Views
             base.CreateViewModel();
         }
 
+        protected override void ControlBase_Loading(FrameworkElement sender, object args)
+        {
+            base.ControlBase_Loading(sender, args);
+
+
+            (DataContext as ViewModelBase).DoSomething();
+        }
+
         public override void AddControls()
         {
             Grid content = new Grid();

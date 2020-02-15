@@ -20,5 +20,10 @@ namespace ISUF.UI.ViewModel
         {
             return GetType().GetProperty(propertyName).GetValue(this, null);
         }
+
+        public virtual void DoSomething()
+        {
+
+        }
     }
 }

@@ -169,21 +169,29 @@ namespace ISUF.UI.ViewModel
             FillValues(formControls);
         }
 
+        public override void DoSomething()
+        {
+            FillValuesFromFormIntoItem();
+        }
+
         private void FillValues(IList<FrameworkElement> formControls)
         {
-            foreach (var prop in typeof(T).GetProperties())
-            {
-                var formControl = formControls.FirstOrDefault(x => x.Name == prop.Name);
+            var itemProps = typeof(T).GetProperties();
 
-                if (formControls == null)
+            foreach (var formControl in formControls)
+            {
+                var formControlName = formControl.Name.Substring(0, formControl.Name.Length - Classes.Constants.DATA_CONTROL_IDENTIFIER.Length);
+                var itemProp = itemProps.FirstOrDefault(x => x.Name == formControlName);
+
+                if (itemProp == null)
                     throw new Base.Exceptions.ArgumentException("None of controls not match property name.");
 
                 object value = GetValueFromControl(formControl);
 
-                if (value.GetType() != prop.PropertyType)
-                    value = ConvertValueToPropValue(value, prop);
+                if (value.GetType() != itemProp.PropertyType)
+                    value = ConvertValueToPropValue(value, itemProp);
 
-                prop.SetValue(AddEditItem, value);
+                itemProp.SetValue(AddEditItem, value);
             }
         }
 
