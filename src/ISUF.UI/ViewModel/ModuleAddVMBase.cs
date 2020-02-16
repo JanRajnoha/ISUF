@@ -103,9 +103,9 @@ namespace ISUF.UI.ViewModel
         protected abstract void AddNewItem(ItemAddNewMsg obj);
         protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
 
-        public abstract DelegateCommand<T> SaveItem { get; set; }
+        public virtual DelegateCommand<T> SaveItemCommand => new DelegateCommand<T>(async (T item) => { SaveItem(); });
 
-        public abstract DelegateCommand<T> SaveItemClose { get; set; }
+        public virtual DelegateCommand<T> SaveItemCloseCommand => new DelegateCommand<T>(async (T item) => { SaveCloseItem(); });
 
         public ModuleAddVMBase()
         {
@@ -130,10 +130,7 @@ namespace ISUF.UI.ViewModel
             this.messenger.Register<UserLoggedInMsg>(UserLoggedIn);
             this.messenger.Register<UserLoggedOutMsg>(UserLoggedOut);
 
-            Close = new RelayCommand(() => messenger.Send(new ItemAddCloseMsg()
-            {
-                ItemType = itemType
-            }));
+            Close = new RelayCommand(() => CloseAddPane());
 
             SecBtnVisibility = CustomSettings.IsUserLogged;
 
@@ -144,6 +141,14 @@ namespace ISUF.UI.ViewModel
 
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
             itemType = uiModule.ModuleItemType;
+        }
+
+        private void CloseAddPane()
+        {
+            messenger.Send(new ItemAddCloseMsg()
+            {
+                ItemType = itemType
+            });
         }
 
         public void CloseModal()
@@ -169,9 +174,15 @@ namespace ISUF.UI.ViewModel
             FillValues(formControls);
         }
 
-        public override void DoSomething()
+        protected virtual void SaveItem()
         {
             FillValuesFromFormIntoItem();
+        }
+
+        private void SaveCloseItem()
+        {
+            SaveItem();
+            CloseAddPane();
         }
 
         private void FillValues(IList<FrameworkElement> formControls)

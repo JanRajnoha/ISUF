@@ -38,14 +38,6 @@ namespace ISUF.UI.Views
             base.CreateViewModel();
         }
 
-        protected override void ControlBase_Loading(FrameworkElement sender, object args)
-        {
-            base.ControlBase_Loading(sender, args);
-
-
-            (DataContext as ViewModelBase).DoSomething();
-        }
-
         public override void AddControls()
         {
             Grid content = new Grid();
@@ -112,7 +104,7 @@ namespace ISUF.UI.Views
                 FontSize = 15,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemClose") as ICommand,
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemCloseCommand") as ICommand,
                 CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(AddClose, 0);
@@ -185,7 +177,7 @@ namespace ISUF.UI.Views
                 IsEnabled = true,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItem") as ICommand,
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemCommand") as ICommand,
                 CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(Add, 1);
