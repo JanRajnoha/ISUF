@@ -1,3 +1,4 @@
+using ISUF.Interface.Storage;
 using ISUF.Storage.Modules;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ namespace ISUF.UI.Modules
 {
     public class UIModule : StorageModule
     {
-        public Symbol ModuleIcon { get; private set; }
+        protected new IBaseItemManager itemManager;
+            
         public string ModuleDisplayName { get; private set; }
+        public Symbol ModuleIcon { get; private set; }
         public Type ModulePage { get; private set; }
 
         public UIModule(Type moduleItemType, Type itemManagerType, string moduleDisplayName, Symbol moduleIcon, Type modulePage, string moduleTableName = null) : base(moduleItemType, itemManagerType, moduleTableName)

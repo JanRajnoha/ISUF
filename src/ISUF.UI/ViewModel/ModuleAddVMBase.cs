@@ -26,9 +26,10 @@ namespace ISUF.UI.ViewModel
 {
     public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
     {
+        readonly ModuleAddControlBase form;
+        readonly Type itemType;
+
         UserActivitySession currentActivity;
-        ModuleAddControlBase form;
-        Type itemType;
 
         public bool ModalActivation { get; set; } = false;
 
@@ -89,16 +90,17 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private IAtomicItemManager manager;
-        public IAtomicItemManager Manager
-        {
-            get { return manager; }
-            set
-            {
-                manager = value;
-                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Manager);
-            }
-        }
+        // todo smazat
+        //private IBaseItemManager manager;
+        //public IBaseItemManager Manager
+        //{
+        //    get { return manager; }
+        //    set
+        //    {
+        //        manager = value;
+        //        PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Manager);
+        //    }
+        //}
 
         protected abstract void AddNewItem(ItemAddNewMsg obj);
         protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
@@ -177,6 +179,8 @@ namespace ISUF.UI.ViewModel
         protected virtual void SaveItem()
         {
             FillValuesFromFormIntoItem();
+
+            uiModule.AddItem(AddEditItem);
         }
 
         private void SaveCloseItem()

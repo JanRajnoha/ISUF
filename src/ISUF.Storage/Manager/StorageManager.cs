@@ -19,7 +19,7 @@ namespace ISUF.Storage.Manager
     /// Storage manager class
     /// </summary>
     /// <typeparam name="T">Type of item</typeparam>
-    [Obsolete("Will be removed")]
+    [Obsolete("Will be removed", true)]
     abstract public class StorageManager<T> : IStorageManager<T> where T : AtomicItem
     {
         PathType pathType { get; set; }

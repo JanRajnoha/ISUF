@@ -17,12 +17,6 @@ namespace ISUF.Interface.UI
 
         bool ErrorVisible { get; set; }
 
-        IAtomicItemManager Manager { get; set; }
-
         void SetDetailItem(T currentItem);
-
-        //   DelegateCommand<T> SaveItem { get; set; }
-
-        // DelegateCommand<T> SaveItemClose { get; set; }
     }
 }
