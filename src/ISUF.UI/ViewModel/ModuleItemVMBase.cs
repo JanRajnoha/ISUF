@@ -128,6 +128,7 @@ namespace ISUF.UI.ViewModel
             catch (Exception e)
             {
                 LogService.AddLogMessage(e.Message);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
 
             var shareFile = await ApplicationData.Current.LocalFolder.GetFileAsync(ShareFileItem);

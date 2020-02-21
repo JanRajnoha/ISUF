@@ -60,14 +60,13 @@ namespace ISUF.UI.Command
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
 
-                    using (Stream xmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.isuf", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult())
-                    {
-                        serializer.Serialize(xmlStream, sharedData);
-                    }
+                    using Stream xmlStream = ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync("Share.isuf", CreationCollisionOption.ReplaceExisting).GetAwaiter().GetResult();
+                    serializer.Serialize(xmlStream, sharedData);
                 }
                 catch (Exception e)
                 {
                     LogService.AddLogMessage(e.Message, logLevel: Base.Enum.LogLevel.Debug);
+                    throw new Base.Exceptions.Exception("Unhandled exception", e);
                 }
 
                 DataTransferManager.ShowShareUI();

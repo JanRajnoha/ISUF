@@ -37,14 +37,14 @@ namespace ISUF.Base.Storage
                 }
                 else
                 {
-                    return default(T);
+                    return default;
                 }
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception e) when (e.Message.Contains("denied") && attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await ReadDataAsync(fileName, path, attempts + 1);
             }
 
@@ -85,9 +85,9 @@ namespace ISUF.Base.Storage
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && attempts <= 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await SaveDataAsync(data, fileName, path, attempts + 1);
             }
 

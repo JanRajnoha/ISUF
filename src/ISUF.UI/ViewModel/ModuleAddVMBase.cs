@@ -325,6 +325,7 @@ namespace ISUF.UI.ViewModel
             catch (Exception e)
             {
                 await LogService.AddLogMessageAsync(e.Message);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 

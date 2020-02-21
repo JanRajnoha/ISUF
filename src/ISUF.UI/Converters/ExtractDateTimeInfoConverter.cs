@@ -38,7 +38,7 @@ namespace ISUF.UI.Converters
                 catch (Exception e)
                 {
                     LogService.AddLogMessage($"ExtractDateTimeInfoConverter: {e.Message}");
-                    return ((DateTime)value);
+                    return (DateTime)value;
                 }
             }
 

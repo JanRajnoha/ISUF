@@ -93,10 +93,7 @@ namespace ISUF.Storage.DatabaseAccess
 
             try
             {
-                using (FileStream file = File.Create($@"{connectionsString}\{tableName}.xml"))
-                {
-
-                }
+                using FileStream file = File.Create($@"{connectionsString}\{tableName}.xml");
             }
             catch (Exception e)
             {
@@ -141,16 +138,15 @@ namespace ISUF.Storage.DatabaseAccess
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception e) when (e.Message.Contains("denied") && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
             {
-                LogService.AddLogMessage(e.Message);
+                LogService.AddLogMessage("File is in use\n\n" + e.Message);
                 return await ReadFileAsync<T>(tableName, Attempts + 1);
             }
 
             catch (Exception e)
             {
-                return new ObservableCollection<T>();
-                //throw new Base.Exceptions.Exception("Unhandled exception", e);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 
@@ -182,16 +178,15 @@ namespace ISUF.Storage.DatabaseAccess
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
             {
-                LogService.AddLogMessage(e.Message);
+                LogService.AddLogMessage("File is in use\n\n" + e.Message);
                 return await SaveFileAsync(itemsToSave, tableName, Attempts + 1);
             }
 
             catch (Exception e)
             {
-                return default;
-                //throw new Base.Exceptions.Exception("Unhandled exception", e);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
 

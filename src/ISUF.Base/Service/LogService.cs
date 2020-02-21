@@ -122,7 +122,7 @@ namespace ISUF.Base.Service
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
             {
                 SaveAllLogFile(fileName, Attempts + 1);
             }
@@ -144,14 +144,12 @@ namespace ISUF.Base.Service
         {
             try
             {
-                using (StreamWriter LogStream = new StreamWriter(await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(fileName, CreationCollisionOption.OpenIfExists)))
-                {
-                    LogStream.WriteLine($"{DateTime.Now}: {message}");
-                }
+                using StreamWriter LogStream = new StreamWriter(await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(fileName, CreationCollisionOption.OpenIfExists));
+                LogStream.WriteLine($"{DateTime.Now}: {message}");
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
             {
                 SaveLogFile(message, fileName, Attempts + 1);
             }

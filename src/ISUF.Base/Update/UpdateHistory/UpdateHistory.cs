@@ -182,9 +182,9 @@ namespace ISUF.Base.Update.UpdateHistory
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception s) when (s.Message.Contains("denied") && attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 await ReadDataAsync(attempts + 1);
             }
 
@@ -211,8 +211,8 @@ namespace ISUF.Base.Update.UpdateHistory
             try
             {
                 var serializer = new XmlSerializer(typeof(UpdateHistoryFile));
-                var v = Package.Current.Id.Version;
-                Version packageVersion = new Version(v.Major, v.Minor, v.Build, v.Revision);
+                var version = Package.Current.Id.Version;
+                Version packageVersion = new Version(version.Major, version.Minor, version.Build, version.Revision);
 
                 using (Stream xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(FileName, CreationCollisionOption.ReplaceExisting))
                 {
@@ -223,8 +223,9 @@ namespace ISUF.Base.Update.UpdateHistory
             }
 
             // When file is unavailable
-            catch (Exception s) when ((s.Message.Contains("denied") || s.Message.Contains("is in use")) && (attempts <= 10))
+            catch (Exception e) when (e.Message.Contains("is in use") && (attempts < 10))
             {
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await SaveDataAsync(attempts + 1);
             }
 
