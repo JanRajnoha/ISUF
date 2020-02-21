@@ -120,17 +120,18 @@ namespace ISUF.Storage.DatabaseAccess
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
-                Stream xmlStream = File.OpenRead($@"{connectionsString}\{tableName}.xml");
 
                 object readedObjects;
-                using (xmlStream)
+                using (Stream xmlStream = File.OpenRead($@"{connectionsString}\{tableName}.xml"))
                 {
+                    if (xmlStream.Length == 0)
+                        return new ObservableCollection<T>();
+
                     readedObjects = (ItemStorage<T>)serializer.Deserialize(xmlStream);
                 }
 
                 if (readedObjects != null)
                 {
-
                     return ((ItemStorage<T>)readedObjects).Items;
                 }
 
@@ -167,11 +168,11 @@ namespace ISUF.Storage.DatabaseAccess
                     TypeOfItem = typeOfItem
                 };
 
-                XmlSerializer Serializ = new XmlSerializer(typeof(ItemStorage<T>));
+                XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
 
-                using (Stream XmlStream = File.OpenWrite($@"{connectionsString}\{tableName}.xml"))
+                using (Stream xmlStream = File.Create($@"{connectionsString}\{tableName}.xml"))
                 {
-                    Serializ.Serialize(XmlStream, itemStorage);
+                    serializer.Serialize(xmlStream, itemStorage);
                 }
 
                 return true;
