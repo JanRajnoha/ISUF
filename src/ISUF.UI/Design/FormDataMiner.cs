@@ -41,7 +41,7 @@ namespace ISUF.UI.Design
             else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
                 (formControl as LinkedTableSelectorControl).GetSelectedId();
             else if (formControl.GetType() == typeof(CalendarDatePicker))
-                (formControl as CalendarDatePicker).Date = value as DateTimeOffset?;
+                (formControl as CalendarDatePicker).Date = (DateTime)value;
             else if (formControl.GetType() == typeof(TimePicker))
                 if (value is DateTime)
                     (formControl as TimePicker).Time = ((DateTime)value).TimeOfDay;
