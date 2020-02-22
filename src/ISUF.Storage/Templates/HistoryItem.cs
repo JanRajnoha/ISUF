@@ -39,5 +39,10 @@ namespace ISUF.Storage.Templates
         {
             return new HistoryItem(this);
         }
+
+        public override string ToString()
+        {
+            return $"{Id}:  {ModuleType}:{ItemID} - {TypeOfChange}";
+        }
     }
 }

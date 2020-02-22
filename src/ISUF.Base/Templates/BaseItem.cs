@@ -33,7 +33,12 @@ namespace ISUF.Base.Template
 
         public override object Clone()
         {
-            return new AtomicItem(this);
+            return new BaseItem(this);
+        }
+
+        public override string ToString()
+        {
+            return Name.ToString();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

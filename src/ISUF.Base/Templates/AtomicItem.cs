@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace ISUF.Base.Template
 {
-    public class AtomicItem: INotifyPropertyChanged, ICloneable
+    public class AtomicItem : INotifyPropertyChanged, ICloneable
     {
         [UIParams(ReadOnlyMode = true, UIOrder = 0, UseLabelDescription = true, ShowDetailOnOneLine = true)]
         public int Id { get; set; } = -1;
@@ -42,13 +42,18 @@ namespace ISUF.Base.Template
             ManagerID = baseItem.ManagerID;
         }
 
-    public virtual object Clone()
-    {
-        return new AtomicItem(this);
+        public virtual object Clone()
+        {
+            return new AtomicItem(this);
+        }
+
+        public override string ToString()
+        {
+            return Id.ToString(); 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged([CallerMemberName]string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public void NotifyPropertyChanged([CallerMemberName]string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-}
 }

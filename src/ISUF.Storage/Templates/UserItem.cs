@@ -37,5 +37,10 @@ namespace ISUF.Storage.Templates
         {
             return new UserItem(this);
         }
+
+        public override string ToString()
+        {
+            return $"{Id}:  {Username}";
+        }
     }
 }

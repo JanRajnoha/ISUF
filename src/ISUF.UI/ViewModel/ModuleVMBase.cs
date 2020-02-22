@@ -204,9 +204,6 @@ namespace ISUF.UI.ViewModel
 
         public ICommand EditCommand { get; set; }
 
-        protected abstract void NewItemAdded(ItemAddSavedMsg obj);
-        protected abstract Task UpdateSourceAsync(bool secureChanged = false);
-
         public abstract Task OnLoadAsync(bool SecureChanged = false);
 
         public ModuleVMBase(Type modulePage)
@@ -265,7 +262,34 @@ namespace ISUF.UI.ViewModel
             if (obj.FormType == GetType())
                 Source = uiModule.GetAllItems<T>();
 
-            //UpdateSourceAsync(true);
+            UpdateSourceAsync(true);
+        }
+
+        protected virtual async void NewItemAdded(ItemAddSavedMsg obj)
+        {
+            if (obj.ItemType == ItemType)
+            {
+                await UpdateSourceAsync(true);
+
+                string NotifyText = "Item was added";
+
+                if (obj.ID != -1)
+                    NotifyText = "Item was edited";
+
+                if (obj.MoreItemsAdded)
+                    NotifyText = "Items were added";
+
+
+                Messenger.Send(new ShowNotificationMsg()
+                {
+                    Text = NotifyText
+                });
+            }
+        }
+
+        protected virtual async Task UpdateSourceAsync(bool secureChanged = false)
+        {
+            Source = await uiModule.GetAllItemsAsync<T>();
         }
 
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
