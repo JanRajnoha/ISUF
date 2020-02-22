@@ -29,6 +29,11 @@ namespace ISUF.UI.Controls
             return presentedLinkedIds;
         }
 
+        public void SetSelectedIds(IList<int> ids)
+        {
+            presentedLinkedIds = ids;
+        }
+
         public static UIElement CreateLinkedTablePresenterControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
         {
             if (controlData is null)

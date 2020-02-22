@@ -15,7 +15,7 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableSelectorControl : Grid
     {
-        private int selectedLinkedID;
+        private int selectedLinkedId;
 
         public LinkedTableSelectorControl()
         {
@@ -24,7 +24,12 @@ namespace ISUF.UI.Controls
 
         public int GetSelectedId()
         {
-            return selectedLinkedID;
+            return selectedLinkedId;
+        }
+
+        public void SetSelectedId(int id)
+        {
+            selectedLinkedId = id;
         }
 
         public static UIElement CreateLinkedTableSelectorControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)

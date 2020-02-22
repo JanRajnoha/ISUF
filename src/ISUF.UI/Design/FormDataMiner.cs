@@ -34,24 +34,37 @@ namespace ISUF.UI.Design
         {
             if (formControl.GetType() == typeof(TextBox))
                 (formControl as TextBox).Text = value.ToString();
-            if (formControl.GetType() == typeof(TextBlock))
+
+            else if (formControl.GetType() == typeof(TextBlock))
                 (formControl as TextBlock).Text = value.ToString();
+
             else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
-                (formControl as LinkedTablePresenterControl).GetSelectedIds();
+                if (value is IList<int> intValues)
+                    (formControl as LinkedTablePresenterControl).SetSelectedIds(intValues);
+                else
+                    throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
+
             else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
-                (formControl as LinkedTableSelectorControl).GetSelectedId();
+                if (value is int intValue)
+                    (formControl as LinkedTableSelectorControl).SetSelectedId(intValue);
+            else
+                throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
+
             else if (formControl.GetType() == typeof(CalendarDatePicker))
                 (formControl as CalendarDatePicker).Date = (DateTime)value;
+
             else if (formControl.GetType() == typeof(TimePicker))
-                if (value is DateTime)
-                    (formControl as TimePicker).Time = ((DateTime)value).TimeOfDay;
+                if (value is DateTime dateTimeValue)
+                    (formControl as TimePicker).Time = dateTimeValue.TimeOfDay;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
+
             else if (formControl.GetType() == typeof(CheckBox))
-                if (value is bool)
-                    (formControl as CheckBox).IsChecked = (bool)value;
+                if (value is bool boolValue)
+                    (formControl as CheckBox).IsChecked = boolValue;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
+
             else
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for setting value.");
         }
