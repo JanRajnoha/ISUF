@@ -163,6 +163,7 @@
     <Compile Include="Converters\StringConcatConverter.cs" />
     <Compile Include="Converters\VisibilityToGridLength.cs" />
     <Compile Include="Design\ControlCreator.cs" />
+    <Compile Include="Design\FormDataMiner.cs" />
     <Compile Include="Design\PropertyChangedNotifier.cs" />
     <Compile Include="Design\RegisteredDestinationProperty.cs" />
     <Compile Include="Design\RegisteredTargetProperty.cs" />

@@ -55,44 +55,44 @@ namespace ISUF.UI.Design
                     case PropertyType.Decimal:
                     case PropertyType.Float:
 
-                        if (customization.ReadOnlyMode)
-                        {
-                            control = new Grid();
+                        //if (customization.ReadOnlyMode)
+                        //{
+                        //    control = new Grid();
 
-                            ColumnDefinition rowNameColumn = new ColumnDefinition()
-                            {
-                                Width = new GridLength(1, GridUnitType.Auto)
-                            };
+                        //    ColumnDefinition rowNameColumn = new ColumnDefinition()
+                        //    {
+                        //        Width = new GridLength(1, GridUnitType.Auto)
+                        //    };
 
-                            ColumnDefinition rowDataColumn = new ColumnDefinition()
-                            {
-                                Width = new GridLength(1, GridUnitType.Auto)
-                            };
+                        //    ColumnDefinition rowDataColumn = new ColumnDefinition()
+                        //    {
+                        //        Width = new GridLength(1, GridUnitType.Auto)
+                        //    };
 
-                            (control as Grid).ColumnDefinitions.Add(rowNameColumn);
-                            (control as Grid).ColumnDefinitions.Add(rowDataColumn);
+                        //    (control as Grid).ColumnDefinitions.Add(rowNameColumn);
+                        //    (control as Grid).ColumnDefinitions.Add(rowDataColumn);
 
-                            var nameLabel = new TextBlock()
-                            {
-                                Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
-                                Text = controlName + ":",
-                                Margin = new Thickness(10),
-                                TextWrapping = TextWrapping.Wrap
-                            };
+                        //    var nameLabel = new TextBlock()
+                        //    {
+                        //        Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
+                        //        Text = controlName + ":",
+                        //        Margin = new Thickness(10),
+                        //        TextWrapping = TextWrapping.Wrap
+                        //    };
 
-                            var dataLabel = new TextBlock()
-                            {
-                                Name = controlName,
-                                Margin = new Thickness(10),
-                                TextWrapping = TextWrapping.Wrap
-                            };
-                            Grid.SetColumn(dataLabel, 1);
+                        //    var dataLabel = new TextBlock()
+                        //    {
+                        //        Name = controlName,
+                        //        Margin = new Thickness(10),
+                        //        TextWrapping = TextWrapping.Wrap
+                        //    };
+                        //    Grid.SetColumn(dataLabel, 1);
 
-                            (control as Grid).Children.Add(nameLabel);
-                            (control as Grid).Children.Add(dataLabel);
-                        }
-                        else
-                        {
+                        //    (control as Grid).Children.Add(nameLabel);
+                        //    (control as Grid).Children.Add(dataLabel);
+                        //}
+                        //else
+                        //{
                             control = new TextBox()
                             {
                                 Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
@@ -106,7 +106,7 @@ namespace ISUF.UI.Design
 
                             if (customization != null && customization.UseLongTextInput)
                                 (control as TextBox).Height = 150;
-                        }
+                        //}
 
                         break;
 
@@ -253,6 +253,7 @@ namespace ISUF.UI.Design
                     case PropertyType.Double:
                     case PropertyType.Char:
                     case PropertyType.DateTime:
+                    case PropertyType.Boolean:
 
                         if (customization == null && controlTypeName == PropertyType.DateTime)
                             throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
@@ -279,7 +280,7 @@ namespace ISUF.UI.Design
                         {
                             TextBlock label = new TextBlock()
                             {
-                                Text = customization == null ? controlTypeName.ToString() : customization.LabelDescription,
+                                Text = customization.LabelDescription ?? controlData.PropertyName,
                                 VerticalAlignment = VerticalAlignment.Center,
                                 Margin = new Thickness(0, 0, 0, 5)
                             };
@@ -297,45 +298,49 @@ namespace ISUF.UI.Design
 
                         UIElement dateTimeControl;
 
-                        switch (customization.DateTimeMode)
+                        if (controlTypeName == PropertyType.DateTime)
                         {
-                            case DatePickerMode.Date:
-                                dateTimeControl = new CalendarDatePicker()
-                                {
-                                    Date = DateTime.Today,
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Margin = new Thickness(0, 5, 0, 0),
-                                    PlaceholderText = "Select a date",
-                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = true
-                                };
-                                break;
+                            switch (customization.DateTimeMode)
+                            {
+                                case DatePickerMode.Date:
+                                    dateTimeControl = new CalendarDatePicker()
+                                    {
+                                        Date = DateTime.Today,
+                                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                                        Margin = new Thickness(0, 5, 0, 0),
+                                        PlaceholderText = "Select a date",
+                                        Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                                        IsEnabled = true
+                                    };
+                                    break;
 
-                            case DatePickerMode.Time:
-                                dateTimeControl = new TimePicker()
-                                {
-                                    Time = DateTime.Now.TimeOfDay,
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Margin = new Thickness(0, 5, 0, 0),
-                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = true
-                                };
-                                break;
+                                case DatePickerMode.Time:
+                                    dateTimeControl = new TimePicker()
+                                    {
+                                        Time = DateTime.Now.TimeOfDay,
+                                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                                        Margin = new Thickness(0, 5, 0, 0),
+                                        Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                                        IsEnabled = true
+                                    };
+                                    break;
 
-                            case DatePickerMode.DateAndTime:
-                                throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
+                                case DatePickerMode.DateAndTime:
+                                    throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
 
-                            default:
-                                throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
+                                default:
+                                    throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
+                            }
+
+                            Grid.SetRow(dateTimeControl as FrameworkElement, 1);
+
+                            (control as Grid).Children.Add(dateTimeControl);
                         }
-
-                        Grid.SetRow(dateTimeControl as FrameworkElement, 1);
-
-                        (control as Grid).Children.Add(dateTimeControl);
 
                         break;
 
                     case PropertyType.notImplementedYet:
+
                         control = new Grid()
                         {
                             Background = new SolidColorBrush(Colors.Red),

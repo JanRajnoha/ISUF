@@ -279,8 +279,40 @@ namespace ISUF.UI.Views
                 if (item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIIgnoreAttribute)) != null)
                     continue;
 
-                mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl));
+                var uiParamsAttr = item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute));
+
+                if ((uiParamsAttr != null && !(uiParamsAttr as UIParamsAttribute).ReadOnlyMode) || uiParamsAttr == null)
+                    mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl));
+                else
+                    mainContent.Children.Add(ControlCreator.CreateDetailControl(item, ref previousControl));
             }
+
+            FillPredefinedValues();
+        }
+
+        private void FillPredefinedValues()
+        {
+            object item = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem");
+
+            try
+            {
+                item = Convert.ChangeType(item, uiModule.ModuleItemType);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Base.Exceptions.ArgumentNullException("Argument is null", e);
+            }
+            catch (FormatException e)
+            {
+                throw new Base.Exceptions.ArgumentException("Argument format exception", e);
+            }
+            catch (Exception e)
+            {
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
+            }
+
+            var formControls = FormDataMiner.GetControlsFromForm(this);
+            FormDataMiner.FillValuesIntoForm(formControls, item);
         }
     }
 }
