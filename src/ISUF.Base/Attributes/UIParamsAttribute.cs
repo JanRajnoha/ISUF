@@ -19,6 +19,7 @@ namespace ISUF.Base.Attributes
         public string LabelDescription { get; set; }
         public DatePickerMode DateTimeMode { get; set; } = DatePickerMode.Date;
         public bool ReadOnlyMode { get; set; } = false;
+        public bool ShowDetailOnOneLine { get; set; } = false;
         public string DateLabel { get; set; }
     }
 }

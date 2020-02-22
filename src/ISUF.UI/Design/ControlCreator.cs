@@ -55,59 +55,19 @@ namespace ISUF.UI.Design
                     case PropertyType.Decimal:
                     case PropertyType.Float:
 
-                        //if (customization.ReadOnlyMode)
-                        //{
-                        //    control = new Grid();
+                        control = new TextBox()
+                        {
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                            Margin = new Thickness(10),
+                            TextWrapping = TextWrapping.Wrap,
+                            PlaceholderText = "Insert " + controlName
+                        };
 
-                        //    ColumnDefinition rowNameColumn = new ColumnDefinition()
-                        //    {
-                        //        Width = new GridLength(1, GridUnitType.Auto)
-                        //    };
+                        if (controlTypeName == PropertyType.Char)
+                            (control as TextBox).MaxLength = 1;
 
-                        //    ColumnDefinition rowDataColumn = new ColumnDefinition()
-                        //    {
-                        //        Width = new GridLength(1, GridUnitType.Auto)
-                        //    };
-
-                        //    (control as Grid).ColumnDefinitions.Add(rowNameColumn);
-                        //    (control as Grid).ColumnDefinitions.Add(rowDataColumn);
-
-                        //    var nameLabel = new TextBlock()
-                        //    {
-                        //        Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
-                        //        Text = controlName + ":",
-                        //        Margin = new Thickness(10),
-                        //        TextWrapping = TextWrapping.Wrap
-                        //    };
-
-                        //    var dataLabel = new TextBlock()
-                        //    {
-                        //        Name = controlName,
-                        //        Margin = new Thickness(10),
-                        //        TextWrapping = TextWrapping.Wrap
-                        //    };
-                        //    Grid.SetColumn(dataLabel, 1);
-
-                        //    (control as Grid).Children.Add(nameLabel);
-                        //    (control as Grid).Children.Add(dataLabel);
-                        //}
-                        //else
-                        //{
-                            control = new TextBox()
-                            {
-                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                Margin = new Thickness(10),
-                                TextWrapping = TextWrapping.Wrap,
-                                PlaceholderText = "Insert " + controlName
-                            };
-
-                            if (controlTypeName == PropertyType.Char)
-                                (control as TextBox).MaxLength = 1;
-
-                            if (customization != null && customization.UseLongTextInput)
-                                (control as TextBox).Height = 150;
-                        //}
-
+                        if (customization != null && customization.UseLongTextInput)
+                            (control as TextBox).Height = 150;
                         break;
 
                     case PropertyType.Boolean:
@@ -276,30 +236,35 @@ namespace ISUF.UI.Design
                         (control as Grid).RowDefinitions.Add(labelRow);
                         (control as Grid).RowDefinitions.Add(dateTimeRow);
 
+                        ColumnDefinition labelColumn = new ColumnDefinition()
+                        {
+                            Width = new GridLength(1, GridUnitType.Auto)
+                        };
+
+                        ColumnDefinition dataColumn = new ColumnDefinition()
+                        {
+                            Width = new GridLength(1, GridUnitType.Auto)
+                        };
+
+                        (control as Grid).ColumnDefinitions.Add(labelColumn);
+                        (control as Grid).ColumnDefinitions.Add(dataColumn);
+
                         if (customization.UseLabelDescription)
                         {
                             TextBlock label = new TextBlock()
                             {
                                 Text = customization.LabelDescription ?? controlData.PropertyName,
                                 VerticalAlignment = VerticalAlignment.Center,
-                                Margin = new Thickness(0, 0, 0, 5)
+                                Margin = new Thickness(0, 0, 5, 0)
                             };
                             Grid.SetRow(label, 0);
                             (control as Grid).Children.Add(label);
                         }
 
-                        TextBox data = new TextBox()
-                        {
-                            Text = "",
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(0, 0, 0, 5),
-                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
-                        };
-
-                        UIElement dateTimeControl;
-
                         if (controlTypeName == PropertyType.DateTime)
                         {
+                            UIElement dateTimeControl;
+
                             switch (customization.DateTimeMode)
                             {
                                 case DatePickerMode.Date:
@@ -335,6 +300,22 @@ namespace ISUF.UI.Design
                             Grid.SetRow(dateTimeControl as FrameworkElement, 1);
 
                             (control as Grid).Children.Add(dateTimeControl);
+                        }
+                        else
+                        {
+                            TextBlock data = new TextBlock()
+                            {
+                                Text = "",
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Margin = new Thickness(5, 0, 0, 0),
+                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
+                            };
+                            (control as Grid).Children.Add(data);
+
+                            if (customization.ShowDetailOnOneLine)
+                                Grid.SetColumn(data, 1);
+                            else
+                                Grid.SetRow(data, 1);
                         }
 
                         break;

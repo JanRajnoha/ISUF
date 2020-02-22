@@ -34,6 +34,8 @@ namespace ISUF.UI.Design
         {
             if (formControl.GetType() == typeof(TextBox))
                 (formControl as TextBox).Text = value.ToString();
+            if (formControl.GetType() == typeof(TextBlock))
+                (formControl as TextBlock).Text = value.ToString();
             else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
                 (formControl as LinkedTablePresenterControl).GetSelectedIds();
             else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
@@ -66,6 +68,9 @@ namespace ISUF.UI.Design
                 if (itemProp == null)
                     throw new Base.Exceptions.ArgumentException("None of controls not match property name.");
 
+                if (formControl.GetType() == typeof(TextBlock))
+                    continue;
+
                 object value = GetValueFromControl(formControl);
 
                 if (value.GetType() != itemProp.PropertyType)
@@ -75,6 +80,24 @@ namespace ISUF.UI.Design
             }
 
             return item;
+        }
+
+        private static object GetValueFromControl(FrameworkElement formControl)
+        {
+            if (formControl.GetType() == typeof(TextBox))
+                return (formControl as TextBox).Text;
+            else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
+                return (formControl as LinkedTablePresenterControl).GetSelectedIds();
+            else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
+                return (formControl as LinkedTableSelectorControl).GetSelectedId();
+            else if (formControl.GetType() == typeof(CalendarDatePicker))
+                return (formControl as CalendarDatePicker).Date;
+            else if (formControl.GetType() == typeof(TimePicker))
+                return (formControl as TimePicker).Time;
+            else if (formControl.GetType() == typeof(CheckBox))
+                return (formControl as CheckBox).IsChecked;
+            else
+                throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }
 
         private static object ConvertValueToPropValue(object value, PropertyInfo prop)
@@ -129,24 +152,6 @@ namespace ISUF.UI.Design
                     $"Target type: {prop.PropertyType.Name}");
 
             return convertedValue;
-        }
-
-        private static object GetValueFromControl(FrameworkElement formControl)
-        {
-            if (formControl.GetType() == typeof(TextBox))
-                return (formControl as TextBox).Text;
-            else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
-                return (formControl as LinkedTablePresenterControl).GetSelectedIds();
-            else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
-                return (formControl as LinkedTableSelectorControl).GetSelectedId();
-            else if (formControl.GetType() == typeof(CalendarDatePicker))
-                return (formControl as CalendarDatePicker).Date;
-            else if (formControl.GetType() == typeof(TimePicker))
-                return (formControl as TimePicker).Time;
-            else if (formControl.GetType() == typeof(CheckBox))
-                return (formControl as CheckBox).IsChecked;
-            else
-                throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }
 
         public static IList<FrameworkElement> GetControlsFromForm(Control form)

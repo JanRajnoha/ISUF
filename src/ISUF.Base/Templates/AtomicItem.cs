@@ -9,7 +9,7 @@ namespace ISUF.Base.Template
 {
     public class AtomicItem: INotifyPropertyChanged, ICloneable
     {
-        [UIParams(ReadOnlyMode = true, UIOrder = 0, UseLabelDescription = true)]
+        [UIParams(ReadOnlyMode = true, UIOrder = 0, UseLabelDescription = true, ShowDetailOnOneLine = true)]
         public int Id { get; set; } = -1;
 
         [UIParams(UseLongTextInput = true, UIOrder = 30)]
