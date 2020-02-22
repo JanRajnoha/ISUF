@@ -19,6 +19,7 @@ using ISUF.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Navigation;
 using System.Windows.Input;
+using ISUF.Base.Messages;
 
 namespace ISUF.UI.Views
 {
@@ -462,8 +463,9 @@ namespace ISUF.UI.Views
                 Name = nameof(ModuleData),
                 Margin = new Thickness(0, 10, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = new SolidColorBrush(Color.FromArgb(125, 125, 0, 255))
+                ItemsSource = (DataContext as ViewModelBase).GetPropertyValue("Source")
             };
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(ModuleData, ListView.ItemsSourceProperty, "Source", viewModelType);
 
             Binding moduleDataSelectionModeBinding = new Binding()
             {
@@ -493,8 +495,9 @@ namespace ISUF.UI.Views
             StackPanel LoadingStack = new StackPanel()
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
             };
+            LoadingStack.Loaded += LoadingStack_Loaded;
 
             Binding loadingStackVisibilityBinding = new Binding()
             {
@@ -506,7 +509,36 @@ namespace ISUF.UI.Views
 
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(LoadingStack, StackPanel.VisibilityProperty, "Source", viewModelType, converter: new NullToVisibilityConverter(), converterParameter: "not");
 
+            ProgressRing loadingRing = new ProgressRing()
+            {
+                Height = 75,
+                Width = 75,
+                IsActive = true,
+                Margin = new Thickness(15),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            TextBlock loadingText = new TextBlock()
+            {
+                Text = "Please wait. Loading data...",
+                FontSize = 21
+            };
+
+            LoadingStack.Children.Add(loadingRing);
+            LoadingStack.Children.Add(loadingText);
+
             container.Children.Add(LoadingStack);
+        }
+
+        private void LoadingStack_Loaded(object sender, RoutedEventArgs e)
+        {
+            FormLoadedMsg msg = new FormLoadedMsg()
+            {
+                FormType = DataContext.GetType()
+            };
+
+            ApplicationBase.Current.VMLocator.GetMessenger().Send(msg);
         }
 
         private void AddSlavePane(Panel container)

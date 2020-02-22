@@ -155,6 +155,7 @@
     <Compile Include="Locator\LocatorBase.cs" />
     <Compile Include="Locator\ManagerLocator.cs" />
     <Compile Include="Messages\Base\ItemBaseMsg.cs" />
+    <Compile Include="Messages\FormLoadedMsg.cs" />
     <Compile Include="Messages\ItemAddCloseMsg.cs" />
     <Compile Include="Messages\ItemAddErrorMsg.cs" />
     <Compile Include="Messages\ItemAddMsg.cs" />

@@ -11,6 +11,11 @@ namespace ISUF.UI.Design
 {
     public class FormDataMiner
     {
+        public static void FillValueIntoControl(FrameworkElement formControl, object item)
+        {
+            throw new Base.Exceptions.NotImplementedException("Not implemented yet.");
+        }
+
         public static void FillValuesIntoForm(IList<FrameworkElement> formControls, object item)
         {
             var itemProps = item.GetType().GetProperties();
@@ -67,6 +72,11 @@ namespace ISUF.UI.Design
 
             else
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for setting value.");
+        }
+
+        public static T FillValueIntoProperty<T>(FrameworkElement formControl, T item) where T : BaseItem
+        {
+            throw new Base.Exceptions.NotImplementedException("Not implemented yet.");
         }
 
         public static T FillValuesIntoProperty<T>(IList<FrameworkElement> formControls, T item) where T : BaseItem

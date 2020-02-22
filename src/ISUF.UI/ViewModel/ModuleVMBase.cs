@@ -72,7 +72,7 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private ObservableCollection<T> source = new ObservableCollection<T>();
+        private ObservableCollection<T> source /*= new ObservableCollection<T>()*/;
         public ObservableCollection<T> Source
         {
             get => source;
@@ -231,14 +231,16 @@ namespace ISUF.UI.ViewModel
                     ListSelectionMode = ListViewSelectionMode.None;
             });
 
-            Messenger.Register<ItemAddCloseMsg>(CloseAddPane);
             AddItem = new RelayCommand(ItemNew);
+            Messenger.Register<ItemAddCloseMsg>(CloseAddPane);
 
             Messenger.Register<ItemAddSavedMsg>(NewItemAdded);
             Messenger.Register<ItemEditMsg>(EditItem);
 
             Messenger.Register<ItemDetailOpenMsg>(OpenDetailPane);
             Messenger.Register<ItemDetailCloseMsg>(CloseDetailPane);
+
+            messenger.Register<FormLoadedMsg>(FormLoaded);
 
             AddStartTile = new RelayCommand(() => SecTileManageAsync());
             ChangePaneVisibility = new RelayCommand(InversePaneVisibility);
@@ -256,6 +258,14 @@ namespace ISUF.UI.ViewModel
             ModuleTitle = uiModule.ModuleDisplayName;
             ModuleName = uiModule.ModuleName;
             ItemType = uiModule.ModuleItemType;
+        }
+
+        private void FormLoaded(FormLoadedMsg obj)
+        {
+            if (obj.FormType == GetType())
+                Source = uiModule.GetAllItems<T>();
+
+            //UpdateSourceAsync(true);
         }
 
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -293,7 +303,7 @@ namespace ISUF.UI.ViewModel
         }
 
         protected virtual void AddPane<TMessage>(string paneName, TMessage msg)
-        { 
+        {
         }
 
         private void Data_ShareCompleted(DataPackage sender, ShareCompletedEventArgs args)
