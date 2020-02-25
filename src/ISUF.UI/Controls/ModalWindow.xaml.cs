@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+﻿using ISUF.Base.Enum;
+using Microsoft.Toolkit.Uwp.UI.Animations;
 using Template10.Common;
 using Template10.Controls;
 using Windows.UI.Xaml;
@@ -10,15 +11,17 @@ namespace ISUF.UI.Controls
 {
     public sealed partial class ModalWindow : UserControl
     {
-        public static FrameworkElement ModalContent { get; set; }
-        public static bool ShowDefaultButton { get; set; }
+        private static object modalContent;
+        private static bool showButtons;
+        private static MessageDialogButtons showedButtons;
+        private static MessageDialogResult dialogResult;
 
         public ModalWindow()
         {
             InitializeComponent();
         }
 
-        public ModalWindow(FrameworkElement modalContent) : this()
+        public ModalWindow(object modalContent) : this()
         {
             if (modalContent != null)
             {
@@ -31,22 +34,28 @@ namespace ISUF.UI.Controls
             get { return (bool)GetValue(IsShowedProperty); }
             set { SetValue(IsShowedProperty, value); }
         }
+
         public static readonly DependencyProperty IsShowedProperty =
             DependencyProperty.Register(nameof(IsShowed), typeof(bool), typeof(ModalWindow), new PropertyMetadata(false));
 
+        public static MessageDialogResult ShowModal(bool showed, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
+        {
+            SetVisibility(showed, modalContent, showButtons, showedButtons, useDesignAnimation);
+            return MessageDialogResult.Abort;
+        }
+
         /// <summary>
-        /// Set visibility of Release Notes Screen
+        /// Set visibility of Modal window
         /// </summary>
         /// <param name="showed">Visibility bool</param>
         /// <param name="modalContent">Content of ModalWindow</param>
-        /// <param name="showDefaultButton">use default buttons</param>
-        /// <param name="useAnimation">Enable or disable animations</param>
-        public static void SetVisibility(bool showed, FrameworkElement modalContent = null, bool showDefaultButton = true, bool useAnimation = true)
+        /// <param name="showButtons">use default buttons</param>
+        /// <param name="useDesignAnimation">Enable or disable animations</param>
+        public static void SetVisibility(bool showed, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
         {
-            {
-                ModalContent = modalContent;
-                ShowDefaultButton = showDefaultButton;
-            }
+            ModalWindow.modalContent = modalContent;
+            ModalWindow.showButtons = showButtons;
+            ModalWindow.showedButtons = showedButtons;
 
             WindowWrapper.Current().Dispatcher.Dispatch(() =>
             {
@@ -56,41 +65,64 @@ namespace ISUF.UI.Controls
                     modal.ModalContent = view = new ModalWindow();
 
                 if (showed)
-                    if (ModalContent != null)
-                        modal.ModalContent = view = new ModalWindow(ModalContent);
+                {
+                    if (ModalWindow.modalContent != null)
+                        modal.ModalContent = view = new ModalWindow(ModalWindow.modalContent);
                     else
                         modal.ModalContent = view = new ModalWindow();
-                //else
-                //    if (view.Content.Content == null)
-                //    modal.ModalContent = view = new ModalWindow(ModalContent);
 
-
-                if (!showed)
-                {
-                    view.Content.Visibility = Visibility.Collapsed;
-                    view.GotIt.Visibility = Visibility.Collapsed;
-
-                    var BlurAnim = view.BlurLayer.Blur(0, 500);
-                    BlurAnim.Completed += CloseBlurAnim_Completed;
-                    BlurAnim.Start();
-                }
-                else
-                {
                     view.Content.Visibility = Visibility.Visible;
 
-                    if (ShowDefaultButton)
+                    if (ModalWindow.showButtons)
                     {
-                        view.DefaultButtonRow.Height = GridLength.Auto;
-                        view.GotIt.Visibility = Visibility.Visible;
+                        view.ButtonRow.Height = GridLength.Auto;
+
+                        switch (ModalWindow.showedButtons)
+                        {
+                            case MessageDialogButtons.Ok:
+                                view.Ok.Visibility = Visibility.Visible;
+                                view.Cancel.Visibility = Visibility.Collapsed;
+                                view.Ignore.Visibility = Visibility.Collapsed;
+                                break;
+
+                            case MessageDialogButtons.OkCancel:
+                                view.Ok.Visibility = Visibility.Visible;
+                                view.Cancel.Visibility = Visibility.Visible;
+                                view.Ignore.Visibility = Visibility.Collapsed;
+                                break;
+
+                            case MessageDialogButtons.YesNo:
+                                view.Ok.Visibility = Visibility.Visible;
+                                view.Cancel.Visibility = Visibility.Visible;
+                                view.Ignore.Visibility = Visibility.Collapsed;
+
+                                view.Ok.Content = "Yes";
+                                view.Ignore.Content = "No";
+                                break;
+
+                            case MessageDialogButtons.AbortRetryIgnore:
+                                view.Ok.Visibility = Visibility.Visible;
+                                view.Cancel.Visibility = Visibility.Visible;
+                                view.Ignore.Visibility = Visibility.Visible;
+
+                                view.Ok.Content = "Abort";
+                                view.Ignore.Content = "Retry";
+                                break;
+
+                            default:
+                                throw new Base.Exceptions.NotImplementedException($"Combination {ModalWindow.showedButtons} is not supported yet");
+                        }
                     }
                     else
-                        view.DefaultButtonRow.Height = new GridLength(0);
+                        view.ButtonRow.Height = new GridLength(0);
 
                     modal.IsModal = view.IsShowed = showed;
 
-                    if (useAnimation)
+                    if (useDesignAnimation)
                     {
-                        view.GotIt.IsEnabled = false;
+                        view.Ok.IsEnabled = false;
+                        view.Cancel.IsEnabled = false;
+                        view.Ignore.IsEnabled = false;
 
                         var BlurAnim = view.BlurLayer.Blur(5, 500);
                         BlurAnim.Completed += OpenBlurAnim_Completed;
@@ -98,6 +130,17 @@ namespace ISUF.UI.Controls
                     }
                     else
                         view.BlurLayer.Blur(8, 1).Start();
+                }
+                else
+                {
+                    view.Content.Visibility = Visibility.Collapsed;
+                    view.Ok.Visibility = Visibility.Collapsed;
+                    view.Cancel.Visibility = Visibility.Collapsed;
+                    view.Ignore.Visibility = Visibility.Collapsed;
+
+                    var BlurAnim = view.BlurLayer.Blur(0, 500);
+                    BlurAnim.Completed += CloseBlurAnim_Completed;
+                    BlurAnim.Start();
                 }
 
             });
@@ -115,10 +158,11 @@ namespace ISUF.UI.Controls
                 var modal = Window.Current.Content as ModalDialog;
 
                 if (!(modal.ModalContent is ModalWindow view))
-                    modal.ModalContent = view = new ModalWindow(ModalContent);
+                    modal.ModalContent = view = new ModalWindow(modalContent);
 
-                view.GotIt.IsEnabled = true;
-
+                view.Ok.IsEnabled = true;
+                view.Cancel.IsEnabled = true;
+                view.Ignore.IsEnabled = true;
             });
         }
 
@@ -141,14 +185,74 @@ namespace ISUF.UI.Controls
             });
         }
 
-        /// <summary>
-        /// Close Release Notes Screen
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                case MessageDialogButtons.OkCancel:
+                    CloseModal(MessageDialogResult.Ok);
+                    break;
+
+                case MessageDialogButtons.YesNo:
+                    CloseModal(MessageDialogResult.Yes);
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                    break;
+
+                case MessageDialogButtons.OkCancel:
+                    CloseModal(MessageDialogResult.Cancel);
+                    break;
+
+                case MessageDialogButtons.YesNo:
+                    CloseModal(MessageDialogResult.Yes);
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
+        private void Ignore_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                case MessageDialogButtons.OkCancel:
+                case MessageDialogButtons.YesNo:
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
+        private static void CloseModal(MessageDialogResult result)
         {
             SetVisibility(false);
+            dialogResult = result;
         }
     }
 }
