@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Controls
 {
-    public sealed partial class ModalWindow : UserControl
+    public partial class ModalWindow : UserControl
     {
         private static object modalContent;
         private static bool showButtons;
@@ -45,6 +45,76 @@ namespace ISUF.UI.Controls
             ModalWindow.modalResult = modalResult;
         }
 
+        protected static void CloseModal(MessageDialogResult result)
+        {
+            SetVisibility(false);
+            modalResult?.Invoke(result);
+        }
+
+        protected void Ok_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                case MessageDialogButtons.OkCancel:
+                    CloseModal(MessageDialogResult.Ok);
+                    break;
+
+                case MessageDialogButtons.YesNo:
+                    CloseModal(MessageDialogResult.Yes);
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
+        protected void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                    break;
+
+                case MessageDialogButtons.OkCancel:
+                    CloseModal(MessageDialogResult.Cancel);
+                    break;
+
+                case MessageDialogButtons.YesNo:
+                    CloseModal(MessageDialogResult.Yes);
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
+        protected void Ignore_Click(object sender, RoutedEventArgs e)
+        {
+            switch (showedButtons)
+            {
+                case MessageDialogButtons.Ok:
+                case MessageDialogButtons.OkCancel:
+                case MessageDialogButtons.YesNo:
+                    break;
+
+                case MessageDialogButtons.AbortRetryIgnore:
+                    CloseModal(MessageDialogResult.Abort);
+                    break;
+
+                default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
+            }
+        }
+
         /// <summary>
         /// Set visibility of Modal window
         /// </summary>
@@ -52,7 +122,7 @@ namespace ISUF.UI.Controls
         /// <param name="modalContent">Content of ModalWindow</param>
         /// <param name="showButtons">use default buttons</param>
         /// <param name="useDesignAnimation">Enable or disable animations</param>
-        public static void SetVisibility(bool showed, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
+        protected static void SetVisibility(bool showed, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
         {
             ModalWindow.modalContent = modalContent;
             ModalWindow.showButtons = showButtons;
@@ -152,7 +222,7 @@ namespace ISUF.UI.Controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void OpenBlurAnim_Completed(object sender, AnimationSetCompletedEventArgs e)
+        protected static void OpenBlurAnim_Completed(object sender, AnimationSetCompletedEventArgs e)
         {
             WindowWrapper.Current().Dispatcher.Dispatch(() =>
             {
@@ -172,7 +242,7 @@ namespace ISUF.UI.Controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void CloseBlurAnim_Completed(object sender, AnimationSetCompletedEventArgs e)
+        protected static void CloseBlurAnim_Completed(object sender, AnimationSetCompletedEventArgs e)
         {
             WindowWrapper.Current().Dispatcher.Dispatch(() =>
             {
@@ -184,76 +254,6 @@ namespace ISUF.UI.Controls
                 modal.IsModal = view.IsShowed = false;
 
             });
-        }
-
-        private void Ok_Click(object sender, RoutedEventArgs e)
-        {
-            switch (showedButtons)
-            {
-                case MessageDialogButtons.Ok:
-                case MessageDialogButtons.OkCancel:
-                    CloseModal(MessageDialogResult.Ok);
-                    break;
-
-                case MessageDialogButtons.YesNo:
-                    CloseModal(MessageDialogResult.Yes);
-                    break;
-
-                case MessageDialogButtons.AbortRetryIgnore:
-                    CloseModal(MessageDialogResult.Abort);
-                    break;
-
-                default:
-                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
-            }
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            switch (showedButtons)
-            {
-                case MessageDialogButtons.Ok:
-                    break;
-
-                case MessageDialogButtons.OkCancel:
-                    CloseModal(MessageDialogResult.Cancel);
-                    break;
-
-                case MessageDialogButtons.YesNo:
-                    CloseModal(MessageDialogResult.Yes);
-                    break;
-
-                case MessageDialogButtons.AbortRetryIgnore:
-                    CloseModal(MessageDialogResult.Abort);
-                    break;
-
-                default:
-                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
-            }
-        }
-
-        private void Ignore_Click(object sender, RoutedEventArgs e)
-        {
-            switch (showedButtons)
-            {
-                case MessageDialogButtons.Ok:
-                case MessageDialogButtons.OkCancel:
-                case MessageDialogButtons.YesNo:
-                    break;
-
-                case MessageDialogButtons.AbortRetryIgnore:
-                    CloseModal(MessageDialogResult.Abort);
-                    break;
-
-                default:
-                    throw new Base.Exceptions.NotImplementedException($"Combination {showedButtons} is not supported yet");
-            }
-        }
-
-        private static void CloseModal(MessageDialogResult result)
-        {
-            SetVisibility(false);
-            modalResult?.Invoke(result);
         }
     }
 }

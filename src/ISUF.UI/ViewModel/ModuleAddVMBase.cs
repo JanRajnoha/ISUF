@@ -155,8 +155,7 @@ namespace ISUF.UI.ViewModel
 
         public void CloseModal()
         {
-            if (ModalActivation)
-                ModalWindow.SetVisibility(false);
+            // TODO
         }
 
         public void SetDetailItem(T currentItem)

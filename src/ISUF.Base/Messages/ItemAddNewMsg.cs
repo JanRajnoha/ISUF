@@ -9,8 +9,5 @@ namespace ISUF.Base.Messages
 {
     public class ItemAddNewMsg : ItemBaseMsg
     {
-        public ItemAddNewMsg()
-        {
-        }
     }
 }

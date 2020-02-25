@@ -62,7 +62,7 @@ namespace ISUF.UI.ViewModel
 
                 if (CurVer.Minor != OldVer.Minor || OldVer.Major == 0)
                 {
-                    ModalWindow.SetVisibility(true, new ReleaseNotes(), useDesignAnimation: false);
+                    ModalWindow.ShowModal(null, new ReleaseNotes(), useDesignAnimation: false);
                 }
                 else
                 {

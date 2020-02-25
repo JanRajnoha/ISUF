@@ -154,6 +154,7 @@
     <Compile Include="Enum\PathType.cs" />
     <Compile Include="Locator\LocatorBase.cs" />
     <Compile Include="Locator\ManagerLocator.cs" />
+    <Compile Include="Messages\AnswerMsg.cs" />
     <Compile Include="Messages\Base\ItemBaseMsg.cs" />
     <Compile Include="Messages\FormLoadedMsg.cs" />
     <Compile Include="Messages\ItemAddCloseMsg.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Messages\ItemSelectedDetailMsg.cs" />
     <Compile Include="Messages\ItemSourceUpdatedMsg.cs" />
     <Compile Include="Messages\PropertyChangedMsg.cs" />
+    <Compile Include="Messages\RequestMsg.cs" />
     <Compile Include="Messages\ShowModalActivationMsg.cs" />
     <Compile Include="Messages\ShowNotificationMsg.cs" />
     <Compile Include="Messages\UserLoggedInMsg.cs" />
