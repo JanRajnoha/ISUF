@@ -1,5 +1,6 @@
 ﻿using ISUF.Base.Enum;
 using Microsoft.Toolkit.Uwp.UI.Animations;
+using System;
 using Template10.Common;
 using Template10.Controls;
 using Windows.UI.Xaml;
@@ -14,7 +15,7 @@ namespace ISUF.UI.Controls
         private static object modalContent;
         private static bool showButtons;
         private static MessageDialogButtons showedButtons;
-        private static MessageDialogResult dialogResult;
+        private static Action<MessageDialogResult> modalResult;
 
         public ModalWindow()
         {
@@ -38,10 +39,10 @@ namespace ISUF.UI.Controls
         public static readonly DependencyProperty IsShowedProperty =
             DependencyProperty.Register(nameof(IsShowed), typeof(bool), typeof(ModalWindow), new PropertyMetadata(false));
 
-        public static MessageDialogResult ShowModal(bool showed, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
+        public static void ShowModal(Action<MessageDialogResult> modalResult, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
         {
-            SetVisibility(showed, modalContent, showButtons, showedButtons, useDesignAnimation);
-            return MessageDialogResult.Abort;
+            SetVisibility(true, modalContent, showButtons, showedButtons, useDesignAnimation);
+            ModalWindow.modalResult = modalResult;
         }
 
         /// <summary>
@@ -252,7 +253,7 @@ namespace ISUF.UI.Controls
         private static void CloseModal(MessageDialogResult result)
         {
             SetVisibility(false);
-            dialogResult = result;
+            modalResult?.Invoke(result);
         }
     }
 }
