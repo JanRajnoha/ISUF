@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Controls
 {
-    public class LinkedTablePresenterControl : Grid
+    public class LinkedTableMultiSelectorControl : Grid
     {
         private IList<int> presentedLinkedIds = new List<int>();
 
-        public LinkedTablePresenterControl()
+        public LinkedTableMultiSelectorControl()
         {
 
         }
@@ -45,7 +45,7 @@ namespace ISUF.UI.Controls
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
 
-            var control = new LinkedTablePresenterControl()
+            var control = new LinkedTableMultiSelectorControl()
             {
                 Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                 Margin = new Thickness(10)

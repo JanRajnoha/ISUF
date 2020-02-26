@@ -5,6 +5,7 @@ using Template10.Common;
 using Template10.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -51,7 +52,7 @@ namespace ISUF.UI.Controls
             modalResult?.Invoke(result);
         }
 
-        protected void Ok_Click(object sender, RoutedEventArgs e)
+        protected virtual void Ok_Click(object sender, RoutedEventArgs e)
         {
             switch (showedButtons)
             {
@@ -73,7 +74,7 @@ namespace ISUF.UI.Controls
             }
         }
 
-        protected void Cancel_Click(object sender, RoutedEventArgs e)
+        protected virtual void Cancel_Click(object sender, RoutedEventArgs e)
         {
             switch (showedButtons)
             {
@@ -97,7 +98,7 @@ namespace ISUF.UI.Controls
             }
         }
 
-        protected void Ignore_Click(object sender, RoutedEventArgs e)
+        protected virtual void Ignore_Click(object sender, RoutedEventArgs e)
         {
             switch (showedButtons)
             {
@@ -201,6 +202,8 @@ namespace ISUF.UI.Controls
                     }
                     else
                         view.BlurLayer.Blur(8, 1).Start();
+
+                    //view.Conta(FocusState.Keyboard);
                 }
                 else
                 {

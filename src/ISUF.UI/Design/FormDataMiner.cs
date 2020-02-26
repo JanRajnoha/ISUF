@@ -43,15 +43,15 @@ namespace ISUF.UI.Design
             else if (formControl.GetType() == typeof(TextBlock))
                 (formControl as TextBlock).Text = value.ToString();
 
-            else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
+            else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
                 if (value is IList<int> intValues)
-                    (formControl as LinkedTablePresenterControl).SetSelectedIds(intValues);
+                    (formControl as LinkedTableMultiSelectorControl).SetSelectedIds(intValues);
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
-            else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
+            else if (formControl.GetType() == typeof(LinkedTableSingleSelectorControl))
                 if (value is int intValue)
-                    (formControl as LinkedTableSelectorControl).SetSelectedId(intValue);
+                    (formControl as LinkedTableSingleSelectorControl).SetSelectedId(intValue);
             else
                 throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
@@ -109,10 +109,10 @@ namespace ISUF.UI.Design
         {
             if (formControl.GetType() == typeof(TextBox))
                 return (formControl as TextBox).Text;
-            else if (formControl.GetType() == typeof(LinkedTablePresenterControl))
-                return (formControl as LinkedTablePresenterControl).GetSelectedIds();
-            else if (formControl.GetType() == typeof(LinkedTableSelectorControl))
-                return (formControl as LinkedTableSelectorControl).GetSelectedId();
+            else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
+                return (formControl as LinkedTableMultiSelectorControl).GetSelectedIds();
+            else if (formControl.GetType() == typeof(LinkedTableSingleSelectorControl))
+                return (formControl as LinkedTableSingleSelectorControl).GetSelectedId();
             else if (formControl.GetType() == typeof(CalendarDatePicker))
                 return (formControl as CalendarDatePicker).Date;
             else if (formControl.GetType() == typeof(TimePicker))

@@ -282,7 +282,7 @@ namespace ISUF.UI.Views
                 var uiParamsAttr = item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute));
 
                 if ((uiParamsAttr != null && !(uiParamsAttr as UIParamsAttribute).ReadOnlyMode) || uiParamsAttr == null)
-                    mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl));
+                    mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl, uiModule));
                 else
                     mainContent.Children.Add(ControlCreator.CreateDetailControl(item, ref previousControl));
             }

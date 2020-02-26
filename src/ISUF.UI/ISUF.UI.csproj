@@ -126,9 +126,9 @@
     <Compile Include="Controls\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\LinkedTablePresenterControl.cs" />
+    <Compile Include="Controls\LinkedTableMultiSelectorControl.cs" />
     <Compile Include="Controls\LinkedTableSelector.cs" />
-    <Compile Include="Controls\LinkedTableSelectorControl.cs" />
+    <Compile Include="Controls\LinkedTableSingleSelectorControl.cs" />
     <Compile Include="Controls\ReleaseNotes.xaml.cs">
       <DependentUpon>ReleaseNotes.xaml</DependentUpon>
     </Compile>

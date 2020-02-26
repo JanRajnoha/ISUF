@@ -4,6 +4,7 @@ using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
 using ISUF.UI.Classes;
 using ISUF.UI.Controls;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace ISUF.UI.Design
 {
     public static class ControlCreator
     {
-        public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
+        public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl, UIModule uiModule)
         {
             string controlName = controlAnalyze.Key;
             PropertyAnalyze controlData = controlAnalyze.Value;
@@ -32,11 +33,11 @@ namespace ISUF.UI.Design
                 switch (linkedTableAttribute.LinkedTableRelation)
                 {
                     case LinkedTableRelation.One:
-                        control = LinkedTableSelectorControl.CreateLinkedTableSelectorControl(controlName, controlData, controlTypeName);
+                        control = LinkedTableSingleSelectorControl.CreateLinkedTableSelectorControl(controlName, controlData, controlTypeName, uiModule);
                         break;
 
                     case LinkedTableRelation.Many:
-                        control = LinkedTablePresenterControl.CreateLinkedTablePresenterControl(controlName, controlData, controlTypeName);
+                        control = LinkedTableMultiSelectorControl.CreateLinkedTablePresenterControl(controlName, controlData, controlTypeName);
                         break;
 
                     default:
@@ -200,139 +201,134 @@ namespace ISUF.UI.Design
             UIElement control;
             UIParamsAttribute customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 
-            if (controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) != null)
+            switch (controlTypeName)
             {
-                control = LinkedTableSelectorControl.CreateLinkedTableSelectorControl(controlName, controlData, controlTypeName);
-            }
-            else
-                switch (controlTypeName)
-                {
-                    case PropertyType.String:
-                    case PropertyType.Int:
-                    case PropertyType.Int32:
-                    case PropertyType.Double:
-                    case PropertyType.Char:
-                    case PropertyType.DateTime:
-                    case PropertyType.Boolean:
+                case PropertyType.String:
+                case PropertyType.Int:
+                case PropertyType.Int32:
+                case PropertyType.Double:
+                case PropertyType.Char:
+                case PropertyType.DateTime:
+                case PropertyType.Boolean:
 
-                        if (customization == null && controlTypeName == PropertyType.DateTime)
-                            throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
+                    if (customization == null && controlTypeName == PropertyType.DateTime)
+                        throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
 
-                        control = new Grid()
+                    control = new Grid()
+                    {
+                        Margin = new Thickness(10)
+                    };
+
+                    RowDefinition labelRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    RowDefinition dateTimeRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    (control as Grid).RowDefinitions.Add(labelRow);
+                    (control as Grid).RowDefinitions.Add(dateTimeRow);
+
+                    ColumnDefinition labelColumn = new ColumnDefinition()
+                    {
+                        Width = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    ColumnDefinition dataColumn = new ColumnDefinition()
+                    {
+                        Width = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    (control as Grid).ColumnDefinitions.Add(labelColumn);
+                    (control as Grid).ColumnDefinitions.Add(dataColumn);
+
+                    if (customization.UseLabelDescription)
+                    {
+                        TextBlock label = new TextBlock()
                         {
-                            Margin = new Thickness(10)
+                            Text = customization.LabelDescription ?? controlData.PropertyName,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(0, 0, 5, 0)
                         };
+                        Grid.SetRow(label, 0);
+                        (control as Grid).Children.Add(label);
+                    }
 
-                        RowDefinition labelRow = new RowDefinition()
+                    if (controlTypeName == PropertyType.DateTime)
+                    {
+                        UIElement dateTimeControl;
+
+                        switch (customization.DateTimeMode)
                         {
-                            Height = new GridLength(1, GridUnitType.Auto)
-                        };
+                            case DatePickerMode.Date:
+                                dateTimeControl = new CalendarDatePicker()
+                                {
+                                    Date = DateTime.Today,
+                                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                                    Margin = new Thickness(0, 5, 0, 0),
+                                    PlaceholderText = "Select a date",
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                                    IsEnabled = true
+                                };
+                                break;
 
-                        RowDefinition dateTimeRow = new RowDefinition()
-                        {
-                            Height = new GridLength(1, GridUnitType.Auto)
-                        };
+                            case DatePickerMode.Time:
+                                dateTimeControl = new TimePicker()
+                                {
+                                    Time = DateTime.Now.TimeOfDay,
+                                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                                    Margin = new Thickness(0, 5, 0, 0),
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                                    IsEnabled = true
+                                };
+                                break;
 
-                        (control as Grid).RowDefinitions.Add(labelRow);
-                        (control as Grid).RowDefinitions.Add(dateTimeRow);
+                            case DatePickerMode.DateAndTime:
+                                throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
 
-                        ColumnDefinition labelColumn = new ColumnDefinition()
-                        {
-                            Width = new GridLength(1, GridUnitType.Auto)
-                        };
-
-                        ColumnDefinition dataColumn = new ColumnDefinition()
-                        {
-                            Width = new GridLength(1, GridUnitType.Auto)
-                        };
-
-                        (control as Grid).ColumnDefinitions.Add(labelColumn);
-                        (control as Grid).ColumnDefinitions.Add(dataColumn);
-
-                        if (customization.UseLabelDescription)
-                        {
-                            TextBlock label = new TextBlock()
-                            {
-                                Text = customization.LabelDescription ?? controlData.PropertyName,
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Margin = new Thickness(0, 0, 5, 0)
-                            };
-                            Grid.SetRow(label, 0);
-                            (control as Grid).Children.Add(label);
+                            default:
+                                throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
                         }
 
-                        if (controlTypeName == PropertyType.DateTime)
+                        Grid.SetRow(dateTimeControl as FrameworkElement, 1);
+
+                        (control as Grid).Children.Add(dateTimeControl);
+                    }
+                    else
+                    {
+                        TextBlock data = new TextBlock()
                         {
-                            UIElement dateTimeControl;
+                            Text = "",
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(5, 0, 0, 0),
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
+                        };
+                        (control as Grid).Children.Add(data);
 
-                            switch (customization.DateTimeMode)
-                            {
-                                case DatePickerMode.Date:
-                                    dateTimeControl = new CalendarDatePicker()
-                                    {
-                                        Date = DateTime.Today,
-                                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                                        Margin = new Thickness(0, 5, 0, 0),
-                                        PlaceholderText = "Select a date",
-                                        Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                        IsEnabled = true
-                                    };
-                                    break;
-
-                                case DatePickerMode.Time:
-                                    dateTimeControl = new TimePicker()
-                                    {
-                                        Time = DateTime.Now.TimeOfDay,
-                                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                                        Margin = new Thickness(0, 5, 0, 0),
-                                        Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                        IsEnabled = true
-                                    };
-                                    break;
-
-                                case DatePickerMode.DateAndTime:
-                                    throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
-
-                                default:
-                                    throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
-                            }
-
-                            Grid.SetRow(dateTimeControl as FrameworkElement, 1);
-
-                            (control as Grid).Children.Add(dateTimeControl);
-                        }
+                        if (customization.ShowDetailOnOneLine)
+                            Grid.SetColumn(data, 1);
                         else
-                        {
-                            TextBlock data = new TextBlock()
-                            {
-                                Text = "",
-                                VerticalAlignment = VerticalAlignment.Center,
-                                Margin = new Thickness(5, 0, 0, 0),
-                                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
-                            };
-                            (control as Grid).Children.Add(data);
+                            Grid.SetRow(data, 1);
+                    }
 
-                            if (customization.ShowDetailOnOneLine)
-                                Grid.SetColumn(data, 1);
-                            else
-                                Grid.SetRow(data, 1);
-                        }
+                    break;
 
-                        break;
+                case PropertyType.notImplementedYet:
 
-                    case PropertyType.notImplementedYet:
+                    control = new Grid()
+                    {
+                        Background = new SolidColorBrush(Colors.Red),
+                        Margin = new Thickness(10),
+                        Height = 25
+                    };
+                    break;
 
-                        control = new Grid()
-                        {
-                            Background = new SolidColorBrush(Colors.Red),
-                            Margin = new Thickness(10),
-                            Height = 25
-                        };
-                        break;
-
-                    default:
-                        throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
-                }
+                default:
+                    throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
+            }
 
             RelativePanel.SetAlignLeftWithPanel(control, true);
             RelativePanel.SetAlignRightWithPanel(control, true);
