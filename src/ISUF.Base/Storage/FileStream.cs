@@ -1,6 +1,7 @@
 using ISUF.Base.Service;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.Storage;
@@ -18,18 +19,15 @@ namespace ISUF.Base.Storage
         /// <returns>Collection of items of type T</returns>
         public static async Task<T> ReadDataAsync(string fileName, string path, int attempts = 0)
         {
-            T readedObjects = default(T);
-            Stream xmlStream = null;
+            T readedObjects = default;
 
             try
             {
                 XmlSerializer serializ = new XmlSerializer(typeof(T));
-                xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName);
 
-                using (xmlStream)
-                {
-                    readedObjects = (T)serializ.Deserialize(xmlStream);
-                }
+                if ((await ApplicationData.Current.LocalFolder.GetFilesAsync()).FirstOrDefault(x => x.Name == fileName) != null)
+                    using (var xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName))
+                        readedObjects = (T)serializ.Deserialize(xmlStream);
 
                 if (readedObjects != null)
                 {
@@ -51,11 +49,6 @@ namespace ISUF.Base.Storage
             catch (Exception e)
             {
                 throw new Exceptions.Exception("Unhandled exception", e);
-            }
-
-            finally
-            {
-                xmlStream?.Close();
             }
         }
 

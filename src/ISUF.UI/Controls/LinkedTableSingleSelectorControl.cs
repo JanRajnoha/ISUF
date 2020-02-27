@@ -18,13 +18,13 @@ namespace ISUF.UI.Controls
     public class LinkedTableSingleSelectorControl : Grid
     {
         private int selectedLinkedId;
-        private UIModule uiModule;
         private Button linkedTableRowSelector;
         private TextBlock selectedIdLabel;
+        private PropertyAnalyze controlData;
 
-        public LinkedTableSingleSelectorControl(string controlName, PropertyAnalyze controlData, UIModule uiModule)
+        public LinkedTableSingleSelectorControl(string controlName, PropertyAnalyze controlData)
         {
-            this.uiModule = uiModule;
+            this.controlData = controlData;
 
             CreateUI(controlName, controlData);
         }
@@ -109,7 +109,7 @@ namespace ISUF.UI.Controls
                 selectedIdLabel.Text = "Selected ID: " + selectedLinkedId.ToString();
         }
 
-        public static UIElement CreateLinkedTableSelectorControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, UIModule uiModule)
+        public static UIElement CreateLinkedTableSelectorControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
         {
             if (controlData is null)
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
@@ -120,7 +120,7 @@ namespace ISUF.UI.Controls
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
 
-            var control = new LinkedTableSingleSelectorControl(controlName, controlData, uiModule)
+            var control = new LinkedTableSingleSelectorControl(controlName, controlData)
             {
                 Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                 Margin = new Thickness(10)
@@ -131,7 +131,7 @@ namespace ISUF.UI.Controls
 
         private void LinkedTableRowSelector_Click(object sender, RoutedEventArgs e)
         {
-            LinkedTableSelector selector = new LinkedTableSelector(uiModule);
+            LinkedTableSelector selector = new LinkedTableSelector(controlData);
             selector.ShowSelector(Selector_Closed);
 
         }

@@ -156,23 +156,21 @@ namespace ISUF.Base.Update.UpdateHistory
         /// <returns>Collection of items of type T</returns>
         public async Task ReadDataAsync(int attempts = 0)
         {
-            Stream xmlStream = null;
-
             try
             {
-                XmlSerializer Serializ = new XmlSerializer(typeof(UpdateHistoryFile));
-                xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName);
 
-                object readedObjects;
-                using (xmlStream)
-                {
-                    readedObjects = (UpdateHistoryFile) Serializ.Deserialize(xmlStream);
-                }
+
+                XmlSerializer Serializ = new XmlSerializer(typeof(UpdateHistoryFile));
+                object readedObjects = null;
+
+                if ((await ApplicationData.Current.LocalFolder.GetFilesAsync()).FirstOrDefault(x => x.Name == FileName) != null)
+                    using (var xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName))
+                        readedObjects = (UpdateHistoryFile)Serializ.Deserialize(xmlStream);
 
                 if (readedObjects != null)
                 {
-                    LastVersion = new Version(((UpdateHistoryFile) readedObjects).LastVersion);
-                    UpdateList = ((UpdateHistoryFile) readedObjects).UpdateList;
+                    LastVersion = new Version(((UpdateHistoryFile)readedObjects).LastVersion);
+                    UpdateList = ((UpdateHistoryFile)readedObjects).UpdateList;
                 }
                 else
                 {
@@ -194,8 +192,6 @@ namespace ISUF.Base.Update.UpdateHistory
             }
             finally
             {
-                xmlStream?.Close();
-                xmlStream?.Dispose();
                 LastVersion = new Version(0, 0, 0, 0);
                 UpdateList = new List<UpdateItem>();
             }

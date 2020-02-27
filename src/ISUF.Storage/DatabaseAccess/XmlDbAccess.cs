@@ -122,7 +122,7 @@ namespace ISUF.Storage.DatabaseAccess
                 XmlSerializer serializer = new XmlSerializer(typeof(ItemStorage<T>));
 
                 object readedObjects;
-                using (Stream xmlStream = File.OpenRead($@"{connectionsString}\{tableName}.xml"))
+                using (Stream xmlStream = File.Open($@"{connectionsString}\{tableName}.xml", FileMode.OpenOrCreate))
                 {
                     if (xmlStream.Length == 0)
                         return new ObservableCollection<T>();

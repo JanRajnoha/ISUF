@@ -202,8 +202,6 @@ namespace ISUF.UI.Controls
                     }
                     else
                         view.BlurLayer.Blur(8, 1).Start();
-
-                    //view.Conta(FocusState.Keyboard);
                 }
                 else
                 {

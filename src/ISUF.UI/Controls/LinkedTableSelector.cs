@@ -1,5 +1,8 @@
+using ISUF.Base.Attributes;
 using ISUF.Base.Classes;
 using ISUF.Base.Enum;
+using ISUF.Base.Modules;
+using ISUF.Storage.Modules;
 using ISUF.UI.App;
 using ISUF.UI.Modules;
 using System;
@@ -16,15 +19,17 @@ namespace ISUF.UI.Controls
     public class LinkedTableSelector : ModalWindow
     {
         private ListView selectorContent;
-        private MessageDialogResult selectorResult;
         private Messenger messenger;
-        private UIModule uiModule;
+        private PropertyAnalyze controlData;
         private Action<MessageDialogResult, IList<object>> selectorResultFunction;
+        private LinkedTableAttribute linkedTableAttribute;
 
-        public LinkedTableSelector(UIModule uiModule)
+        public LinkedTableSelector(PropertyAnalyze controlData)
         {
             messenger = ApplicationBase.Current.VMLocator.GetMessenger();
-            this.uiModule = uiModule;
+            this.controlData = controlData;
+
+            linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
         }
 
         public void ShowSelector(Action<MessageDialogResult, IList<object>> selectorResult, bool useDesignAnimation = true)
@@ -35,8 +40,6 @@ namespace ISUF.UI.Controls
             selectorResultFunction = selectorResult;
 
             ShowModal(CloseSelector, selectorContent, true, MessageDialogButtons.OkCancel, useDesignAnimation);
-
-            var xx = selectorContent.Focus(FocusState.Programmatic);
         }
 
         private void CloseSelector(MessageDialogResult obj)
@@ -46,17 +49,31 @@ namespace ISUF.UI.Controls
 
         private void FillContent(ListView selectorContent)
         {
-            MethodInfo method = uiModule.GetType().GetMethod("GetAllItems");
-            MethodInfo genericMethod = method.MakeGenericMethod(uiModule.ModuleItemType);
+            MethodInfo method = typeof(StorageModule).GetMethod("GetAllItems");
 
-            selectorContent.ItemsSource = genericMethod.Invoke(uiModule, null);
+            StorageModule linkedModule = GetLinkedUIModule();
+            MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+            selectorContent.ItemsSource = genericMethod.Invoke(linkedModule, null);
+        }
+
+        private StorageModule GetLinkedUIModule()
+        {
+            return ApplicationBase.Current.ModuleManager.GetModule(linkedTableAttribute.LinkedTableType) as StorageModule;
         }
 
         private ListView CreateSelectorContent()
         {
+            ListViewSelectionMode selectionMode;
+
+            if (linkedTableAttribute.LinkedTableRelation == LinkedTableRelation.One)
+                selectionMode = ListViewSelectionMode.Single;
+            else
+                selectionMode = ListViewSelectionMode.Multiple;
+
             return new ListView()
             {
-
+                SelectionMode = selectionMode
             };
         }
     }
