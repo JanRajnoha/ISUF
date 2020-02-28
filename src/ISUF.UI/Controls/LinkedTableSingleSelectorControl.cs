@@ -18,7 +18,6 @@ namespace ISUF.UI.Controls
     public class LinkedTableSingleSelectorControl : Grid
     {
         private int selectedLinkedId;
-        private Button linkedTableRowSelector;
         private TextBlock selectedIdLabel;
         private PropertyAnalyze controlData;
 
@@ -73,7 +72,7 @@ namespace ISUF.UI.Controls
             SetRow(linkedTableControlsRowGrid, 1);
             Children.Add(linkedTableControlsRowGrid);
 
-            linkedTableRowSelector = new Button
+            Button linkedTableRowSelector = new Button
             {
                 Content = "Choose row",
                 VerticalAlignment = VerticalAlignment.Center,
@@ -101,15 +100,15 @@ namespace ISUF.UI.Controls
             return selectedLinkedId;
         }
 
-        public void SetSelectedId(int id)
+        public void SetSelectedId(AtomicItem selectedItem)
         {
-            selectedLinkedId = id;
+            selectedLinkedId = selectedItem.Id;
 
             if (selectedIdLabel != null)
                 selectedIdLabel.Text = "Selected ID: " + selectedLinkedId.ToString();
         }
 
-        public static UIElement CreateLinkedTableSelectorControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
+        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
         {
             if (controlData is null)
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
@@ -133,13 +132,12 @@ namespace ISUF.UI.Controls
         {
             LinkedTableSelector selector = new LinkedTableSelector(controlData);
             selector.ShowSelector(Selector_Closed);
-
         }
 
         private void Selector_Closed(MessageDialogResult result, IList<object> selectedIds)
         {
             if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)
-                SetSelectedId((selectedIds[0] as AtomicItem).Id);
+                SetSelectedId(selectedIds[0] as AtomicItem);
         }
     }
 }

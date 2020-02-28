@@ -166,13 +166,14 @@ namespace ISUF.UI.ViewModel
         protected virtual void SaveItem()
         {
             FillValuesFromFormIntoItem();
-            uiModule.AddItem(AddEditItem);
 
             ItemAddSavedMsg msg = new ItemAddSavedMsg()
             {
                 ID = AddEditItem.Id,
                 ItemType = itemType
             };
+
+            uiModule.AddItem(AddEditItem);
 
             messenger.Send(msg);
         }

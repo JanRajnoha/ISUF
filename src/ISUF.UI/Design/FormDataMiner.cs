@@ -45,15 +45,28 @@ namespace ISUF.UI.Design
 
             else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
                 if (value is IList<int> intValues)
-                    (formControl as LinkedTableMultiSelectorControl).SetSelectedIds(intValues);
+                {
+                    List<AtomicItem> selectedItems = new List<AtomicItem>();
+
+                    foreach (var intValue in intValues)
+                    {
+
+                    }
+
+                    (formControl as LinkedTableMultiSelectorControl).SetSelectedIds(selectedItems);
+                }
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
             else if (formControl.GetType() == typeof(LinkedTableSingleSelectorControl))
                 if (value is int intValue)
-                    (formControl as LinkedTableSingleSelectorControl).SetSelectedId(intValue);
-            else
-                throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
+                {
+                    AtomicItem selectedItem = new AtomicItem();
+
+                    (formControl as LinkedTableSingleSelectorControl).SetSelectedId(selectedItem);
+                }
+                else
+                    throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
             else if (formControl.GetType() == typeof(CalendarDatePicker))
                 (formControl as CalendarDatePicker).Date = (DateTime)value;

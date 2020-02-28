@@ -2,6 +2,7 @@ using ISUF.Base.Attributes;
 using ISUF.Base.Classes;
 using ISUF.Base.Enum;
 using ISUF.Base.Modules;
+using ISUF.Base.Template;
 using ISUF.Storage.Modules;
 using ISUF.UI.App;
 using ISUF.UI.Modules;
@@ -32,10 +33,10 @@ namespace ISUF.UI.Controls
             linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
         }
 
-        public void ShowSelector(Action<MessageDialogResult, IList<object>> selectorResult, bool useDesignAnimation = true)
+        public void ShowSelector(Action<MessageDialogResult, IList<object>> selectorResult, IList<int> selectedIds = null, bool useDesignAnimation = true)
         {
             selectorContent = CreateSelectorContent();
-            FillContent(selectorContent);
+            FillContent(selectorContent, selectedIds);
 
             selectorResultFunction = selectorResult;
 
@@ -47,12 +48,17 @@ namespace ISUF.UI.Controls
             selectorResultFunction.Invoke(obj, selectorContent.SelectedItems);
         }
 
-        private void FillContent(ListView selectorContent)
+        private void FillContent(ListView selectorContent, IList<int> selectedIds)
         {
             MethodInfo method = typeof(StorageModule).GetMethod("GetAllItems");
 
             StorageModule linkedModule = GetLinkedUIModule();
             MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+            var allItems = genericMethod.Invoke(linkedModule, null) as IList<AtomicItem>;
+
+            if (selectedIds != null && selectedIds.Count != 0)
+                allItems = allItems.Where(x => !selectedIds.Contains(x.Id)).ToList();
 
             selectorContent.ItemsSource = genericMethod.Invoke(linkedModule, null);
         }

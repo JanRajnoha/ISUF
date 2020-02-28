@@ -2,6 +2,8 @@ using ISUF.Base.Attributes;
 using ISUF.Base.Enum;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
+using ISUF.Base.Template;
+using ISUF.Interface.UI;
 using ISUF.UI.Classes;
 using System;
 using System.Collections.Generic;
@@ -17,39 +19,20 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableMultiSelectorControl : Grid
     {
-        private IList<int> presentedLinkedIds = new List<int>();
+        private IList<int> selectedIds = new List<int>();
+        private ListBox linkedTableSelectedIds;
+        private PropertyAnalyze controlData;
 
-        public LinkedTableMultiSelectorControl()
+        public LinkedTableMultiSelectorControl(string controlName, PropertyAnalyze controlData)
         {
+            this.controlData = controlData;
 
+            CreateUI(controlName, controlData);
         }
 
-        public IList<int> GetSelectedIds()
+        private void CreateUI(string controlName, PropertyAnalyze controlData)
         {
-            return presentedLinkedIds;
-        }
-
-        public void SetSelectedIds(IList<int> ids)
-        {
-            presentedLinkedIds = ids;
-        }
-
-        public static UIElement CreateLinkedTablePresenterControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
-        {
-            if (controlData is null)
-                throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
-
-            if (controlType != PropertyType.Int && controlType != PropertyType.Int32)
-                throw new Base.Exceptions.ArgumentOutOfRangeException(nameof(controlData), "Type of linked table presenter property must be integer.");
-
-            if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
-                throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
-
-            var control = new LinkedTableMultiSelectorControl()
-            {
-                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                Margin = new Thickness(10)
-            };
+            var customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 
             RowDefinition labelRow = new RowDefinition()
             {
@@ -63,12 +46,12 @@ namespace ISUF.UI.Controls
 
             RowDefinition linkedTablePresenterRow = new RowDefinition()
             {
-                Height = new GridLength(150, GridUnitType.Pixel)
+                Height = new GridLength(250, GridUnitType.Pixel)
             };
 
-            control.RowDefinitions.Add(labelRow);
-            control.RowDefinitions.Add(linkedTableControlsRow);
-            control.RowDefinitions.Add(linkedTablePresenterRow);
+            RowDefinitions.Add(labelRow);
+            RowDefinitions.Add(linkedTableControlsRow);
+            RowDefinitions.Add(linkedTablePresenterRow);
 
             TextBlock label = new TextBlock()
             {
@@ -78,7 +61,7 @@ namespace ISUF.UI.Controls
                 Margin = new Thickness(0, 0, 0, 5)
             };
             SetRow(label, 0);
-            control.Children.Add(label);
+            Children.Add(label);
 
             ColumnDefinition linkedTablePresenterColumn = new ColumnDefinition()
             {
@@ -95,7 +78,7 @@ namespace ISUF.UI.Controls
             linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTablePresenterInfoColumn);
 
             SetRow(linkedTableControlsRowGrid, 1);
-            control.Children.Add(linkedTableControlsRowGrid);
+            Children.Add(linkedTableControlsRowGrid);
 
             Button linkedTableRowAdder = new Button()
             {
@@ -103,6 +86,8 @@ namespace ISUF.UI.Controls
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 0, 5, 0)
             };
+
+            linkedTableRowAdder.Click += LinkedTableRowSelector_Click;
 
             Button linkedTableRowRemover = new Button()
             {
@@ -126,16 +111,58 @@ namespace ISUF.UI.Controls
             linkedTableControlsRowGrid.Children.Add(linkedTableRowAdder);
             linkedTableControlsRowGrid.Children.Add(linkedTableRowRemover);
 
-            ListBox linkedTableSelectedIds = new ListBox()
+            linkedTableSelectedIds = new ListBox()
             {
-                Background = new SolidColorBrush(Colors.Red),
-                VerticalAlignment = VerticalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
                 Margin = new Thickness(0, 0, 0, 5)
             };
 
             SetRow(linkedTableSelectedIds, 2);
+            Children.Add(linkedTableSelectedIds);
+        }
+
+        public IList<int> GetSelectedIds()
+        {
+            return selectedIds;
+        }
+
+        public void SetSelectedIds(IList<AtomicItem> selectedItems)
+        {
+            selectedIds = selectedItems.Select(x => x.Id).ToList();
+            linkedTableSelectedIds.ItemsSource = selectedItems.Select(x => x.ToString()).ToList();
+        }
+
+        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
+        {
+            if (controlData is null)
+                throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
+
+            if (controlType != PropertyType.Int && controlType != PropertyType.Int32)
+                throw new Base.Exceptions.ArgumentOutOfRangeException(nameof(controlData), "Type of linked table presenter property must be integer.");
+
+            if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
+                throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
+
+            var control = new LinkedTableMultiSelectorControl(controlName, controlData)
+            {
+                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                Margin = new Thickness(10)
+            };
 
             return control;
+        }
+
+        private void LinkedTableRowSelector_Click(object sender, RoutedEventArgs e)
+        {
+            LinkedTableSelector selector = new LinkedTableSelector(controlData);
+            selector.ShowSelector(Selector_Closed, selectedIds);
+        }
+
+        private void Selector_Closed(MessageDialogResult result, IList<object> selectedIds)
+        {
+            if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)
+                SetSelectedIds(selectedIds.Cast<AtomicItem>().ToList());
         }
     }
 }
