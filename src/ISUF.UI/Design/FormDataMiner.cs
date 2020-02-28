@@ -30,22 +30,23 @@ namespace ISUF.UI.Design
 
                 var value = itemProp.GetValue(item);
 
-                if (value != null)
-                    GetValueIntoControl(formControl, value);
+                GetValueIntoControl(formControl, value);
             }
         }
 
         private static void GetValueIntoControl(FrameworkElement formControl, object value)
         {
             if (formControl.GetType() == typeof(TextBox))
-                (formControl as TextBox).Text = value.ToString();
+                (formControl as TextBox).Text = value == null ? "" : value.ToString();
 
             else if (formControl.GetType() == typeof(TextBlock))
-                (formControl as TextBlock).Text = value.ToString();
+                (formControl as TextBlock).Text = value == null ? "" : value.ToString();
 
             else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
-                if (value is IList<int> intValues)
+                if (value is IList<int> || value == null)
                 {
+                    IList<int> intValues = value == null ? new List<int>() : (IList<int>)value;
+
                     List<AtomicItem> selectedItems = new List<AtomicItem>();
 
                     foreach (var intValue in intValues)
@@ -69,11 +70,11 @@ namespace ISUF.UI.Design
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
             else if (formControl.GetType() == typeof(CalendarDatePicker))
-                (formControl as CalendarDatePicker).Date = (DateTime)value;
+                (formControl as CalendarDatePicker).Date = value == null ? DateTime.Today : (DateTime)value;
 
             else if (formControl.GetType() == typeof(TimePicker))
-                if (value is DateTime dateTimeValue)
-                    (formControl as TimePicker).Time = dateTimeValue.TimeOfDay;
+                if (value is DateTime  || value == null)
+                    (formControl as TimePicker).Time = value == null ? DateTime.Today.TimeOfDay : ((DateTime)value).TimeOfDay;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 

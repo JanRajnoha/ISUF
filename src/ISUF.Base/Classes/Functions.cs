@@ -143,5 +143,10 @@ namespace ISUF.Base.Classes
                 return false;
             }
         }
+
+        public static object CreateInstance(Type instanceType, params object[] instanceArgs)
+        {
+            return Activator.CreateInstance(instanceType, instanceArgs);
+        }
     }
 }

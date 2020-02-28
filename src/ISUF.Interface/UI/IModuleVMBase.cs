@@ -22,7 +22,7 @@ namespace ISUF.Interface.UI
 
         ListViewSelectionMode ListSelectionMode { get; set; }
 
-        ObservableCollection<T> Source { get; set; }
+        List<T> Source { get; set; }
 
         ObservableCollection<PivotItem> PivotPanes { get; set; }
 

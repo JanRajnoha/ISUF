@@ -26,8 +26,8 @@ namespace ISUF.UI.ViewModel
 {
     public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
     {
-        readonly ModuleAddControlBase form;
-        readonly Type itemType;
+        private readonly ModuleAddControlBase form;
+        private readonly Type itemType;
 
         UserActivitySession currentActivity;
 
@@ -42,6 +42,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 addEditItem = value;
+                FillValuesFromItemIntoForm();
                 PropertyChangedNotifier.NotifyPropertyChanged(GetType(), AddEditItem);
             }
         }
@@ -176,12 +177,23 @@ namespace ISUF.UI.ViewModel
             uiModule.AddItem(AddEditItem);
 
             messenger.Send(msg);
+
+            AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
         }
 
-        public void FillValuesFromFormIntoItem()
+        private void FillValuesFromFormIntoItem()
         {
             var formControls = FormDataMiner.GetControlsFromForm(form);
             AddEditItem = FormDataMiner.FillValuesIntoProperty(formControls, AddEditItem);
+        }
+
+        private void FillValuesFromItemIntoForm()
+        {
+            if (form == null)
+                return;
+
+            var formControls = FormDataMiner.GetControlsFromForm(form);
+            FormDataMiner.FillValuesIntoForm(formControls, AddEditItem);
         }
 
         private void SaveCloseItem()

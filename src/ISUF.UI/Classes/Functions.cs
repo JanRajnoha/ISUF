@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ISUF.UI.App;
+using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -93,6 +94,15 @@ namespace ISUF.UI.Classes
             }
 
             return results;
+        }
+
+        public static void CreateViewModel(Type viewModelType, bool rewriteViewModel = false, params object[] viewModelArgs)
+        {
+            if (ApplicationBase.Current.VMLocator.GetViewModel(viewModelType) != null && !rewriteViewModel)
+                return;
+
+            object viewModel = Base.Classes.Functions.CreateInstance(viewModelType, viewModelArgs);
+            ApplicationBase.Current.VMLocator.AddViewModel(viewModel, rewriteViewModel);
         }
     }
 }

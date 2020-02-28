@@ -2,6 +2,7 @@
 using ISUF.Base.Template;
 using ISUF.Interface.Storage;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -59,12 +60,7 @@ namespace ISUF.Storage.Modules
             return itemManager.RemoveItem<T>(id);
         }
 
-        public ObservableCollection<T> GetAllItems<T>() where T : AtomicItem
-        {
-            return GetAllItemsAsync<T>().Result;
-        }
-
-        public Task<ObservableCollection<T>> GetAllItemsAsync<T>() where T : AtomicItem
+        public List<T> GetAllItems<T>() where T : AtomicItem
         {
             return itemManager.GetAllItems<T>();
         }

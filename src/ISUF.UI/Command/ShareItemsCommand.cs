@@ -4,6 +4,7 @@ using ISUF.Base.Template;
 using ISUF.Security;
 using ISUF.Storage.Storage;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace ISUF.UI.Command
                     TypeOfItem = itemTypeName
                 };
 
-                foreach (var item in new ObservableCollection<T>(itemList.SelectedItems.Cast<T>().Select(x => (T)x.Clone()).ToList()))
+                foreach (var item in new List<T>(itemList.SelectedItems.Cast<T>().Select(x => (T)x.Clone()).ToList()))
                 {
                     T itemToShare = item;
 

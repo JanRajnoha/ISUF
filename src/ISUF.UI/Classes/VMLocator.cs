@@ -15,11 +15,19 @@ namespace ISUF.UI.Classes
 
         public Dictionary<Type, object> ViewModels { get; set; } = new Dictionary<Type, object>();
 
-        public bool AddViewModel(object newViewModel)
+        public bool AddViewModel(object newViewModel, bool rewriteViewModel = false)
         {
+            if (newViewModel == null)
+                throw new Base.Exceptions.ArgumentNullException("ViewModel is null.");
+
             if (!ViewModels.ContainsKey(newViewModel.GetType()))
             {
                 ViewModels.Add(newViewModel.GetType(), newViewModel);
+                return true;
+            }
+            else if (rewriteViewModel)
+            {
+                ViewModels[newViewModel.GetType()] = newViewModel;
                 return true;
             }
             else

@@ -29,13 +29,13 @@ namespace ISUF.UI.Views
             this.uiModule = uiModule;
         }
 
-        protected override void CreateViewModel()
+        protected override void CreateViewModel(bool rewriteViewModel = false)
         {
             var vma = viewModelArgs.ToList();
             vma.Add(this);
             viewModelArgs = vma.ToArray();
 
-            base.CreateViewModel();
+            base.CreateViewModel(rewriteViewModel);
         }
 
         public override void AddControls()

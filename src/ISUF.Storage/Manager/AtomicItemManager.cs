@@ -21,6 +21,8 @@ namespace ISUF.Storage.Manager
         protected string moduleName;
         protected Type moduleItemType;
         protected IDatabaseAccess dbAccess;
+        protected object itemsSource;
+        protected bool dbMemoryDirty = true;
 
         // TODO dopsat dokumentaci
         /// <summary>
@@ -63,7 +65,8 @@ namespace ISUF.Storage.Manager
             newItem.Encrypted = false;
             newItem.ManagerID = id;
 
-            var itemSource = dbAccess.GetAllItems<T>();
+            var itemSource = GetAllItems<T>();
+            dbMemoryDirty = true;
 
             if (!AddItemAdditionCheck(item))
                 return false;
@@ -99,6 +102,7 @@ namespace ISUF.Storage.Manager
         public virtual async Task<bool> AddItemRange<T>(List<T> itemList, bool checkItems = true) where T : AtomicItem
         {
             bool res = true;
+            dbMemoryDirty = true;
 
             foreach (var item in itemList)
             {
@@ -129,6 +133,7 @@ namespace ISUF.Storage.Manager
         {
             //UpdatePhraseList();
 
+            dbMemoryDirty = true;
             return await dbAccess.RemoveItemFromDatabase<T>(id);
         }
 
@@ -137,7 +142,7 @@ namespace ISUF.Storage.Manager
         /// If not, return next ID from row.
         /// </summary>
         /// <returns>New ID</returns>
-        protected virtual int GetID<T>(ObservableCollection<T> itemSource) where T : AtomicItem
+        protected virtual int GetID<T>(List<T> itemSource) where T : AtomicItem
         {
             int index = 0;
 
@@ -161,7 +166,10 @@ namespace ISUF.Storage.Manager
         /// <returns>Item</returns>
         public virtual T GetItem<T>(int ID) where T : AtomicItem
         {
-            return dbAccess.GetItem<T>(ID);
+            if (dbMemoryDirty)
+                itemsSource = GetAllItems<T>();
+
+            return (itemsSource as List<T>).FirstOrDefault(x => x.Id == ID);
         }
 
         public virtual void UpdateDatabaseTable()
@@ -179,11 +187,15 @@ namespace ISUF.Storage.Manager
             dbAccess.RemoveDatabaseTable(moduleItemType);
         }
 
-        public virtual async Task<ObservableCollection<T>> GetAllItems<T>() where T : AtomicItem
+        public virtual List<T> GetAllItems<T>() where T : AtomicItem
         {
-            var itemSource = dbAccess.GetAllItems<T>();
+            if (dbMemoryDirty)
+            {
+                itemsSource = dbAccess.GetAllItems<T>();
+                dbMemoryDirty = false;
+            }
 
-            return itemSource ?? new ObservableCollection<T>();
+            return itemsSource as List<T> ?? new List<T>();
         }
 
         /// <summary>
@@ -191,7 +203,7 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="reloadItems">Reload collection after changing security</param>
         /// <returns>Collection of items</returns>
-        public virtual async Task<ObservableCollection<T>> GetItemsAsync<T>() where T : AtomicItem
+        public virtual async Task<List<T>> GetItemsAsync<T>() where T : AtomicItem
         {
             var itemSource = dbAccess.GetAllItems<T>();
 

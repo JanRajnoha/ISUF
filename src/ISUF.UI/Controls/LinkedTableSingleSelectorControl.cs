@@ -134,7 +134,7 @@ namespace ISUF.UI.Controls
             selector.ShowSelector(Selector_Closed);
         }
 
-        private void Selector_Closed(MessageDialogResult result, IList<object> selectedIds)
+        private void Selector_Closed(MessageDialogResult result, List<object> selectedIds)
         {
             if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)
                 SetSelectedId(selectedIds[0] as AtomicItem);

@@ -16,7 +16,7 @@ namespace ISUF.Interface.Storage
 
         Task<bool> AddItemRange<T>(List<T> item, bool checkItems = true) where T : AtomicItem;
 
-        Task<ObservableCollection<T>> GetAllItems<T>() where T : AtomicItem;
+        List<T> GetAllItems<T>() where T : AtomicItem;
 
         Task<bool> RemoveItem<T>(T detailedItem) where T : AtomicItem;
 

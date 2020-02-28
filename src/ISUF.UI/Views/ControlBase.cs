@@ -1,3 +1,4 @@
+using ISUF.Base.Classes;
 using ISUF.Interface.UI;
 using ISUF.UI.App;
 using System;
@@ -20,7 +21,7 @@ namespace ISUF.UI.Views
             this.viewModelType = viewModelType;
             this.viewModelArgs = viewModelArgs;
 
-            CreateViewModel();
+            CreateViewModel(true);
 
             Loading += ControlBase_Loading;
         }
@@ -32,10 +33,9 @@ namespace ISUF.UI.Views
             CreateControlsForModule();
         }
 
-        protected virtual void CreateViewModel()
+        protected virtual void CreateViewModel(bool rewriteViewModel = false)
         {
-            object viewModel = Activator.CreateInstance(viewModelType, viewModelArgs);
-            ApplicationBase.Current.VMLocator.AddViewModel(viewModel);
+            Classes.Functions.CreateViewModel(viewModelType, rewriteViewModel, viewModelArgs);
         }
 
         public abstract void AddControls();

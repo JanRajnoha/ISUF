@@ -8,6 +8,7 @@ using ISUF.UI.App;
 using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -22,7 +23,7 @@ namespace ISUF.UI.Controls
         private ListView selectorContent;
         private Messenger messenger;
         private PropertyAnalyze controlData;
-        private Action<MessageDialogResult, IList<object>> selectorResultFunction;
+        private Action<MessageDialogResult, List<object>> selectorResultFunction;
         private LinkedTableAttribute linkedTableAttribute;
 
         public LinkedTableSelector(PropertyAnalyze controlData)
@@ -33,7 +34,7 @@ namespace ISUF.UI.Controls
             linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
         }
 
-        public void ShowSelector(Action<MessageDialogResult, IList<object>> selectorResult, IList<int> selectedIds = null, bool useDesignAnimation = true)
+        public void ShowSelector(Action<MessageDialogResult, List<object>> selectorResult, List<int> selectedIds = null, bool useDesignAnimation = true)
         {
             selectorContent = CreateSelectorContent();
             FillContent(selectorContent, selectedIds);
@@ -45,22 +46,22 @@ namespace ISUF.UI.Controls
 
         private void CloseSelector(MessageDialogResult obj)
         {
-            selectorResultFunction.Invoke(obj, selectorContent.SelectedItems);
+            selectorResultFunction.Invoke(obj, selectorContent.SelectedItems.ToList());
         }
 
-        private void FillContent(ListView selectorContent, IList<int> selectedIds)
+        private void FillContent(ListView selectorContent, List<int> selectedIds)
         {
             MethodInfo method = typeof(StorageModule).GetMethod("GetAllItems");
 
             StorageModule linkedModule = GetLinkedUIModule();
             MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
 
-            var allItems = genericMethod.Invoke(linkedModule, null) as IList<AtomicItem>;
+            var allItems = Convert.ChangeType(genericMethod.Invoke(linkedModule, null), genericMethod.ReturnType) as IReadOnlyList<AtomicItem>;
 
             if (selectedIds != null && selectedIds.Count != 0)
                 allItems = allItems.Where(x => !selectedIds.Contains(x.Id)).ToList();
 
-            selectorContent.ItemsSource = genericMethod.Invoke(linkedModule, null);
+            selectorContent.ItemsSource = allItems;
         }
 
         private StorageModule GetLinkedUIModule()

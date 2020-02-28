@@ -72,8 +72,8 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private ObservableCollection<T> source /*= new ObservableCollection<T>()*/;
-        public ObservableCollection<T> Source
+        private List<T> source /*= new ObservableCollection<T>()*/;
+        public List<T> Source
         {
             get => source;
             set
@@ -262,14 +262,14 @@ namespace ISUF.UI.ViewModel
             if (obj.FormType == GetType())
                 Source = uiModule.GetAllItems<T>();
 
-            UpdateSourceAsync(true);
+            UpdateSource(true);
         }
 
         protected virtual async void NewItemAdded(ItemAddSavedMsg obj)
         {
             if (obj.ItemType == ItemType)
             {
-                await UpdateSourceAsync(true);
+                UpdateSource(true);
 
                 string NotifyText = "Item was added";
 
@@ -287,9 +287,9 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        protected virtual async Task UpdateSourceAsync(bool secureChanged = false)
+        protected virtual void UpdateSource(bool secureChanged = false)
         {
-            Source = await uiModule.GetAllItemsAsync<T>();
+            Source = uiModule.GetAllItems<T>();
         }
 
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

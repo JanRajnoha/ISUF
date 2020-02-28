@@ -19,7 +19,7 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableMultiSelectorControl : Grid
     {
-        private IList<int> selectedIds = new List<int>();
+        private List<int> selectedIds = new List<int>();
         private ListBox linkedTableSelectedIds;
         private PropertyAnalyze controlData;
 
@@ -122,15 +122,19 @@ namespace ISUF.UI.Controls
             Children.Add(linkedTableSelectedIds);
         }
 
-        public IList<int> GetSelectedIds()
+        public List<int> GetSelectedIds()
         {
             return selectedIds;
         }
 
-        public void SetSelectedIds(IList<AtomicItem> selectedItems)
+        public void SetSelectedIds(List<AtomicItem> selectedItems)
         {
             selectedIds = selectedItems.Select(x => x.Id).ToList();
-            linkedTableSelectedIds.ItemsSource = selectedItems.Select(x => x.ToString()).ToList();
+
+            foreach (var item in selectedItems)
+            {
+                linkedTableSelectedIds.Items.Add(item.ToString());
+            }
         }
 
         public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
@@ -159,7 +163,7 @@ namespace ISUF.UI.Controls
             selector.ShowSelector(Selector_Closed, selectedIds);
         }
 
-        private void Selector_Closed(MessageDialogResult result, IList<object> selectedIds)
+        private void Selector_Closed(MessageDialogResult result, List<object> selectedIds)
         {
             if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)
                 SetSelectedIds(selectedIds.Cast<AtomicItem>().ToList());

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.Storage;
+using System.Collections.Generic;
 
 namespace ISUF.Storage.Manager
 {
@@ -26,8 +27,8 @@ namespace ISUF.Storage.Manager
         string path { get; set; } = string.Empty;
         string fileName { get; set; } = string.Empty;
 
-        protected ObservableCollection<T> ItemsSource { get; set; } = null;
-        protected ObservableCollection<T> ItemsSourceAll { get; set; } = new ObservableCollection<T>();
+        protected List<T> ItemsSource { get; set; } = null;
+        protected List<T> ItemsSourceAll { get; set; } = new List<T>();
 
         /// <summary>
         /// Set file name, that has serializaed data of type T
@@ -46,7 +47,7 @@ namespace ISUF.Storage.Manager
         /// </summary>
         /// <param name="attempts">Number of attempts</param>
         /// <returns>Collection of items of type T</returns>
-        protected async Task<ObservableCollection<T>> ReadDataAsync(int attempts = 0)
+        protected async Task<List<T>> ReadDataAsync(int attempts = 0)
         {
             try
             {
@@ -66,10 +67,10 @@ namespace ISUF.Storage.Manager
                     ItemsSourceAll = ((ItemStorage<T>)readedObjects).Items;
                     ItemsSource = ((ItemStorage<T>)readedObjects).Items;
 
-                    return new ObservableCollection<T>(((ItemStorage<T>)readedObjects).Items.Where(GetValidItems));
+                    return new List<T>(((ItemStorage<T>)readedObjects).Items.Where(GetValidItems));
                 }
                 else
-                    return new ObservableCollection<T>();
+                    return new List<T>();
             }
 
             // When is file unavailable - 10 attempts is enough
@@ -175,12 +176,12 @@ namespace ISUF.Storage.Manager
         /// Get source collection of all items of type T for serializing
         /// </summary>
         /// <returns>Collection of items of type T</returns>
-        abstract protected ObservableCollection<T> GetFinalCollection();
+        abstract protected List<T> GetFinalCollection();
 
         /// <summary>
         /// Set source collection of items of type T for serializing
         /// </summary>
         /// <returns>Collection of items of type T</returns>
-        abstract public void SetSourceCollection(ObservableCollection<T> source);
+        abstract public void SetSourceCollection(List<T> source);
     }
 }
