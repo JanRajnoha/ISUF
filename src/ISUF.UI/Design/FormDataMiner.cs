@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using Windows.UI.Xaml.Controls;
 using ISUF.Base.Template;
+using ISUF.UI.App;
+using ISUF.Storage.Modules;
 
 namespace ISUF.UI.Design
 {
@@ -36,51 +38,58 @@ namespace ISUF.UI.Design
 
         private static void GetValueIntoControl(FrameworkElement formControl, object value)
         {
-            if (formControl.GetType() == typeof(TextBox))
-                (formControl as TextBox).Text = value == null ? "" : value.ToString();
+            if (formControl is TextBox textBoxControl)
+                textBoxControl.Text = value == null ? "" : value.ToString();
 
-            else if (formControl.GetType() == typeof(TextBlock))
-                (formControl as TextBlock).Text = value == null ? "" : value.ToString();
+            else if (formControl is TextBlock textBlockControl)
+                textBlockControl.Text = value == null ? "" : value.ToString();
 
-            else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
+            else if (formControl is LinkedTableMultiSelectorControl multiSelectorControl)
                 if (value is IList<int> || value == null)
                 {
-                    IList<int> intValues = value == null ? new List<int>() : (IList<int>)value;
+                    IList<int> intValues = value == null ? new List<int>() : (List<int>)value;
 
                     List<AtomicItem> selectedItems = new List<AtomicItem>();
 
+                    var linkedTableType = multiSelectorControl.LinkedTableType;
+                    var storageModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
+
                     foreach (var intValue in intValues)
                     {
+                        var linkedTableItem = storageModule.GetItemById<AtomicItem>(intValue);
 
+                        selectedItems.Add(linkedTableItem);
                     }
 
-                    (formControl as LinkedTableMultiSelectorControl).SetSelectedIds(selectedItems);
+                    multiSelectorControl.SetSelectedIds(selectedItems);
                 }
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
-            else if (formControl.GetType() == typeof(LinkedTableSingleSelectorControl))
+            else if (formControl is LinkedTableSingleSelectorControl singleSelectorControl)
                 if (value is int intValue)
                 {
-                    AtomicItem selectedItem = new AtomicItem();
+                    var linkedTableType = singleSelectorControl.LinkedTableType;
+                    var storageModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
+                    var linkedTableItem = storageModule.GetItemById<AtomicItem>(intValue);
 
-                    (formControl as LinkedTableSingleSelectorControl).SetSelectedId(selectedItem);
+                    singleSelectorControl.SetSelectedId(linkedTableItem);
                 }
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
-            else if (formControl.GetType() == typeof(CalendarDatePicker))
-                (formControl as CalendarDatePicker).Date = value == null ? DateTime.Today : (DateTime)value;
+            else if (formControl is CalendarDatePicker calendarControl)
+                calendarControl.Date = value == null ? DateTime.Today : (DateTime)value;
 
-            else if (formControl.GetType() == typeof(TimePicker))
+            else if (formControl is TimePicker timePickerControl)
                 if (value is DateTime  || value == null)
-                    (formControl as TimePicker).Time = value == null ? DateTime.Today.TimeOfDay : ((DateTime)value).TimeOfDay;
+                    timePickerControl.Time = value == null ? DateTime.Today.TimeOfDay : ((DateTime)value).TimeOfDay;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
-            else if (formControl.GetType() == typeof(CheckBox))
+            else if (formControl is CheckBox checkBoxControl)
                 if (value is bool boolValue)
-                    (formControl as CheckBox).IsChecked = boolValue;
+                    checkBoxControl.IsChecked = boolValue;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");
 
@@ -121,18 +130,18 @@ namespace ISUF.UI.Design
 
         private static object GetValueFromControl(FrameworkElement formControl)
         {
-            if (formControl.GetType() == typeof(TextBox))
-                return (formControl as TextBox).Text;
-            else if (formControl.GetType() == typeof(LinkedTableMultiSelectorControl))
-                return (formControl as LinkedTableMultiSelectorControl).GetSelectedIds();
-            else if (formControl.GetType() == typeof(LinkedTableSingleSelectorControl))
-                return (formControl as LinkedTableSingleSelectorControl).GetSelectedId();
-            else if (formControl.GetType() == typeof(CalendarDatePicker))
-                return (formControl as CalendarDatePicker).Date;
-            else if (formControl.GetType() == typeof(TimePicker))
-                return (formControl as TimePicker).Time;
-            else if (formControl.GetType() == typeof(CheckBox))
-                return (formControl as CheckBox).IsChecked;
+            if (formControl is TextBox textBoxControl)
+                return textBoxControl.Text;
+            else if (formControl is LinkedTableMultiSelectorControl multiSelectorControl)
+                return multiSelectorControl.GetSelectedIds();
+            else if (formControl is LinkedTableSingleSelectorControl singleSelectorControl)
+                return singleSelectorControl.GetSelectedId();
+            else if (formControl is CalendarDatePicker calendarControl)
+                return calendarControl.Date;
+            else if (formControl is TimePicker timePickerControl)
+                return timePickerControl.Time;
+            else if (formControl is CheckBox checkBoxControl)
+                return checkBoxControl.IsChecked;
             else
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }

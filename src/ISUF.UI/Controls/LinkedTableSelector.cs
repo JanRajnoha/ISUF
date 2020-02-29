@@ -20,17 +20,13 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableSelector : ModalWindow
     {
+        readonly LinkedTableAttribute linkedTableAttribute;
+
         private ListView selectorContent;
-        private Messenger messenger;
-        private PropertyAnalyze controlData;
         private Action<MessageDialogResult, List<object>> selectorResultFunction;
-        private LinkedTableAttribute linkedTableAttribute;
 
         public LinkedTableSelector(PropertyAnalyze controlData)
         {
-            messenger = ApplicationBase.Current.VMLocator.GetMessenger();
-            this.controlData = controlData;
-
             linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
         }
 

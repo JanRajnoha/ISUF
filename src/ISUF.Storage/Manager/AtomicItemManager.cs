@@ -169,7 +169,7 @@ namespace ISUF.Storage.Manager
             if (dbMemoryDirty)
                 itemsSource = GetAllItems<T>();
 
-            return (itemsSource as List<T>).FirstOrDefault(x => x.Id == ID);
+            return (itemsSource as IReadOnlyList<T>).FirstOrDefault(x => x.Id == ID);
         }
 
         public virtual void UpdateDatabaseTable()

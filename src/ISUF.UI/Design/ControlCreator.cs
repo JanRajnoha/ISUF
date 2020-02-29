@@ -33,11 +33,11 @@ namespace ISUF.UI.Design
                 switch (linkedTableAttribute.LinkedTableRelation)
                 {
                     case LinkedTableRelation.One:
-                        control = LinkedTableSingleSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName);
+                        control = LinkedTableSingleSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName, linkedTableAttribute);
                         break;
 
                     case LinkedTableRelation.Many:
-                        control = LinkedTableMultiSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName);
+                        control = LinkedTableMultiSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName, linkedTableAttribute);
                         break;
 
                     default:

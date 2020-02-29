@@ -5,6 +5,7 @@ using ISUF.Base.Modules;
 using ISUF.Base.Template;
 using ISUF.Interface.UI;
 using ISUF.UI.Classes;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,13 +20,17 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableMultiSelectorControl : Grid
     {
+        readonly PropertyAnalyze controlData;
+
         private List<int> selectedIds = new List<int>();
         private ListBox linkedTableSelectedIds;
-        private PropertyAnalyze controlData;
 
-        public LinkedTableMultiSelectorControl(string controlName, PropertyAnalyze controlData)
+        public Type LinkedTableType { get; private set; }
+
+        public LinkedTableMultiSelectorControl(string controlName, PropertyAnalyze controlData, LinkedTableAttribute linkedTableAttribute)
         {
             this.controlData = controlData;
+            LinkedTableType = linkedTableAttribute.LinkedTableType;
 
             CreateUI(controlName, controlData);
         }
@@ -137,7 +142,7 @@ namespace ISUF.UI.Controls
             }
         }
 
-        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
+        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, LinkedTableAttribute linkedTableAttribute)
         {
             if (controlData is null)
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
@@ -148,7 +153,7 @@ namespace ISUF.UI.Controls
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
 
-            var control = new LinkedTableMultiSelectorControl(controlName, controlData)
+            var control = new LinkedTableMultiSelectorControl(controlName, controlData, linkedTableAttribute)
             {
                 Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                 Margin = new Thickness(10)

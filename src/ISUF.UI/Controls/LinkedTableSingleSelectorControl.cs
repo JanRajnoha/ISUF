@@ -17,13 +17,17 @@ namespace ISUF.UI.Controls
 {
     public class LinkedTableSingleSelectorControl : Grid
     {
+        readonly PropertyAnalyze controlData;
+
         private int selectedLinkedId;
         private TextBlock selectedIdLabel;
-        private PropertyAnalyze controlData;
 
-        public LinkedTableSingleSelectorControl(string controlName, PropertyAnalyze controlData)
+        public Type LinkedTableType { get; private set; }
+
+        public LinkedTableSingleSelectorControl(string controlName, PropertyAnalyze controlData, LinkedTableAttribute linkedTableAttribute)
         {
             this.controlData = controlData;
+            LinkedTableType = linkedTableAttribute.LinkedTableType;
 
             CreateUI(controlName, controlData);
         }
@@ -108,7 +112,7 @@ namespace ISUF.UI.Controls
                 selectedIdLabel.Text = "Selected ID: " + selectedLinkedId.ToString();
         }
 
-        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType)
+        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, LinkedTableAttribute linkedTableAttribute)
         {
             if (controlData is null)
                 throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
@@ -119,7 +123,7 @@ namespace ISUF.UI.Controls
             if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute))
                 throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
 
-            var control = new LinkedTableSingleSelectorControl(controlName, controlData)
+            var control = new LinkedTableSingleSelectorControl(controlName, controlData, linkedTableAttribute)
             {
                 Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                 Margin = new Thickness(10)
