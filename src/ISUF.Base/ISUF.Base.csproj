@@ -152,8 +152,6 @@
     <Compile Include="Interface\IMessenger.cs" />
     <Compile Include="Enum\AppTheme.cs" />
     <Compile Include="Enum\PathType.cs" />
-    <Compile Include="Locator\LocatorBase.cs" />
-    <Compile Include="Locator\ManagerLocator.cs" />
     <Compile Include="Messages\AnswerMsg.cs" />
     <Compile Include="Messages\Base\ItemBaseMsg.cs" />
     <Compile Include="Messages\FormLoadedMsg.cs" />

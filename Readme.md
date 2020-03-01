@@ -18,12 +18,10 @@ Framework for information systems for UWP
 | ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/) |
 
 
-## To-Do (Phase 5)
+## To-Do (Phase 6)
 
 ### Project
 
-- [ ] Security
+- [x] Linked tables
 
-- [ ] Linked tables
-
-- [ ] Working with data
+- [x] Working with data - Adding iems

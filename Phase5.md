@@ -4,8 +4,6 @@
 
 ### Project
 
-- [ ] Security
+- [x] Linked tables
 
-- [ ] Linked tables
-
-- [ ] Working with data
+- [x] Working with data - Adding iems

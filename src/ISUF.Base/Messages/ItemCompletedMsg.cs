@@ -10,7 +10,5 @@ namespace ISUF.Base.Messages
     public class ItemCompletedMsg : ItemBaseMsg
     {
         public int ID { get; set; } = -1;
-
-        public string ManagerID { get; set; } = string.Empty;
     }
 }

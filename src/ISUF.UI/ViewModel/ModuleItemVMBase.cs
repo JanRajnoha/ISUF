@@ -47,8 +47,7 @@ namespace ISUF.UI.ViewModel
             {
                 ItemType = ItemType,
                 Edit = false,
-                ID = item.Id,
-                ManagerID = item.ManagerID
+                ID = item.Id
             });
         });
 
@@ -182,8 +181,7 @@ namespace ISUF.UI.ViewModel
             messenger.Send(new ItemEditMsg()
             {
                 ItemType = ItemType,
-                ID = obj.Id,
-                ManagerID = obj.ManagerID
+                ID = obj.Id
             });
         }
 

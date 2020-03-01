@@ -4,6 +4,6 @@
 
 ### Project
 
-- [ ] Community testing
+- [ ] Security
 
-- [ ] Community feedback
+- [ ] Working with data

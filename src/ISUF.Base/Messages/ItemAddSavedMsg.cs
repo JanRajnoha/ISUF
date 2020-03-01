@@ -14,7 +14,5 @@ namespace ISUF.Base.Messages
         public bool ClosePane { get; set; } = true;
 
         public bool MoreItemsAdded { get; set; } = false;
-
-        public string ManagerID { get; set; } = string.Empty;
     }
 }

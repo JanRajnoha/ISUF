@@ -10,7 +10,5 @@ namespace ISUF.Base.Messages
     public class ItemEditMsg : ItemBaseMsg
     {
         public int ID { get; set; } = -1;
-
-        public string ManagerID { get; set; }
     }
 }

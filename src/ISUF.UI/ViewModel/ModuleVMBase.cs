@@ -7,6 +7,7 @@ using ISUF.Interface.UI;
 using ISUF.Storage.Storage;
 using ISUF.UI.App;
 using ISUF.UI.Command;
+using ISUF.UI.Controls;
 using ISUF.UI.Design;
 using ISUF.UI.Modules;
 using System;
@@ -186,21 +187,23 @@ namespace ISUF.UI.ViewModel
 
         public ICommand SlavePaneVisibilityCommand { get; set; }
 
-        public ICommand DeleteItems { get; set; }
+        public ICommand RemoveItemsCommand { get; set; }
 
-        public ICommand SelectAllItems { get; set; }
+        public ICommand SelectAllItemsCommand { get; set; }
 
-        public ICommand ShareItems { get; set; }
+        public ICommand ShareItemsCommand { get; set; }
 
-        public ICommand AddStartTile { get; set; }
+        public ICommand AddStartTileCommand { get; set; }
 
-        public ICommand ChangePaneVisibility { get; set; }
+        public ICommand ChangePaneVisibilityCommand { get; set; }
 
-        public ICommand AddItem { get; set; }
+        public ICommand AddItemCommand { get; set; }
 
-        public ICommand ChangeSelectionMode { get; set; }
+        public ICommand ChangeSelectionModeCommand { get; set; }
 
-        public ICommand DetailCommand { get; set; }
+        public ICommand ShowDetailCommand { get; set; }
+
+        public ICommand RemoveCommand { get; set; }
 
         public ICommand EditCommand { get; set; }
 
@@ -220,7 +223,7 @@ namespace ISUF.UI.ViewModel
 
             DataTransferManager daTranManaItems = DataTransferManager.GetForCurrentView();
 
-            ChangeSelectionMode = new RelayCommand(() =>
+            ChangeSelectionModeCommand = new RelayCommand(() =>
             {
                 if (ListSelectionMode == ListViewSelectionMode.None)
                     ListSelectionMode = ListViewSelectionMode.Multiple;
@@ -228,7 +231,7 @@ namespace ISUF.UI.ViewModel
                     ListSelectionMode = ListViewSelectionMode.None;
             });
 
-            AddItem = new RelayCommand(ItemNew);
+            AddItemCommand = new RelayCommand(ItemNew);
             Messenger.Register<ItemAddCloseMsg>(CloseAddPane);
 
             Messenger.Register<ItemAddSavedMsg>(NewItemAdded);
@@ -239,10 +242,28 @@ namespace ISUF.UI.ViewModel
 
             messenger.Register<FormLoadedMsg>(FormLoaded);
 
-            AddStartTile = new RelayCommand(() => SecTileManageAsync());
-            ChangePaneVisibility = new RelayCommand(InversePaneVisibility);
+            AddStartTileCommand = new RelayCommand(() => SecTileManageAsync());
+            ChangePaneVisibilityCommand = new RelayCommand(InversePaneVisibility);
 
-            ShareItems = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
+            EditCommand = new DelegateCommand<T>((T editedItem) =>
+            {
+                MessageDialog aa = new MessageDialog("Edit placeholder");
+                aa.ShowAsync();
+            });
+
+            ShowDetailCommand = new DelegateCommand<T>((T detailedItem) =>
+            {
+                MessageDialog aa = new MessageDialog("Show detail placeholder");
+                aa.ShowAsync();
+            });
+
+            RemoveCommand = new DelegateCommand<T>((T removedItem) =>
+            {
+                MessageDialog aa = new MessageDialog("Remove placeholder");
+                aa.ShowAsync();
+            });
+
+            ShareItemsCommand = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
             {
                 daTranManaItems = DataTransferManager.GetForCurrentView();
                 daTranManaItems.DataRequested += DaTranManaItems_DataRequestedAsync;
@@ -519,8 +540,7 @@ namespace ISUF.UI.ViewModel
                 {
                     ItemType = ItemType,
                     ID = obj.ID,
-                    Edit = obj.Edit,
-                    ManagerID = obj.ManagerID
+                    Edit = obj.Edit
                 });
         }
 
@@ -550,8 +570,7 @@ namespace ISUF.UI.ViewModel
                     AddPane(addPivotItemName, new ItemSelectedAddMsg()
                     {
                         ItemType = ItemType,
-                        ID = obj.ID,
-                        ManagerID = obj.ManagerID
+                        ID = obj.ID
                     });
             }
         }
