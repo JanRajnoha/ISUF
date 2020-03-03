@@ -29,8 +29,6 @@ namespace ISUF.UI.ViewModel
         private readonly ModuleAddControlBase form;
         private readonly Type itemType;
 
-        UserActivitySession currentActivity;
-
         public bool ModalActivation { get; set; } = false;
 
         public ICommand Close { get; set; }
@@ -91,21 +89,6 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        // todo smazat
-        //private IBaseItemManager manager;
-        //public IBaseItemManager Manager
-        //{
-        //    get { return manager; }
-        //    set
-        //    {
-        //        manager = value;
-        //        PropertyChangedNotifier.NotifyPropertyChanged(GetType(), Manager);
-        //    }
-        //}
-
-        protected abstract void AddNewItem(ItemAddNewMsg obj);
-        protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
-
         public virtual DelegateCommand<T> SaveItemCommand => new DelegateCommand<T>(async (T item) => { SaveItem(); });
 
         public virtual DelegateCommand<T> SaveItemCloseCommand => new DelegateCommand<T>(async (T item) => { SaveCloseItem(); });
@@ -153,6 +136,9 @@ namespace ISUF.UI.ViewModel
                 ItemType = itemType
             });
         }
+
+        protected abstract void AddNewItem(ItemAddNewMsg obj);
+        protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
 
         public void CloseModal()
         {
@@ -223,31 +209,31 @@ namespace ISUF.UI.ViewModel
         }
 
         // Insp
-        protected async Task GenerateTimelineActivityAsync()
-        {
-            try
-            {
-                //Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
-                UserActivityChannel channel = UserActivityChannel.GetDefault();
-                UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("MainPage");
+        //protected async Task GenerateTimelineActivityAsync()
+        //{
+        //    try
+        //    {
+        //        //Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
+        //        UserActivityChannel channel = UserActivityChannel.GetDefault();
+        //        UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("MainPage");
 
-                //Populate required properties
-                userActivity.VisualElements.DisplayText = "Hello Activities";
-                userActivity.ActivationUri = new Uri("thedailynotes://page2?action=edit");
+        //        //Populate required properties
+        //        userActivity.VisualElements.DisplayText = "Hello Activities";
+        //        userActivity.ActivationUri = new Uri("thedailynotes://page2?action=edit");
 
-                //Save
-                await userActivity.SaveAsync(); //save the new metadata
+        //        //Save
+        //        await userActivity.SaveAsync(); //save the new metadata
 
-                //Dispose of any current UserActivitySession, and create a new one.
-                currentActivity?.Dispose();
-                currentActivity = userActivity.CreateSession();
-            }
-            catch (Exception e)
-            {
-                await LogService.AddLogMessageAsync(e.Message);
-                throw new Base.Exceptions.Exception("Unhandled exception", e);
-            }
-        }
+        //        //Dispose of any current UserActivitySession, and create a new one.
+        //        currentActivity?.Dispose();
+        //        currentActivity = userActivity.CreateSession();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        await LogService.AddLogMessageAsync(e.Message);
+        //        throw new Base.Exceptions.Exception("Unhandled exception", e);
+        //    }
+        //}
 
         /// <summary>
         /// User Logged out message recieved

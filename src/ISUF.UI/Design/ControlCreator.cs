@@ -271,7 +271,7 @@ namespace ISUF.UI.Design
                                     Margin = new Thickness(0, 5, 0, 0),
                                     PlaceholderText = "Select a date",
                                     Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = true
+                                    IsEnabled = false
                                 };
                                 break;
 
@@ -282,7 +282,7 @@ namespace ISUF.UI.Design
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
                                     Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = true
+                                    IsEnabled = false
                                 };
                                 break;
 

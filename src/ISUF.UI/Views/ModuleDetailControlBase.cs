@@ -39,9 +39,8 @@ namespace ISUF.UI.Views
 
             RowDefinition buttonsRow = new RowDefinition()
             {
-                Height = new GridLength(1, GridUnitType.Star)
+                Height = new GridLength(59, GridUnitType.Pixel)
             };
-            // binding
 
             content.RowDefinitions.Add(mainRow);
             content.RowDefinitions.Add(buttonsRow);
@@ -58,23 +57,8 @@ namespace ISUF.UI.Views
 
             content.Children.Add(mainScrollView);
 
-
-
             Grid buttonsPart = new Grid();
             Grid.SetRow(buttonsPart, 1);
-
-            ColumnDefinition col1 = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            };
-
-            ColumnDefinition col2 = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            };
-
-            buttonsPart.ColumnDefinitions.Add(col1);
-            buttonsPart.ColumnDefinitions.Add(col2);
             
             RowDefinition buttonRow = new RowDefinition()
             {
@@ -139,6 +123,33 @@ namespace ISUF.UI.Views
 
                 mainContent.Children.Add(ControlCreator.CreateDetailControl(item, ref previousControl));
             }
+
+            FillPredefinedValues();
+        }
+
+        private void FillPredefinedValues()
+        {
+            object item = (DataContext as ViewModelBase).GetPropertyValue("DetailItem");
+
+            try
+            {
+                item = Convert.ChangeType(item, uiModule.ModuleItemType);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Base.Exceptions.ArgumentNullException("Argument is null", e);
+            }
+            catch (FormatException e)
+            {
+                throw new Base.Exceptions.ArgumentException("Argument format exception", e);
+            }
+            catch (Exception e)
+            {
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
+            }
+
+            var formControls = FormDataMiner.GetControlsFromForm(this);
+            FormDataMiner.FillValuesIntoForm(formControls, item);
         }
     }
 }

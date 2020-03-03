@@ -253,14 +253,19 @@ namespace ISUF.UI.ViewModel
 
             ShowDetailCommand = new DelegateCommand<T>((T detailedItem) =>
             {
-                MessageDialog aa = new MessageDialog("Show detail placeholder");
-                aa.ShowAsync();
+                ItemDetailOpenMsg msg = new ItemDetailOpenMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = detailedItem.Id,
+                };
+
+                OpenDetailPane(msg);
             });
 
             RemoveCommand = new DelegateCommand<T>((T removedItem) =>
             {
-                MessageDialog aa = new MessageDialog("Remove placeholder");
-                aa.ShowAsync();
+
+                //messenger.Sendc
             });
 
             ShareItemsCommand = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
