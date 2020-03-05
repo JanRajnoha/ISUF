@@ -39,8 +39,13 @@ namespace ISUF.Base.Modules
             {
                 var attributes = prop.GetCustomAttributes(true).ToList();
 
-                if (attributes.Contains(typeof(DbIgnoreAttribute)) && (attributes.Contains(typeof(LinkedTableAttribute))))
+                if (attributes.Contains(typeof(DbIgnoreAttribute)) && attributes.Contains(typeof(LinkedTableAttribute)))
                     throw new NotSupportedAttributeCombinationException("Linked tables properties can't be ignored in DB.");
+
+                UIParamsAttribute uiParams = attributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+
+                if (uiParams != null && string.IsNullOrEmpty(uiParams.LabelDescription) && uiParams.UseLabelDescription)
+                    throw new NotSupportedAttributeCombinationException("UIParams attribute must specify LabelDescription if UseLabelDescription is true.");
 
                 var analyze = new PropertyAnalyze(prop.Name, prop.PropertyType, attributes);
 

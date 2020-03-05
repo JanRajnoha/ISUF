@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Controls;
 using ISUF.Base.Template;
 using ISUF.UI.App;
 using ISUF.Storage.Modules;
+using ISUF.Base.Attributes;
+using System.Globalization;
+using System.Threading;
 
 namespace ISUF.UI.Design
 {
@@ -18,7 +21,7 @@ namespace ISUF.UI.Design
             throw new Base.Exceptions.NotImplementedException("Not implemented yet.");
         }
 
-        public static void FillValuesIntoForm(IList<FrameworkElement> formControls, object item)
+        public static void FillValuesIntoForm(IList<FrameworkElement> formControls, object item, bool isDetailMode = false)
         {
             var itemProps = item.GetType().GetProperties();
 
@@ -32,11 +35,46 @@ namespace ISUF.UI.Design
 
                 var value = itemProp.GetValue(item);
 
-                GetValueIntoControl(formControl, value);
+                if (isDetailMode)
+                    value = ConvertValueToFormValue(itemProp, value);
+
+                SetValueIntoControl(formControl, value);
             }
         }
 
-        private static void GetValueIntoControl(FrameworkElement formControl, object value)
+        private static object ConvertValueToFormValue(PropertyInfo prop, object value)
+        {
+            if (prop.PropertyType == typeof(DateTime))
+            {
+                var customization = prop.GetCustomAttributes(true).ToList().FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                DateTime dateTimeValue = (DateTime)value;
+
+                if (customization == null)
+                    throw new Base.Exceptions.MissingRequiredAdditionalDataException("DateTime missing UIParams attribute.");
+
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+
+                switch (customization.DateTimeMode)
+                {
+                    case Base.Enum.DatePickerMode.Date:
+                        return dateTimeValue.ToString("d", currentCulture);
+
+                    case Base.Enum.DatePickerMode.Time:
+                        return dateTimeValue.ToString("t", currentCulture);
+
+                    case Base.Enum.DatePickerMode.DateAndTime:
+                        return dateTimeValue.ToString("g", currentCulture);
+
+                    default:
+                        throw new Base.Exceptions.UnsuccessfulConversionException("DateTime conversion was unsuccessful.\n" +
+                            $"Unsupported DateTIme mode: {customization.DateTimeMode.ToString()}");
+                }
+            }
+            else
+                return value;
+        }
+
+        private static void SetValueIntoControl(FrameworkElement formControl, object value)
         {
             if (formControl is TextBox textBoxControl)
                 textBoxControl.Text = value == null ? "" : value.ToString();
@@ -82,7 +120,7 @@ namespace ISUF.UI.Design
                 calendarControl.Date = value == null ? DateTime.Today : (DateTime)value;
 
             else if (formControl is TimePicker timePickerControl)
-                if (value is DateTime  || value == null)
+                if (value is DateTime || value == null)
                     timePickerControl.Time = value == null ? DateTime.Today.TimeOfDay : ((DateTime)value).TimeOfDay;
                 else
                     throw new Base.Exceptions.NotSupportedException("Property value is not compatible with control.");

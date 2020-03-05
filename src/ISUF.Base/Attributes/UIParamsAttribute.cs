@@ -14,12 +14,11 @@ namespace ISUF.Base.Attributes
         [Required]
         public int UIOrder { get; set; } = 0;
 
-        public bool UseLongTextInput { get; set; }
-        public bool UseLabelDescription { get; set; }
-        public string LabelDescription { get; set; }
+        public bool UseLongTextInput { get; set; } = false;
+        public bool UseLabelDescription { get; set; } = false;
+        public string LabelDescription { get; set; } = "";
         public DatePickerMode DateTimeMode { get; set; } = DatePickerMode.Date;
         public bool ReadOnlyMode { get; set; } = false;
         public bool ShowDetailOnOneLine { get; set; } = false;
-        public string DateLabel { get; set; }
     }
 }

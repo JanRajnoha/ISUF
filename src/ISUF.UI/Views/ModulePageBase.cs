@@ -474,6 +474,8 @@ namespace ISUF.UI.Views
             };
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(ModuleData, ListView.ItemsSourceProperty, "Source", viewModelType);
 
+            ScrollViewer.SetVerticalScrollBarVisibility(ModuleData, ScrollBarVisibility.Auto);
+            
             MenuFlyout menuFlyout = new MenuFlyout();
             editFlyoutItem = new MenuFlyoutItem()
             {

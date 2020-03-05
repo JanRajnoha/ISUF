@@ -149,7 +149,7 @@ namespace ISUF.UI.Views
             }
 
             var formControls = FormDataMiner.GetControlsFromForm(this);
-            FormDataMiner.FillValuesIntoForm(formControls, item);
+            FormDataMiner.FillValuesIntoForm(formControls, item, true);
         }
     }
 }

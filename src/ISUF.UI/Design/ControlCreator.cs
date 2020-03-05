@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -245,74 +246,76 @@ namespace ISUF.UI.Design
                     (control as Grid).ColumnDefinitions.Add(labelColumn);
                     (control as Grid).ColumnDefinitions.Add(dataColumn);
 
+                    TextBlock label = new TextBlock()
+                    {
+                        VerticalAlignment = VerticalAlignment.Bottom,
+                        FontWeight = FontWeights.Bold,
+                        Margin = new Thickness(0, 0, 5, 0)
+                    };
+
                     if (customization.UseLabelDescription)
-                    {
-                        TextBlock label = new TextBlock()
-                        {
-                            Text = customization.LabelDescription ?? controlData.PropertyName,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(0, 0, 5, 0)
-                        };
-                        Grid.SetRow(label, 0);
-                        (control as Grid).Children.Add(label);
-                    }
-
-                    if (controlTypeName == PropertyType.DateTime)
-                    {
-                        UIElement dateTimeControl;
-
-                        switch (customization.DateTimeMode)
-                        {
-                            case DatePickerMode.Date:
-                                dateTimeControl = new CalendarDatePicker()
-                                {
-                                    Date = DateTime.Today,
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Margin = new Thickness(0, 5, 0, 0),
-                                    PlaceholderText = "Select a date",
-                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = false
-                                };
-                                break;
-
-                            case DatePickerMode.Time:
-                                dateTimeControl = new TimePicker()
-                                {
-                                    Time = DateTime.Now.TimeOfDay,
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Margin = new Thickness(0, 5, 0, 0),
-                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                                    IsEnabled = false
-                                };
-                                break;
-
-                            case DatePickerMode.DateAndTime:
-                                throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
-
-                            default:
-                                throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
-                        }
-
-                        Grid.SetRow(dateTimeControl as FrameworkElement, 1);
-
-                        (control as Grid).Children.Add(dateTimeControl);
-                    }
+                        label.Text = customization.LabelDescription ?? "";
                     else
-                    {
+                        label.Text = controlData.PropertyName;
+
+                    Grid.SetRow(label, 0);
+                    (control as Grid).Children.Add(label);
+
+                    //if (controlTypeName == PropertyType.DateTime)
+                    //{
+                    //    UIElement dateTimeControl;
+
+                    //    switch (customization.DateTimeMode)
+                    //    {
+                    //        case DatePickerMode.Date:
+                    //            dateTimeControl = new CalendarDatePicker()
+                    //            {
+                    //                Date = DateTime.Today,
+                    //                HorizontalAlignment = HorizontalAlignment.Stretch,
+                    //                Margin = new Thickness(0, 5, 0, 0),
+                    //                PlaceholderText = "Select a date",
+                    //                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                    //                IsEnabled = false
+                    //            };
+                    //            break;
+
+                    //        case DatePickerMode.Time:
+                    //            dateTimeControl = new TimePicker()
+                    //            {
+                    //                Time = DateTime.Now.TimeOfDay,
+                    //                HorizontalAlignment = HorizontalAlignment.Stretch,
+                    //                Margin = new Thickness(0, 5, 0, 0),
+                    //                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                    //                IsEnabled = false
+                    //            };
+                    //            break;
+
+                    //        case DatePickerMode.DateAndTime:
+                    //            throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
+
+                    //        default:
+                    //            throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
+                    //    }
+
+                    //    Grid.SetRow(dateTimeControl as FrameworkElement, 1);
+
+                    //    (control as Grid).Children.Add(dateTimeControl);
                         TextBlock data = new TextBlock()
                         {
                             Text = "",
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(5, 0, 0, 0),
+                            VerticalAlignment = VerticalAlignment.Bottom,
+                            Margin = new Thickness(0, 5, 0, 0),
                             Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                         };
                         (control as Grid).Children.Add(data);
 
                         if (customization.ShowDetailOnOneLine)
+                        {
+                            data.Margin = new Thickness(5, 5, 0, 0);
                             Grid.SetColumn(data, 1);
+                        }
                         else
                             Grid.SetRow(data, 1);
-                    }
 
                     break;
 
