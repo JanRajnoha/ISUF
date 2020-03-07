@@ -38,12 +38,14 @@ namespace ISUF.UI.Design
                 if (isDetailMode)
                     value = ConvertValueToFormValue(itemProp, value);
 
-                SetValueIntoControl(formControl, value);
+                SetValueIntoControl(formControl, value, itemProp);
             }
         }
 
         private static object ConvertValueToFormValue(PropertyInfo prop, object value)
         {
+            var linkedTableAttribute = prop.GetCustomAttributes(true).ToList().FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+
             if (prop.PropertyType == typeof(DateTime))
             {
                 var customization = prop.GetCustomAttributes(true).ToList().FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
@@ -70,17 +72,64 @@ namespace ISUF.UI.Design
                             $"Unsupported DateTIme mode: {customization.DateTimeMode.ToString()}");
                 }
             }
+            else if (linkedTableAttribute != null)
+            {
+                switch (linkedTableAttribute.LinkedTableRelation)
+                {
+                    case Base.Enum.LinkedTableRelation.One:
+
+                        var intValue = (int)value;
+                        if (intValue == -1)
+                            return "-";
+
+                        MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+
+                        StorageModule linkedModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableAttribute.LinkedTableType) as StorageModule;
+                        MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                        var linkedTableItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { intValue }), genericMethod.ReturnType) as AtomicItem;
+
+                        return linkedTableItem.ToString();
+
+                    case Base.Enum.LinkedTableRelation.Many:
+
+                        var intValues = (List<int>)value;
+                        if (intValues == null || (intValues != null && intValues.Count == 0))
+                            return new List<string> { "-" };
+
+                        method = typeof(StorageModule).GetMethod("GetItemById");
+
+                        linkedModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableAttribute.LinkedTableType) as StorageModule;
+                        genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                        List<AtomicItem> selectedItems = new List<AtomicItem>();
+                        foreach (var selectedItemValue in intValues)
+                        {
+                            var selectedLinkedTableItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { selectedItemValue }), genericMethod.ReturnType) as AtomicItem;
+
+                            selectedItems.Add(selectedLinkedTableItem);
+                        }
+
+                        return selectedItems;
+
+                    default:
+                        throw new Base.Exceptions.NotSupportedException("Unsupported Linked table relation.");
+                }
+            }
             else
                 return value;
         }
 
-        private static void SetValueIntoControl(FrameworkElement formControl, object value)
+        private static void SetValueIntoControl(FrameworkElement formControl, object value, PropertyInfo itemProp)
         {
             if (formControl is TextBox textBoxControl)
                 textBoxControl.Text = value == null ? "" : value.ToString();
 
             else if (formControl is TextBlock textBlockControl)
                 textBlockControl.Text = value == null ? "" : value.ToString();
+
+            else if (formControl is ListView selectedLinkedTableItems)
+                selectedLinkedTableItems.ItemsSource = value;
 
             else if (formControl is LinkedTableMultiSelectorControl multiSelectorControl)
                 if (value is IList<int> || value == null)
@@ -90,11 +139,13 @@ namespace ISUF.UI.Design
                     List<AtomicItem> selectedItems = new List<AtomicItem>();
 
                     var linkedTableType = multiSelectorControl.LinkedTableType;
-                    var storageModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
+                    var linkedModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
+                    MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                    MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
 
                     foreach (var intValue in intValues)
                     {
-                        var linkedTableItem = storageModule.GetItemById<AtomicItem>(intValue);
+                        var linkedTableItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { intValue }), genericMethod.ReturnType) as AtomicItem;
 
                         selectedItems.Add(linkedTableItem);
                     }
@@ -107,9 +158,13 @@ namespace ISUF.UI.Design
             else if (formControl is LinkedTableSingleSelectorControl singleSelectorControl)
                 if (value is int intValue)
                 {
+                    MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+
                     var linkedTableType = singleSelectorControl.LinkedTableType;
-                    var storageModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
-                    var linkedTableItem = storageModule.GetItemById<AtomicItem>(intValue);
+                    var linkedModule = ApplicationBase.Current.ModuleManager.GetModule(linkedTableType) as StorageModule;
+                    MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                    var linkedTableItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { intValue }), genericMethod.ReturnType) as AtomicItem;
 
                     singleSelectorControl.SetSelectedId(linkedTableItem);
                 }

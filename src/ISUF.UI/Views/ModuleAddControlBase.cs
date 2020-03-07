@@ -40,7 +40,10 @@ namespace ISUF.UI.Views
 
         public override void AddControls()
         {
-            Grid content = new Grid();
+            Grid content = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
 
             RowDefinition mainRow = new RowDefinition()
             {

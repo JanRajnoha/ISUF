@@ -42,6 +42,13 @@ namespace ISUF.Base.Modules
                 if (attributes.Contains(typeof(DbIgnoreAttribute)) && attributes.Contains(typeof(LinkedTableAttribute)))
                     throw new NotSupportedAttributeCombinationException("Linked tables properties can't be ignored in DB.");
 
+                LinkedTableAttribute linkedTableInfo = attributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+
+                if (linkedTableInfo != null && 
+                    ((linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.Many && prop.PropertyType != typeof(List<int>)) ||
+                    (linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.One && prop.PropertyType != typeof(int))))
+                    throw new NotSupportedAttributeCombinationException("Property type can't be used with this type of Linked Table attribute");
+
                 UIParamsAttribute uiParams = attributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 
                 if (uiParams != null && string.IsNullOrEmpty(uiParams.LabelDescription) && uiParams.UseLabelDescription)

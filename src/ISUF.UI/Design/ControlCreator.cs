@@ -201,6 +201,7 @@ namespace ISUF.UI.Design
             PropertyType controlTypeName = controlData.PropertyType;
             UIElement control;
             UIParamsAttribute customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+            var linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
 
             switch (controlTypeName)
             {
@@ -217,7 +218,8 @@ namespace ISUF.UI.Design
 
                     control = new Grid()
                     {
-                        Margin = new Thickness(10)
+                        Margin = new Thickness(10),
+                        VerticalAlignment = VerticalAlignment.Stretch
                     };
 
                     RowDefinition labelRow = new RowDefinition()
@@ -261,45 +263,24 @@ namespace ISUF.UI.Design
                     Grid.SetRow(label, 0);
                     (control as Grid).Children.Add(label);
 
-                    //if (controlTypeName == PropertyType.DateTime)
-                    //{
-                    //    UIElement dateTimeControl;
+                    if (linkedTableAttribute != null && linkedTableAttribute.LinkedTableRelation == LinkedTableRelation.Many)
+                    {
+                        ListView linkedTableSelectedIds = new ListView()
+                        {
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            Margin = new Thickness(0, 5, 0, 5),
+                            Height = 250,
+                            SelectionMode = ListViewSelectionMode.None
+                        };
 
-                    //    switch (customization.DateTimeMode)
-                    //    {
-                    //        case DatePickerMode.Date:
-                    //            dateTimeControl = new CalendarDatePicker()
-                    //            {
-                    //                Date = DateTime.Today,
-                    //                HorizontalAlignment = HorizontalAlignment.Stretch,
-                    //                Margin = new Thickness(0, 5, 0, 0),
-                    //                PlaceholderText = "Select a date",
-                    //                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                    //                IsEnabled = false
-                    //            };
-                    //            break;
-
-                    //        case DatePickerMode.Time:
-                    //            dateTimeControl = new TimePicker()
-                    //            {
-                    //                Time = DateTime.Now.TimeOfDay,
-                    //                HorizontalAlignment = HorizontalAlignment.Stretch,
-                    //                Margin = new Thickness(0, 5, 0, 0),
-                    //                Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
-                    //                IsEnabled = false
-                    //            };
-                    //            break;
-
-                    //        case DatePickerMode.DateAndTime:
-                    //            throw new Base.Exceptions.NotSupportedException("DateAndTime is not supported.");
-
-                    //        default:
-                    //            throw new Base.Exceptions.NotSupportedException("Not suported DatePickerMode.");
-                    //    }
-
-                    //    Grid.SetRow(dateTimeControl as FrameworkElement, 1);
-
-                    //    (control as Grid).Children.Add(dateTimeControl);
+                        Grid.SetRow(linkedTableSelectedIds, 1);
+                        Grid.SetColumnSpan(linkedTableSelectedIds, 2);
+                        (control as Grid).Children.Add(linkedTableSelectedIds);
+                    }
+                    else
+                    {
                         TextBlock data = new TextBlock()
                         {
                             Text = "",
@@ -316,6 +297,7 @@ namespace ISUF.UI.Design
                         }
                         else
                             Grid.SetRow(data, 1);
+                    }
 
                     break;
 

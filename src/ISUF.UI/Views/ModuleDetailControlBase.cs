@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Views
 {
@@ -30,7 +32,10 @@ namespace ISUF.UI.Views
 
         public override void AddControls()
         {
-            Grid content = new Grid();
+            Grid content = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
 
             RowDefinition mainRow = new RowDefinition()
             {
