@@ -1,4 +1,5 @@
 ﻿using ISUF.Base.Template;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace ISUF.Interface.Storage
@@ -13,7 +14,7 @@ namespace ISUF.Interface.Storage
 
         bool UpdateItem(object item);
 
-        ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
+        List<T> GetAllItems<T>() where T : AtomicItem;
 
         T GetItem<T>(int ID) where T : AtomicItem;
 

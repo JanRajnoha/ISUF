@@ -1,3 +1,4 @@
+using ISUF.Base.Modules;
 using ISUF.Security;
 using ISUF.Storage.Enum;
 using ISUF.Storage.Manager;
@@ -56,7 +57,7 @@ namespace ISUF.Storage.Modules
 
         public bool RegisterUser(UserItem newUser)
         {
-            if (!((UserItemManager)itemManager).AddItem(newUser))
+            if (!((UserItemManager)itemManager).AddItem(newUser, moduleManager))
                 return false;
             
             CurrentUserId = newUser.Id;

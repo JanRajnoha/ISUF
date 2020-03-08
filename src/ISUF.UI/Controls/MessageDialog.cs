@@ -23,6 +23,14 @@ namespace ISUF.UI.Controls
                     PopupMessageDialog.CancelCommandIndex = 1;
                     break;
 
+                case MessageDialogButtons.OkCancel:
+                    PopupMessageDialog.Commands.Add(new UICommand("Ok", new UICommandInvokedHandler(EscapeFce), MessageDialogResult.Ok));
+                    PopupMessageDialog.Commands.Add(new UICommand("Cancel", new UICommandInvokedHandler(EscapeFce), MessageDialogResult.Cancel));
+
+                    PopupMessageDialog.DefaultCommandIndex = 0;
+                    PopupMessageDialog.CancelCommandIndex = 1;
+                    break;
+
                 case MessageDialogButtons.YesNo:
                     PopupMessageDialog.Commands.Add(new UICommand("Yes", new UICommandInvokedHandler(EscapeFce), MessageDialogResult.Yes));
                     PopupMessageDialog.Commands.Add(new UICommand("No", new UICommandInvokedHandler(EscapeFce), MessageDialogResult.No));
@@ -41,6 +49,7 @@ namespace ISUF.UI.Controls
                     break;
 
                 default:
+                    throw new Base.Exceptions.NotImplementedException($"Combination {messageDialogButtons} is not supported yet");
                     break;
             }
         }

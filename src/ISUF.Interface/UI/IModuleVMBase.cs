@@ -22,7 +22,7 @@ namespace ISUF.Interface.UI
 
         ListViewSelectionMode ListSelectionMode { get; set; }
 
-        ObservableCollection<T> Source { get; set; }
+        List<T> Source { get; set; }
 
         ObservableCollection<PivotItem> PivotPanes { get; set; }
 
@@ -44,23 +44,25 @@ namespace ISUF.Interface.UI
 
         ICommand SlavePaneVisibilityCommand { get; set; }
 
-        ICommand DeleteItems { get; set; }
+        ICommand RemoveItemsCommand { get; set; }
 
-        ICommand SelectAllItems { get; set; }
+        ICommand SelectAllItemsCommand { get; set; }
 
-        ICommand AddStartTile { get; set; }
+        ICommand AddStartTileCommand { get; set; }
 
-        ICommand ChangePaneVisibility { get; set; }
+        ICommand ChangePaneVisibilityCommand { get; set; }
 
-        ICommand AddItem { get; set; }
+        ICommand AddItemCommand { get; set; }
 
-        ICommand ChangeSelectionMode { get; set; }
+        ICommand ChangeSelectionModeCommand { get; set; }
 
-        ICommand DetailCommand { get; set; }
+        ICommand ShowDetailCommand { get; set; }
+
+        ICommand RemoveCommand { get; set; }
 
         ICommand EditCommand { get; set; }
 
-        ICommand ShareItems { get; set; }
+        ICommand ShareItemsCommand { get; set; }
 
         void CloseCurrentSlavePane(object sender, BackRequestedEventArgs e);
 

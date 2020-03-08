@@ -33,8 +33,7 @@ namespace ISUF.UI.Views
 
         protected virtual void CreateViewModel()
         {
-            object viewModel = Activator.CreateInstance(viewModelType, viewModelArgs);
-            ApplicationBase.Current.VMLocator.AddViewModel(viewModel);
+            Classes.Functions.CreateViewModel(viewModelType, viewModelArgs: viewModelArgs);
         }
 
         public abstract void AddControls();

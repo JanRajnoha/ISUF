@@ -1,4 +1,5 @@
 ﻿using ISUF.Base.Template;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace ISUF.Storage.Storage
@@ -7,7 +8,7 @@ namespace ISUF.Storage.Storage
     {
         public string TypeOfItem { get; set; }
 
-        public ObservableCollection<T> Items { get; set; } = new ObservableCollection<T>();
+        public List<T> Items { get; set; } = new List<T>();
     }
 }
 

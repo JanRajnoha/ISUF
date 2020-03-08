@@ -22,16 +22,28 @@ namespace ISUF.UI.Views
     public class ModuleAddControlBase : ControlBase
     {
         Panel mainContent;
-        UIModule uiModule;
+        readonly UIModule uiModule;
 
         public ModuleAddControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
             this.uiModule = uiModule;
         }
 
+        protected override void CreateViewModel(bool rewriteViewModel = false)
+        {
+            var vma = viewModelArgs.ToList();
+            vma.Add(this);
+            viewModelArgs = vma.ToArray();
+
+            base.CreateViewModel(rewriteViewModel);
+        }
+
         public override void AddControls()
         {
-            Grid content = new Grid();
+            Grid content = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
 
             RowDefinition mainRow = new RowDefinition()
             {
@@ -78,7 +90,7 @@ namespace ISUF.UI.Views
             buttonsPart.ColumnDefinitions.Add(col2);
 
             RowDefinition AddCloseRow = new RowDefinition();
-            AddCloseRow.SetValue(FrameworkElement.NameProperty, nameof(AddCloseRow));
+            AddCloseRow.SetValue(NameProperty, nameof(AddCloseRow));
 
             RowDefinition row2 = new RowDefinition()
             {
@@ -95,8 +107,8 @@ namespace ISUF.UI.Views
                 FontSize = 15,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemClose") as ICommand,
-                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemCloseCommand") as ICommand,
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(AddClose, 0);
             Grid.SetColumnSpan(AddClose, 2);
@@ -123,14 +135,14 @@ namespace ISUF.UI.Views
 
             Binding addCloseVisibilityBinding = new Binding()
             {
-                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("AddEditItem") as AtomicItem).Id,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new IdConverter(),
                 ConverterParameter = "visibility"
             };
             BindingOperations.SetBinding(AddClose, Button.VisibilityProperty, addCloseVisibilityBinding);
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddClose, Button.VisibilityProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "visibility");
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddClose, Button.VisibilityProperty, "AddEditItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "visibility");
 
             StackPanel addCloseContent = new StackPanel()
             {
@@ -168,8 +180,8 @@ namespace ISUF.UI.Views
                 IsEnabled = true,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItem") as ICommand,
-                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("DetailItem")
+                Command = (DataContext as ViewModelBase).GetPropertyValue("SaveItemCommand") as ICommand,
+                CommandParameter = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem")
             };
             Grid.SetRow(Add, 1);
             Grid.SetColumn(Add, 0);
@@ -191,20 +203,19 @@ namespace ISUF.UI.Views
 
             Binding addTextBinding = new Binding()
             {
-                Source = ((DataContext as ViewModelBase).GetPropertyValue("DetailItem") as AtomicItem).Id,
+                Source = ((DataContext as ViewModelBase).GetPropertyValue("AddEditItem") as AtomicItem).Id,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = new IdConverter(),
                 ConverterParameter = "text"
             };
             BindingOperations.SetBinding(AddText, TextBlock.TextProperty, addTextBinding);
-            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddText, TextBlock.TextProperty, "DetailItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "text");
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(AddText, TextBlock.TextProperty, "AddEditItem", viewModelType, "Id", converter: new IdConverter(), converterParameter: "text");
 
             addContent.Children.Add(addIcon);
             addContent.Children.Add(AddText);
             Add.Content = addContent;
             ToolTipService.SetToolTip(Add, "Add (Ctrl + S)");
-            // BInding
 
             KeyboardAccelerator addKeyboardAccelerator = new KeyboardAccelerator()
             {
@@ -262,10 +273,7 @@ namespace ISUF.UI.Views
 
         public override void CreateControlsForModule()
         {
-            ModuleAnalyser analyser = new ModuleAnalyser(uiModule.ModuleItemType);
-
-            analyser.Analyze();
-            var result = analyser.SortProperties();
+            var result = ApplicationBase.Current.ModuleAnalyser.SortProperties(uiModule.ModuleItemType);
 
             UIElement previousControl = null;
 
@@ -274,8 +282,40 @@ namespace ISUF.UI.Views
                 if (item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIIgnoreAttribute)) != null)
                     continue;
 
-                mainContent.Children.Add(ControlCreator.CreateControl(item, ref previousControl));
+                var uiParamsAttr = item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute));
+
+                if ((uiParamsAttr != null && !(uiParamsAttr as UIParamsAttribute).ReadOnlyMode) || uiParamsAttr == null)
+                    mainContent.Children.Add(ControlCreator.CreateEditableControl(item, ref previousControl, uiModule));
+                else
+                    mainContent.Children.Add(ControlCreator.CreateDetailControl(item, ref previousControl));
             }
+
+            FillPredefinedValues();
+        }
+
+        private void FillPredefinedValues()
+        {
+            object item = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem");
+
+            try
+            {
+                item = Convert.ChangeType(item, uiModule.ModuleItemType);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Base.Exceptions.ArgumentNullException("Argument is null", e);
+            }
+            catch (FormatException e)
+            {
+                throw new Base.Exceptions.ArgumentException("Argument format exception", e);
+            }
+            catch (Exception e)
+            {
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
+            }
+
+            var formControls = FormDataMiner.GetControlsFromForm(this);
+            FormDataMiner.FillValuesIntoForm(formControls, item);
         }
     }
 }

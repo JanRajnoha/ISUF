@@ -24,7 +24,7 @@ namespace ISUF.Interface.Storage
 
         void RemoveDatabaseTable(Type tableType);
 
-        ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
+        List<T> GetAllItems<T>() where T : AtomicItem;
 
         T GetItem<T>(int ID) where T : AtomicItem;
 
@@ -44,7 +44,7 @@ namespace ISUF.Interface.Storage
 
         Task ClearChangesInMemoryCache<T>() where T : AtomicItem;
 
-        Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoDB) where T : AtomicItem;
+        Task<List<T>> ReloadInMemoryCache<T>(bool writeChangesIntoDB) where T : AtomicItem;
 
         bool HasInMemoryCacheItem<T>() where T : AtomicItem;
 

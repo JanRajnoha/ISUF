@@ -14,10 +14,12 @@ namespace ISUF.Base.Modules
     {
         protected ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 
-        //public ModuleEnum()
-        //{
-        //    registeredModules = new ObservableCollection<Module>();
-        //}
+        public ModuleAnalyser ModuleAnalyser { get; private set; }
+
+        public ModuleManager()
+        {
+            ModuleAnalyser = new ModuleAnalyser();
+        }
 
         /// <summary>
         /// Check existence of module
@@ -98,6 +100,16 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
+        /// Return module by module item type
+        /// </summary>
+        /// <param name="moduleItemType">Module item type</param>
+        /// <returns>Module</returns>
+        public Module GetModuleByItemType(Type moduleItemType)
+        {
+            return registeredModules.Where(x => x.ModuleItemType == moduleItemType).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Return module by index
         /// </summary>
         /// <param name="index">Index of module</param>
@@ -159,6 +171,8 @@ namespace ISUF.Base.Modules
             module.SetModuleManager(this);
 
             registeredModules.Add(module);
+
+            ModuleAnalyser.Analyse(module.ModuleItemType);
 
             return true;
         }

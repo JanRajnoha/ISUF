@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ISUF.UI.App;
+using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -31,15 +33,16 @@ namespace ISUF.UI.Classes
                 (byte)(255 - defaultColor.B));
         }
 
-        public static T FindControl<T>(UIElement parent, Type targetType, string ControlName) where T : FrameworkElement
+        public static T FindControl<T>(UIElement parent, Type targetType, string controlName) where T : FrameworkElement
         {
+            if (controlName is null)
+                throw new Base.Exceptions.ArgumentNullException(nameof(controlName));
+
             if (parent == null) return null;
 
-            if (parent.GetType() == targetType && ((T)parent).Name == ControlName)
-            {
+            if (parent.GetType() == targetType && ((T)parent).Name == controlName)
                 return (T)parent;
-            }
-            T result = null;
+
             int count = VisualTreeHelper.GetChildrenCount(parent);
             for (int i = 0; i < count; i++)
             {
@@ -47,19 +50,59 @@ namespace ISUF.UI.Classes
 
                 if (child is ContentControl contentChild && contentChild.Content is UIElement innerContent)
                 {
-                    if (contentChild.Name == ControlName)
+                    if (contentChild.Name == controlName)
                         return (T)child;
 
                     child = innerContent;
                 }
 
-                if (FindControl<T>(child, targetType, ControlName) != null)
+                var innerControl = FindControl<T>(child, targetType, controlName);
+                if (innerControl != null)
                 {
-                    result = FindControl<T>(child, targetType, ControlName);
-                    break;
+                    return innerControl;
                 }
             }
-            return result;
+
+            return null;
+        }
+
+        public static IList<FrameworkElement> GetControlsByName(FrameworkElement parent, string controlName, bool partMatch = false)
+        {
+            var results = new List<FrameworkElement>();
+
+            if (parent == null) return null;
+
+            if ((!partMatch && parent.Name.Contains(controlName) && parent.Name.Length == controlName.Length) ||
+                (partMatch && parent.Name.Contains(controlName)) || parent.Name.Length == controlName.Length)
+                results.Add(parent);
+
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                FrameworkElement child = (FrameworkElement)VisualTreeHelper.GetChild(parent, i);
+
+                if (child is ContentControl contentChild && contentChild.Content is FrameworkElement innerContent)
+                {
+                    if ((!partMatch && parent.Name.Contains(controlName) && parent.Name.Length == controlName.Length) ||
+                        ((partMatch && parent.Name.Contains(controlName)) || parent.Name.Length == controlName.Length))
+                        results.Add(parent);
+
+                    child = innerContent;
+                }
+
+                results.AddRange(GetControlsByName(child, controlName, partMatch));
+            }
+
+            return results;
+        }
+
+        public static void CreateViewModel(Type viewModelType, bool rewriteViewModel = false, params object[] viewModelArgs)
+        {
+            if (ApplicationBase.Current.VMLocator.GetViewModel(viewModelType) != null && !rewriteViewModel)
+                return;
+
+            object viewModel = Base.Classes.Functions.CreateInstance(viewModelType, viewModelArgs);
+            ApplicationBase.Current.VMLocator.AddViewModel(viewModel, rewriteViewModel);
         }
     }
 }

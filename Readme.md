@@ -18,16 +18,10 @@ Framework for information systems for UWP
 | ISUF.UI | [![Nuget](https://img.shields.io/nuget/v/ISUF.UI.svg?color=green&label=NuGet)](https://www.nuget.org/packages/ISUF.UI/) |
 
 
-## To-Do (Phase 4)
+## To-Do (Phase 6)
 
 ### Project
 
-- [ ] Security
+- [x] Linked tables
 
-- [ ] Dynamic module page
-
-- [ ] Dynamic panes
-
-- [x] Dynamic menu
-
-- [x] Dynamic Main Page
+- [x] Working with data - Adding iems

@@ -1,5 +1,6 @@
 using ISUF.Base.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override ObservableCollection<T> GetAllItems<T>()
+        public override List<T> GetAllItems<T>()
         {
             throw new NotImplementedException();
         }
@@ -79,7 +80,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override Task SetSourceCollection<T>(ObservableCollection<T> source)
+        public override Task SetSourceCollection<T>(List<T> source)
         {
             throw new NotImplementedException();
         }
@@ -109,7 +110,7 @@ namespace ISUF.Storage.DatabaseAccess
             throw new NotImplementedException();
         }
 
-        public override Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB)
+        public override Task<List<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB)
         {
             throw new NotImplementedException();
         }

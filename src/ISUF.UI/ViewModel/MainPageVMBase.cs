@@ -47,7 +47,7 @@ namespace ISUF.UI.ViewModel
 
             CurrentVersion = new Version(v.Major, v.Minor, v.Build);
 
-            Messenger = ApplicationClass.VMLocator.GetMessenger();
+            messenger = ApplicationClass.VMLocator.GetMessenger();
             NavigationService = ApplicationBase.Current.NavigationService;
         }
 
@@ -62,7 +62,7 @@ namespace ISUF.UI.ViewModel
 
                 if (CurVer.Minor != OldVer.Minor || OldVer.Major == 0)
                 {
-                    ModalWindow.SetVisibility(true, new ReleaseNotes(), useAnimation: false);
+                    ModalWindow.ShowModal(null, new ReleaseNotes(), useDesignAnimation: false);
                 }
                 else
                 {

@@ -156,23 +156,21 @@ namespace ISUF.Base.Update.UpdateHistory
         /// <returns>Collection of items of type T</returns>
         public async Task ReadDataAsync(int attempts = 0)
         {
-            Stream xmlStream = null;
-
             try
             {
-                XmlSerializer Serializ = new XmlSerializer(typeof(UpdateHistoryFile));
-                xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName);
 
-                object readedObjects;
-                using (xmlStream)
-                {
-                    readedObjects = (UpdateHistoryFile) Serializ.Deserialize(xmlStream);
-                }
+
+                XmlSerializer Serializ = new XmlSerializer(typeof(UpdateHistoryFile));
+                object readedObjects = null;
+
+                if ((await ApplicationData.Current.LocalFolder.GetFilesAsync()).FirstOrDefault(x => x.Name == FileName) != null)
+                    using (var xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(FileName))
+                        readedObjects = (UpdateHistoryFile)Serializ.Deserialize(xmlStream);
 
                 if (readedObjects != null)
                 {
-                    LastVersion = new Version(((UpdateHistoryFile) readedObjects).LastVersion);
-                    UpdateList = ((UpdateHistoryFile) readedObjects).UpdateList;
+                    LastVersion = new Version(((UpdateHistoryFile)readedObjects).LastVersion);
+                    UpdateList = ((UpdateHistoryFile)readedObjects).UpdateList;
                 }
                 else
                 {
@@ -182,9 +180,9 @@ namespace ISUF.Base.Update.UpdateHistory
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception s) when (s.Message.Contains("denied") && attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 await ReadDataAsync(attempts + 1);
             }
 
@@ -194,8 +192,6 @@ namespace ISUF.Base.Update.UpdateHistory
             }
             finally
             {
-                xmlStream?.Close();
-                xmlStream?.Dispose();
                 LastVersion = new Version(0, 0, 0, 0);
                 UpdateList = new List<UpdateItem>();
             }
@@ -211,8 +207,8 @@ namespace ISUF.Base.Update.UpdateHistory
             try
             {
                 var serializer = new XmlSerializer(typeof(UpdateHistoryFile));
-                var v = Package.Current.Id.Version;
-                Version packageVersion = new Version(v.Major, v.Minor, v.Build, v.Revision);
+                var version = Package.Current.Id.Version;
+                Version packageVersion = new Version(version.Major, version.Minor, version.Build, version.Revision);
 
                 using (Stream xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(FileName, CreationCollisionOption.ReplaceExisting))
                 {
@@ -223,8 +219,9 @@ namespace ISUF.Base.Update.UpdateHistory
             }
 
             // When file is unavailable
-            catch (Exception s) when ((s.Message.Contains("denied") || s.Message.Contains("is in use")) && (attempts <= 10))
+            catch (Exception e) when (e.Message.Contains("is in use") && (attempts < 10))
             {
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await SaveDataAsync(attempts + 1);
             }
 

@@ -4,11 +4,9 @@
 
 ### Project
 
-- [ ] Security
+- [x] Dynamic module page
 
-- [ ] Dynamic module page
-
-- [ ] Dynamic panes
+- [x] Dynamic panes
 
 - [x] Dynamic menu
 

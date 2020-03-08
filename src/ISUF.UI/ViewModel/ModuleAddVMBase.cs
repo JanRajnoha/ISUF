@@ -4,6 +4,7 @@ using ISUF.Base.Settings;
 using ISUF.Base.Template;
 using ISUF.Base.Service;
 using ISUF.UI.Controls;
+using ISUF.UI.Classes;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,16 +15,21 @@ using ISUF.Interface.Storage;
 using ISUF.UI.App;
 using ISUF.UI.Modules;
 using System.Linq;
+using ISUF.UI.Design;
+using ISUF.UI.Views;
+using Windows.UI.Xaml;
+using System.Collections.Generic;
+using System.Reflection;
+using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.ViewModel
 {
-    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : AtomicItem
+    public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
     {
-        public Messenger messenger;
-        UserActivitySession currentActivity;
-        public bool ModalActivation = false;
+        private readonly ModuleAddControlBase form;
+        private readonly Type itemType;
 
-        Type ItemType;
+        public bool ModalActivation { get; set; } = false;
 
         public ICommand Close { get; set; }
 
@@ -34,7 +40,8 @@ namespace ISUF.UI.ViewModel
             set
             {
                 addEditItem = value;
-                RaisePropertyChanged(nameof(addEditItem));
+                FillValuesFromItemIntoForm();
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), AddEditItem);
             }
         }
 
@@ -45,7 +52,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 secBtnVisibility = value;
-                RaisePropertyChanged(nameof(SecBtnVisibility));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), SecBtnVisibility);
             }
         }
 
@@ -56,7 +63,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 adVisibility = value;
-                RaisePropertyChanged(nameof(AdVisibility));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), AdVisibility);
             }
         }
 
@@ -67,7 +74,7 @@ namespace ISUF.UI.ViewModel
             set
             {
                 errorMessage = value;
-                RaisePropertyChanged(nameof(ErrorMessage));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ErrorMessage);
             }
         }
 
@@ -78,27 +85,13 @@ namespace ISUF.UI.ViewModel
             set
             {
                 errorVisible = value;
-                RaisePropertyChanged(nameof(ErrorVisible));
+                PropertyChangedNotifier.NotifyPropertyChanged(GetType(), ErrorVisible);
             }
         }
 
-        private IAtomicItemManager manager;
-        public IAtomicItemManager Manager
-        {
-            get { return manager; }
-            set
-            {
-                manager = value;
-                RaisePropertyChanged(nameof(manager));
-            }
-        }
+        public virtual DelegateCommand<T> SaveItemCommand => new DelegateCommand<T>(async (T item) => { SaveItem(); });
 
-        protected abstract void AddNewItem(ItemAddNewMsg obj);
-        protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
-
-        public abstract DelegateCommand<T> SaveItem { get; set; }
-
-        public abstract DelegateCommand<T> SaveItemClose { get; set; }
+        public virtual DelegateCommand<T> SaveItemCloseCommand => new DelegateCommand<T>(async (T item) => { SaveCloseItem(); });
 
         public ModuleAddVMBase()
         {
@@ -107,10 +100,11 @@ namespace ISUF.UI.ViewModel
 
 
         // To-Do solve
-        public ModuleAddVMBase(Messenger messenger, Type modulePage) : this()
+        public ModuleAddVMBase(Messenger messenger, Type modulePage, ModuleAddControlBase form) : this()
         {
             this.messenger = messenger;
             this.modulePage = modulePage;
+            this.form = form;
 
             this.messenger.Register<ItemAddNewMsg>(AddNewItem);
 
@@ -122,10 +116,7 @@ namespace ISUF.UI.ViewModel
             this.messenger.Register<UserLoggedInMsg>(UserLoggedIn);
             this.messenger.Register<UserLoggedOutMsg>(UserLoggedOut);
 
-            Close = new RelayCommand(() => messenger.Send(new ItemAddCloseMsg()
-            {
-                ItemType = ItemType
-            }));
+            Close = new RelayCommand(() => CloseAddPane());
 
             SecBtnVisibility = CustomSettings.IsUserLogged;
 
@@ -135,18 +126,77 @@ namespace ISUF.UI.ViewModel
             CustomSettings.ShowAdsChanged += CustomSettings_ShowAdsChanged;
 
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == modulePage);
-            ItemType = uiModule.ModuleItemType;
+            itemType = uiModule.ModuleItemType;
+        }
+
+        private void CloseAddPane()
+        {
+            messenger.Send(new ItemAddCloseMsg()
+            {
+                ItemType = itemType
+            });
+        }
+
+        protected abstract void AddNewItem(ItemAddNewMsg obj);
+        protected virtual void SelectedItemChanged(ItemSelectedAddMsg obj)
+        {
+            if (obj == null || (obj != null && obj.ID == -1))
+                AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+            else
+                AddEditItem = uiModule.GetItemById<T>(obj.ID);
         }
 
         public void CloseModal()
         {
-            if (ModalActivation)
-                ModalWindow.SetVisibility(false);
+            // TODO
         }
 
         public void SetDetailItem(T currentItem)
         {
             AddEditItem = currentItem;
+        }
+
+        protected virtual void SaveItem()
+        {
+            bool newItem = AddEditItem.Id == -1;
+
+            FillValuesFromFormIntoItem();
+
+            ItemAddSavedMsg msg = new ItemAddSavedMsg()
+            {
+                ID = AddEditItem.Id,
+                ItemType = itemType
+            };
+
+            uiModule.AddItem(AddEditItem);
+
+            messenger.Send(msg);
+
+            AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+
+            if (!newItem)
+                CloseAddPane();
+        }
+
+        private void FillValuesFromFormIntoItem()
+        {
+            var formControls = FormDataMiner.GetControlsFromForm(form);
+            AddEditItem = FormDataMiner.FillValuesIntoProperty(formControls, AddEditItem);
+        }
+
+        private void FillValuesFromItemIntoForm()
+        {
+            if (form == null)
+                return;
+
+            var formControls = FormDataMiner.GetControlsFromForm(form);
+            FormDataMiner.FillValuesIntoForm(formControls, AddEditItem);
+        }
+
+        private void SaveCloseItem()
+        {
+            SaveItem();
+            CloseAddPane();
         }
 
         /// <summary>
@@ -170,30 +220,31 @@ namespace ISUF.UI.ViewModel
         }
 
         // Insp
-        protected async Task GenerateTimelineActivityAsync()
-        {
-            try
-            {
-                //Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
-                UserActivityChannel channel = UserActivityChannel.GetDefault();
-                UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("MainPage");
+        //protected async Task GenerateTimelineActivityAsync()
+        //{
+        //    try
+        //    {
+        //        //Get the default UserActivityChannel and query it for our UserActivity. If the activity doesn't exist, one is created.
+        //        UserActivityChannel channel = UserActivityChannel.GetDefault();
+        //        UserActivity userActivity = await channel.GetOrCreateUserActivityAsync("MainPage");
 
-                //Populate required properties
-                userActivity.VisualElements.DisplayText = "Hello Activities";
-                userActivity.ActivationUri = new Uri("thedailynotes://page2?action=edit");
+        //        //Populate required properties
+        //        userActivity.VisualElements.DisplayText = "Hello Activities";
+        //        userActivity.ActivationUri = new Uri("thedailynotes://page2?action=edit");
 
-                //Save
-                await userActivity.SaveAsync(); //save the new metadata
+        //        //Save
+        //        await userActivity.SaveAsync(); //save the new metadata
 
-                //Dispose of any current UserActivitySession, and create a new one.
-                currentActivity?.Dispose();
-                currentActivity = userActivity.CreateSession();
-            }
-            catch (Exception e)
-            {
-                await LogService.AddLogMessageAsync(e.Message);
-            }
-        }
+        //        //Dispose of any current UserActivitySession, and create a new one.
+        //        currentActivity?.Dispose();
+        //        currentActivity = userActivity.CreateSession();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        await LogService.AddLogMessageAsync(e.Message);
+        //        throw new Base.Exceptions.Exception("Unhandled exception", e);
+        //    }
+        //}
 
         /// <summary>
         /// User Logged out message recieved
@@ -219,7 +270,7 @@ namespace ISUF.UI.ViewModel
         /// <param name="obj">Message</param>
         private async void ErrorInput(ItemAddErrorMsg obj)
         {
-            if (obj.ItemType != ItemType)
+            if (obj.ItemType != itemType)
                 return;
 
             ErrorVisible = true;
@@ -237,7 +288,7 @@ namespace ISUF.UI.ViewModel
         /// <param name="obj">Message</param>
         private void ValidInput(ItemAddValidMsg obj)
         {
-            if (obj.ItemType == ItemType)
+            if (obj.ItemType == itemType)
                 ErrorVisible = false;
         }
     }

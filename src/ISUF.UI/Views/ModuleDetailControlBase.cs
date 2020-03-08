@@ -15,13 +15,15 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Views
 {
     public class ModuleDetailControlBase : ControlBase
     {
         Panel mainContent;
-        UIModule uiModule;
+        readonly UIModule uiModule;
 
         public ModuleDetailControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
@@ -30,7 +32,10 @@ namespace ISUF.UI.Views
 
         public override void AddControls()
         {
-            Grid content = new Grid();
+            Grid content = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
 
             RowDefinition mainRow = new RowDefinition()
             {
@@ -39,9 +44,8 @@ namespace ISUF.UI.Views
 
             RowDefinition buttonsRow = new RowDefinition()
             {
-                Height = new GridLength(1, GridUnitType.Star)
+                Height = new GridLength(59, GridUnitType.Pixel)
             };
-            // binding
 
             content.RowDefinitions.Add(mainRow);
             content.RowDefinitions.Add(buttonsRow);
@@ -58,23 +62,8 @@ namespace ISUF.UI.Views
 
             content.Children.Add(mainScrollView);
 
-
-
             Grid buttonsPart = new Grid();
             Grid.SetRow(buttonsPart, 1);
-
-            ColumnDefinition col1 = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            };
-
-            ColumnDefinition col2 = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Star)
-            };
-
-            buttonsPart.ColumnDefinitions.Add(col1);
-            buttonsPart.ColumnDefinitions.Add(col2);
             
             RowDefinition buttonRow = new RowDefinition()
             {
@@ -128,10 +117,7 @@ namespace ISUF.UI.Views
 
         public override void CreateControlsForModule()
         {
-            ModuleAnalyser analyser = new ModuleAnalyser(uiModule.ModuleItemType);
-
-            analyser.Analyze();
-            var result = analyser.SortProperties();
+            var result = ApplicationBase.Current.ModuleAnalyser.SortProperties(uiModule.ModuleItemType);
 
             UIElement previousControl = null;
 
@@ -140,8 +126,35 @@ namespace ISUF.UI.Views
                 if (item.Value.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIIgnoreAttribute)) != null)
                     continue;
 
-                mainContent.Children.Add(ControlCreator.CreateControl(item, ref previousControl));
+                mainContent.Children.Add(ControlCreator.CreateDetailControl(item, ref previousControl));
             }
+
+            FillPredefinedValues();
+        }
+
+        private void FillPredefinedValues()
+        {
+            object item = (DataContext as ViewModelBase).GetPropertyValue("DetailItem");
+
+            try
+            {
+                item = Convert.ChangeType(item, uiModule.ModuleItemType);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new Base.Exceptions.ArgumentNullException("Argument is null", e);
+            }
+            catch (FormatException e)
+            {
+                throw new Base.Exceptions.ArgumentException("Argument format exception", e);
+            }
+            catch (Exception e)
+            {
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
+            }
+
+            var formControls = FormDataMiner.GetControlsFromForm(this);
+            FormDataMiner.FillValuesIntoForm(formControls, item, true);
         }
     }
 }

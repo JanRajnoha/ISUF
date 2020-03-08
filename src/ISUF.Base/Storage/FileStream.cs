@@ -1,6 +1,7 @@
 using ISUF.Base.Service;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.Storage;
@@ -18,18 +19,15 @@ namespace ISUF.Base.Storage
         /// <returns>Collection of items of type T</returns>
         public static async Task<T> ReadDataAsync(string fileName, string path, int attempts = 0)
         {
-            T readedObjects = default(T);
-            Stream xmlStream = null;
+            T readedObjects = default;
 
             try
             {
                 XmlSerializer serializ = new XmlSerializer(typeof(T));
-                xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName);
 
-                using (xmlStream)
-                {
-                    readedObjects = (T)serializ.Deserialize(xmlStream);
-                }
+                if ((await ApplicationData.Current.LocalFolder.GetFilesAsync()).FirstOrDefault(x => x.Name == fileName) != null)
+                    using (var xmlStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName))
+                        readedObjects = (T)serializ.Deserialize(xmlStream);
 
                 if (readedObjects != null)
                 {
@@ -37,25 +35,20 @@ namespace ISUF.Base.Storage
                 }
                 else
                 {
-                    return default(T);
+                    return default;
                 }
             }
 
             // When is file unavailable - 10 attempts is enough
-            catch (Exception e) when (e.Message.Contains("denied") && attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await ReadDataAsync(fileName, path, attempts + 1);
             }
 
             catch (Exception e)
             {
                 throw new Exceptions.Exception("Unhandled exception", e);
-            }
-
-            finally
-            {
-                xmlStream?.Close();
             }
         }
 
@@ -85,9 +78,9 @@ namespace ISUF.Base.Storage
             }
 
             // When file is unavailable
-            catch (Exception e) when ((e.Message.Contains("denied") || e.Message.Contains("is in use")) && attempts <= 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                await LogService.AddLogMessageAsync("File is in use");
+                await LogService.AddLogMessageAsync("File is in use\n\n" + e.Message);
                 return await SaveDataAsync(data, fileName, path, attempts + 1);
             }
 

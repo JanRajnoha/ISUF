@@ -47,8 +47,7 @@ namespace ISUF.UI.ViewModel
             {
                 ItemType = ItemType,
                 Edit = false,
-                ID = item.Id,
-                ManagerID = item.ManagerID
+                ID = item.Id
             });
         });
 
@@ -110,7 +109,7 @@ namespace ISUF.UI.ViewModel
                 // To-Do solve
                 //TypeOfItem = typeOfItemList[typeOfItemList.IndexOf(typeOfItemList.FirstOrDefault(x => x.ToString() == itemTypeName))],
                 TypeOfItem = itemTypeName,
-                Items = new System.Collections.ObjectModel.ObservableCollection<T>()
+                Items = new List<T>()
                 {
                     clone
                 }
@@ -128,6 +127,7 @@ namespace ISUF.UI.ViewModel
             catch (Exception e)
             {
                 LogService.AddLogMessage(e.Message);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
 
             var shareFile = await ApplicationData.Current.LocalFolder.GetFileAsync(ShareFileItem);
@@ -181,8 +181,7 @@ namespace ISUF.UI.ViewModel
             messenger.Send(new ItemEditMsg()
             {
                 ItemType = ItemType,
-                ID = obj.Id,
-                ManagerID = obj.ManagerID
+                ID = obj.Id
             });
         }
 

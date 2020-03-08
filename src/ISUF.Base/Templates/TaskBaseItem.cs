@@ -24,12 +24,8 @@ namespace ISUF.Base.Templates
 
         }
 
-        public TaskBaseItem(TaskBaseItem taskBaseItem)
+        public TaskBaseItem(TaskBaseItem taskBaseItem) : base(taskBaseItem)
         {
-            Id = taskBaseItem.Id;
-            Name = taskBaseItem.Name;
-            Secured = taskBaseItem.Secured;
-            Description = taskBaseItem.Description;
             Start = taskBaseItem.Start;
             End = taskBaseItem.End;
             Neverend = taskBaseItem.Neverend;

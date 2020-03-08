@@ -12,5 +12,26 @@ namespace ISUF.Storage.Templates
     {
         public int UserId { get; set; }
         public UserLogType UserActivity { get; set; }
+
+        public LogUserActivityItem()
+        {
+
+        }
+
+        public LogUserActivityItem(LogUserActivityItem logUserActivity) : base(logUserActivity)
+        {
+            UserId = logUserActivity.UserId;
+            UserActivity = logUserActivity.UserActivity;
+        }
+
+        public override object Clone()
+        {
+            return new LogUserActivityItem(this);
+        }
+
+        public override string ToString()
+        {
+            return $"{Id}:  {UserId} - {UserActivity}";
+        }
     }
 }

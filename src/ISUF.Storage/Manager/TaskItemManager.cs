@@ -1,4 +1,5 @@
-﻿using ISUF.Base.Service;
+﻿using ISUF.Base.Modules;
+using ISUF.Base.Service;
 using ISUF.Base.Settings;
 using ISUF.Base.Templates;
 using ISUF.Interface.Storage;
@@ -57,9 +58,9 @@ namespace ISUF.Storage.Manager
         /// Remove item from collection and remove schduled toast
         /// </summary>
         /// <param name="detailedItem">Removed item</param>
-        public override Task<bool> RemoveItem<T>(T detailedItem)
+        public override Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager)
         {
-            var result = base.RemoveItem(detailedItem);
+            var result = base.RemoveItem(detailedItem, moduleManager);
 
             var ToastNotifier = ToastNotificationManager.CreateToastNotifier();
             var ScheduledToastList = ToastNotifier.GetScheduledToastNotifications();

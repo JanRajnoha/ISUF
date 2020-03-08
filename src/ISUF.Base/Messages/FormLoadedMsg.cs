@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ISUF.Base.Locator
+namespace ISUF.Base.Messages
 {
-    public class LocatorBase
+    public class FormLoadedMsg
     {
+        public Type FormType { get; set; }
     }
 }

@@ -1,65 +1,88 @@
 using ISUF.Base.Attributes;
+using ISUF.Base.Enum;
 using ISUF.Base.Exceptions;
 using ISUF.Base.Modules;
+using ISUF.UI.Classes;
+using ISUF.UI.Controls;
+using ISUF.UI.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Design
 {
-    public class ControlCreator
+    public static class ControlCreator
     {
-        public static UIElement CreateControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
+        public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl, UIModule uiModule)
         {
             string controlName = controlAnalyze.Key;
             PropertyAnalyze controlData = controlAnalyze.Value;
-            string controlTypeName = controlData.PropertyType.Name.ToLower();
+            PropertyType controlTypeName = controlData.PropertyType;
             UIElement control;
-            UIParamsAttribute customization;
+            UIParamsAttribute customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 
-            if (controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) != null)
+            var linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+            if (linkedTableAttribute != null)
             {
-                control =  CreateLinkedTableControl(controlName, controlData, controlTypeName);
+                switch (linkedTableAttribute.LinkedTableRelation)
+                {
+                    case LinkedTableRelation.One:
+                        control = LinkedTableSingleSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName, linkedTableAttribute);
+                        break;
+
+                    case LinkedTableRelation.Many:
+                        control = LinkedTableMultiSelectorControl.CreateLinkedTableControl(controlName, controlData, controlTypeName, linkedTableAttribute);
+                        break;
+
+                    default:
+                        throw new NotSupportedPropertyTypeException("Not supported LinkedTableRelation.");
+                }
+
             }
             else
                 switch (controlTypeName)
                 {
-                    case "string":
-                    case "int":
-                    case "int32":
-                    case "double":
-                    case "char":
+                    case PropertyType.String:
+                    case PropertyType.Int:
+                    case PropertyType.Int32:
+                    case PropertyType.Double:
+                    case PropertyType.Char:
+                    case PropertyType.Decimal:
+                    case PropertyType.Float:
+
                         control = new TextBox()
                         {
-                            Name = controlName,
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
                             Margin = new Thickness(10),
                             TextWrapping = TextWrapping.Wrap,
                             PlaceholderText = "Insert " + controlName
                         };
 
-                        customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+                        if (controlTypeName == PropertyType.Char)
+                            (control as TextBox).MaxLength = 1;
+
                         if (customization != null && customization.UseLongTextInput)
                             (control as TextBox).Height = 150;
-
                         break;
 
-                    case "boolean":
+                    case PropertyType.Boolean:
                         control = new CheckBox()
                         {
                             Content = controlName,
-                            Margin = new Thickness(10)
+                            Margin = new Thickness(10),
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                         };
                         break;
 
-                    case "datetime":
+                    case PropertyType.DateTime:
 
-                        customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
                         if (customization == null)
                             throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
 
@@ -83,41 +106,65 @@ namespace ISUF.UI.Design
 
                         TextBlock label = new TextBlock()
                         {
-                            Text = customization.LabelDescription,
+                            Name = controlName + Constants.LABEL_CONTROL_IDENTIFIER,
+                            Text = customization == null ? controlTypeName.ToString() : customization.LabelDescription,
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(0, 0, 0, 5)
                         };
                         Grid.SetRow(label, 0);
                         (control as Grid).Children.Add(label);
 
+                        //if (customization.ReadOnlyMode)
+                        //{
+                        //    TextBox data = new TextBox()
+                        //    {
+                        //        Text = "",
+                        //        VerticalAlignment = VerticalAlignment.Center,
+                        //        Margin = new Thickness(0, 0, 0, 5),
+                        //        Name = controlName + DATA_CONTROL_IDENTIFIER
+                        //    };
+                        //}
+                        //else
+                        //{
+                        //    TextBlock data = new TextBlock()
+                        //    {
+                        //        Text = "",
+                        //        VerticalAlignment = VerticalAlignment.Center,
+                        //        Margin = new Thickness(0, 0, 0, 5),
+                        //        Name = controlName + DATA_CONTROL_IDENTIFIER
+                        //    };
+                        //}
+
                         UIElement dateTimeControl;
 
                         switch (customization.DateTimeMode)
                         {
-                            case Base.Enum.DatePickerMode.Date:
+                            case DatePickerMode.Date:
                                 dateTimeControl = new CalendarDatePicker()
                                 {
                                     Date = DateTime.Today,
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
                                     Margin = new Thickness(0, 5, 0, 0),
-                                    PlaceholderText = "Select a date"
+                                    PlaceholderText = "Select a date",
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                                 };
                                 break;
 
-                            case Base.Enum.DatePickerMode.Time:
+                            case DatePickerMode.Time:
                                 dateTimeControl = new TimePicker()
                                 {
                                     Time = DateTime.Now.TimeOfDay,
                                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Margin = new Thickness(0, 5, 0, 0)
+                                    Margin = new Thickness(0, 5, 0, 0),
+                                    Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
                                 };
                                 break;
 
-                            case Base.Enum.DatePickerMode.DateAndTime:
-                                throw new Base.Exceptions.NotSupportedException();
+                            case DatePickerMode.DateAndTime:
+                                throw new Base.Exceptions.NotSupportedException("DateTime combination is not supported.");
 
                             default:
-                                throw new Base.Exceptions.NotSupportedException();
+                                throw new Base.Exceptions.NotSupportedException("Not supported DatePickerMode.");
                         }
 
                         Grid.SetRow(dateTimeControl as FrameworkElement, 1);
@@ -126,7 +173,7 @@ namespace ISUF.UI.Design
 
                         break;
 
-                    case "notImplementedYet":
+                    case PropertyType.notImplementedYet:
                         control = new Grid()
                         {
                             Background = new SolidColorBrush(Colors.Red),
@@ -136,8 +183,137 @@ namespace ISUF.UI.Design
                         break;
 
                     default:
-                        throw new NotSupportedPropertyType();
+                        throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
                 }
+
+            RelativePanel.SetAlignLeftWithPanel(control, true);
+            RelativePanel.SetAlignRightWithPanel(control, true);
+
+            AddControlUnder(control, ref previousControl);
+
+            return control;
+        }
+
+        internal static UIElement CreateDetailControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
+        {
+            string controlName = controlAnalyze.Key;
+            PropertyAnalyze controlData = controlAnalyze.Value;
+            PropertyType controlTypeName = controlData.PropertyType;
+            UIElement control;
+            UIParamsAttribute customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
+            var linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+
+            switch (controlTypeName)
+            {
+                case PropertyType.String:
+                case PropertyType.Int:
+                case PropertyType.Int32:
+                case PropertyType.Double:
+                case PropertyType.Char:
+                case PropertyType.DateTime:
+                case PropertyType.Boolean:
+
+                    if (customization == null && controlTypeName == PropertyType.DateTime)
+                        throw new MissingRequiredAdditionalDataException("Property DateTime require UIParams attribute for specificating design.");
+
+                    control = new Grid()
+                    {
+                        Margin = new Thickness(10),
+                        VerticalAlignment = VerticalAlignment.Stretch
+                    };
+
+                    RowDefinition labelRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    RowDefinition dateTimeRow = new RowDefinition()
+                    {
+                        Height = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    (control as Grid).RowDefinitions.Add(labelRow);
+                    (control as Grid).RowDefinitions.Add(dateTimeRow);
+
+                    ColumnDefinition labelColumn = new ColumnDefinition()
+                    {
+                        Width = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    ColumnDefinition dataColumn = new ColumnDefinition()
+                    {
+                        Width = new GridLength(1, GridUnitType.Auto)
+                    };
+
+                    (control as Grid).ColumnDefinitions.Add(labelColumn);
+                    (control as Grid).ColumnDefinitions.Add(dataColumn);
+
+                    TextBlock label = new TextBlock()
+                    {
+                        VerticalAlignment = VerticalAlignment.Bottom,
+                        FontWeight = FontWeights.Bold,
+                        Margin = new Thickness(0, 0, 5, 0)
+                    };
+
+                    if (customization.UseLabelDescription)
+                        label.Text = customization.LabelDescription ?? "";
+                    else
+                        label.Text = controlData.PropertyName;
+
+                    Grid.SetRow(label, 0);
+                    (control as Grid).Children.Add(label);
+
+                    if (linkedTableAttribute != null && linkedTableAttribute.LinkedTableRelation == LinkedTableRelation.Many)
+                    {
+                        ListView linkedTableSelectedIds = new ListView()
+                        {
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER,
+                            VerticalAlignment = VerticalAlignment.Stretch,
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            Margin = new Thickness(0, 5, 0, 5),
+                            Height = 250,
+                            SelectionMode = ListViewSelectionMode.None
+                        };
+
+                        Grid.SetRow(linkedTableSelectedIds, 1);
+                        Grid.SetColumnSpan(linkedTableSelectedIds, 2);
+                        (control as Grid).Children.Add(linkedTableSelectedIds);
+                    }
+                    else
+                    {
+                        TextBlock data = new TextBlock()
+                        {
+                            Text = "",
+                            VerticalAlignment = VerticalAlignment.Bottom,
+                            Margin = new Thickness(0, 5, 0, 0),
+                            Name = controlName + Constants.DATA_CONTROL_IDENTIFIER
+                        };
+                        (control as Grid).Children.Add(data);
+
+                        if (customization.ShowDetailOnOneLine)
+                        {
+                            data.Margin = new Thickness(5, 5, 0, 0);
+                            Grid.SetColumn(data, 1);
+                        }
+                        else
+                            Grid.SetRow(data, 1);
+                    }
+
+                    break;
+
+                case PropertyType.notImplementedYet:
+
+                    control = new Grid()
+                    {
+                        Background = new SolidColorBrush(Colors.Red),
+                        Margin = new Thickness(10),
+                        Height = 25
+                    };
+                    break;
+
+                default:
+                    throw new NotSupportedPropertyTypeException("Not supported PropertyType.");
+            }
 
             RelativePanel.SetAlignLeftWithPanel(control, true);
             RelativePanel.SetAlignRightWithPanel(control, true);
@@ -153,84 +329,6 @@ namespace ISUF.UI.Design
                 RelativePanel.SetBelow(control, upperControl);
 
             upperControl = control;
-        }
-
-        public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, string controlTypeName)
-        {
-            if (controlData is null)
-                throw new Base.Exceptions.ArgumentNullException(nameof(controlData));
-
-            if (controlTypeName != "int" || controlTypeName != "int32")
-                throw new Base.Exceptions.ArgumentOutOfRangeException(nameof(controlData), "Type of linked table property must be integer.");
-
-            if (!(controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) is UIParamsAttribute customization))
-                throw new MissingRequiredAdditionalDataException("Linked table property require UIParams attribute for specificating design.");
-
-            var control = new Grid()
-            {
-                Margin = new Thickness(10)
-            };
-
-            RowDefinition labelRow = new RowDefinition()
-            {
-                Height = new GridLength(1, GridUnitType.Auto)
-            };
-
-            RowDefinition linkedTableControlsRow = new RowDefinition()
-            {
-                Height = new GridLength(1, GridUnitType.Auto)
-            };
-
-            control.RowDefinitions.Add(labelRow);
-            control.RowDefinitions.Add(linkedTableControlsRow);
-
-            TextBlock label = new TextBlock()
-            {
-                Text = customization.LabelDescription,
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 5)
-            };
-            Grid.SetRow(label, 0);
-            control.Children.Add(label);
-
-            ColumnDefinition linkedTableSelectorColumn = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Auto)
-            };
-
-            ColumnDefinition linkedTableSelectedInfoColumn = new ColumnDefinition()
-            {
-                Width = new GridLength(1, GridUnitType.Auto)
-            };
-
-            Grid linkedTableControlsRowGrid = new Grid();
-            linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableSelectorColumn);
-            linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableSelectedInfoColumn);
-
-            Grid.SetRow(linkedTableControlsRowGrid, 1);
-            control.Children.Add(linkedTableControlsRowGrid);
-
-            Button linkedTableRowSelector = new Button()
-            {
-                Content = "Choose row",
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 0, 5, 0)
-            };
-
-            TextBlock linkedTableSelectedRowText = new TextBlock()
-            {
-                Name = controlName + "Label",
-                Text = "Selected ID:",
-                VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(5, 0, 0, 0)
-            };
-
-            Grid.SetColumn(linkedTableSelectedRowText, 1);
-
-            linkedTableControlsRowGrid.Children.Add(linkedTableRowSelector);
-            linkedTableControlsRowGrid.Children.Add(linkedTableSelectedRowText);
-
-            return control;
         }
     }
 }

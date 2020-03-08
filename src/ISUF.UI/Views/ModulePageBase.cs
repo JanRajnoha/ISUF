@@ -19,12 +19,19 @@ using ISUF.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Navigation;
 using System.Windows.Input;
+using ISUF.Base.Messages;
+using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace ISUF.UI.Views
 {
     public class ModulePageBase : PageBase
     {
         UIModule uiModule;
+        ListView ModuleData = new ListView();
+        MenuFlyoutItem detailFlyoutItem = new MenuFlyoutItem();
+        MenuFlyoutItem removeFlyoutItem = new MenuFlyoutItem();
+        MenuFlyoutItem editFlyoutItem = new MenuFlyoutItem();
 
         protected ColumnDefinition slaveFrameCD = new ColumnDefinition();
 
@@ -74,7 +81,7 @@ namespace ISUF.UI.Views
         {
             CommandBar PageHeader = new CommandBar
             {
-                Name = "PageHeader",
+                Name = nameof(PageHeader),
                 Style = ApplicationBase.Current.Resources["PageHeader"] as Style,
                 Margin = new Thickness(0, 32, 0, 0)
             };
@@ -86,7 +93,7 @@ namespace ISUF.UI.Views
                 IsEnabled = true,
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("AddItem") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("AddItemCommand") as ICommand
             };
 
             ToolTipService.SetToolTip(AddItem, "Add new " + (DataContext as ViewModelBase).GetPropertyValue("ModuleName") as string + " (Ctrl + N)");
@@ -101,7 +108,7 @@ namespace ISUF.UI.Views
             {
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
-                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangePaneVisibility") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangePaneVisibilityCommand") as ICommand
             };
 
             ToolTipService.SetToolTip(SlavePane, "Open/Close slave pane (Ctrl + O)");
@@ -150,7 +157,7 @@ namespace ISUF.UI.Views
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Bullets),
-                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionMode") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionModeCommand") as ICommand
             };
 
             Binding selectItemsLabelBinding = new Binding()
@@ -193,7 +200,7 @@ namespace ISUF.UI.Views
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Cancel),
-                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionMode") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ChangeSelectionModeCommand") as ICommand
             };
             ToolTipService.SetToolTip(SlavePane, "Cancel select items (Esc)");
 
@@ -285,7 +292,7 @@ namespace ISUF.UI.Views
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Share),
-                Command = (DataContext as ViewModelBase).GetPropertyValue("ShareItems") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ShareItemsCommand") as ICommand
             };
 
             ToolTipService.SetToolTip(ShareItems, "Share");
@@ -308,33 +315,33 @@ namespace ISUF.UI.Views
             };
             BindingOperations.SetBinding(ShareItems, AppBarButton.VisibilityProperty, shareItemsVisibilityBinding);
 
-            AppBarButton DeleteItems = new AppBarButton()
+            AppBarButton RemoveItems = new AppBarButton()
             {
-                Name = nameof(DeleteItems),
-                Label = "Delete items",
+                Name = nameof(RemoveItems),
+                Label = "Remove items",
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.Delete),
-                Command = (DataContext as ViewModelBase).GetPropertyValue("DeleteItems") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("RemoveItemsCommand") as ICommand
             };
-            ToolTipService.SetToolTip(DeleteItems, "Delete (Delete)");
+            ToolTipService.SetToolTip(RemoveItems, "Remove (Delete)");
 
-            KeyboardAccelerator deleteItemsKeyboardAccelerator = new KeyboardAccelerator()
+            KeyboardAccelerator removeItemsKeyboardAccelerator = new KeyboardAccelerator()
             {
                 Key = VirtualKey.Delete,
                 Modifiers = VirtualKeyModifiers.None
             };
-            DeleteItems.KeyboardAccelerators.Add(deleteItemsKeyboardAccelerator);
+            RemoveItems.KeyboardAccelerators.Add(removeItemsKeyboardAccelerator);
 
-            Binding deleteItemsCommandParameterBinding = new Binding()
+            Binding removeItemsCommandParameterBinding = new Binding()
             {
                 ElementName = "ModuleData",
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            BindingOperations.SetBinding(DeleteItems, AppBarButton.CommandParameterProperty, deleteItemsCommandParameterBinding);
+            BindingOperations.SetBinding(RemoveItems, AppBarButton.CommandParameterProperty, removeItemsCommandParameterBinding);
 
-            Binding deleteItemsVisibilityBinding = new Binding()
+            Binding removeItemsVisibilityBinding = new Binding()
             {
                 Path = new PropertyPath(nameof(ListView.SelectionMode)),
                 ElementName = "ModuleData",
@@ -342,7 +349,7 @@ namespace ISUF.UI.Views
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Converter = SelectItemsMode
             };
-            BindingOperations.SetBinding(DeleteItems, AppBarButton.VisibilityProperty, deleteItemsVisibilityBinding);
+            BindingOperations.SetBinding(RemoveItems, AppBarButton.VisibilityProperty, removeItemsVisibilityBinding);
 
             AppBarButton CreateSecondTile = new AppBarButton()
             {
@@ -351,7 +358,7 @@ namespace ISUF.UI.Views
                 Template = ApplicationBase.Current.Resources["ShadowAppBarButton"] as ControlTemplate,
                 Style = ApplicationBase.Current.Resources["AppBarButtonRevealLabelsOnRightStyle"] as Style,
                 Icon = new SymbolIcon(Symbol.SelectAll),
-                Command = (DataContext as ViewModelBase).GetPropertyValue("AddStartTile") as ICommand
+                Command = (DataContext as ViewModelBase).GetPropertyValue("AddStartTileCommand") as ICommand
             };
 
             ToolTipService.SetToolTip(CreateSecondTile, "Add/Remove second tile");
@@ -391,7 +398,7 @@ namespace ISUF.UI.Views
             PageHeader.PrimaryCommands.Add(CancelSelectItems);
             PageHeader.PrimaryCommands.Add(SelectAllItems);
             PageHeader.PrimaryCommands.Add(ShareItems);
-            PageHeader.PrimaryCommands.Add(DeleteItems);
+            PageHeader.PrimaryCommands.Add(RemoveItems);
             PageHeader.PrimaryCommands.Add(new AppBarSeparator());
             PageHeader.PrimaryCommands.Add(CreateSecondTile);
             PageHeader.Content = title;
@@ -457,13 +464,59 @@ namespace ISUF.UI.Views
 
         private void AddDataViewPart(Panel container)
         {
-            ListView ModuleData = new ListView()
+            ModuleData = new ListView()
             {
                 Name = nameof(ModuleData),
                 Margin = new Thickness(0, 10, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Background = new SolidColorBrush(Color.FromArgb(125, 125, 0, 255))
+                SelectionMode = ListViewSelectionMode.Single,
+                ItemsSource = (DataContext as ViewModelBase).GetPropertyValue("Source")
             };
+            ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(ModuleData, ListView.ItemsSourceProperty, "Source", viewModelType);
+
+            ScrollViewer.SetVerticalScrollBarVisibility(ModuleData, ScrollBarVisibility.Auto);
+            
+            MenuFlyout menuFlyout = new MenuFlyout();
+            editFlyoutItem = new MenuFlyoutItem()
+            {
+                Text = "Edit",
+                Icon = new SymbolIcon(Symbol.Edit),
+                Command = (DataContext as ViewModelBase).GetPropertyValue("EditCommand") as ICommand
+            };
+
+            detailFlyoutItem = new MenuFlyoutItem()
+            {
+                Text = "Detail",
+                Icon = new SymbolIcon(Symbol.FullScreen),
+                Command = (DataContext as ViewModelBase).GetPropertyValue("ShowDetailCommand") as ICommand
+            };
+
+            removeFlyoutItem = new MenuFlyoutItem()
+            {
+                Text = "Remove",
+                Icon = new SymbolIcon(Symbol.Delete),
+                Command = (DataContext as ViewModelBase).GetPropertyValue("RemoveCommand") as ICommand
+            };
+
+            menuFlyout.Items.Add(editFlyoutItem);
+            menuFlyout.Items.Add(detailFlyoutItem);
+            menuFlyout.Items.Add(removeFlyoutItem);
+            ModuleData.ContextFlyout = menuFlyout;
+
+            Style itemStyle = new Style()
+            {
+                TargetType = typeof(ListViewItem)
+            };
+
+            Setter itemHorizontalContentAlignmentSetter = new Setter()
+            {
+                Property = HorizontalContentAlignmentProperty,
+                Value = HorizontalAlignment.Stretch
+            };
+            itemStyle.Setters.Add(itemHorizontalContentAlignmentSetter);
+            ModuleData.ItemContainerStyle = itemStyle;
+
+            ModuleData.AddHandler(RightTappedEvent, new RightTappedEventHandler(Item_RightTapped), true);
 
             Binding moduleDataSelectionModeBinding = new Binding()
             {
@@ -474,6 +527,35 @@ namespace ISUF.UI.Views
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(ModuleData, ListView.SelectionModeProperty, "ListSelectionMode", viewModelType);
 
             container.Children.Add(ModuleData);
+        }
+
+        protected void Item_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if (e.OriginalSource is FrameworkElement originalSource)
+            {
+                object dataContextOriginalSource;
+                try
+                {
+                    dataContextOriginalSource = Convert.ChangeType(originalSource.DataContext, uiModule.ModuleItemType);
+                }
+                catch
+                {
+                    return;
+                }
+
+                if (dataContextOriginalSource != null)
+                {
+                    editFlyoutItem.CommandParameter = dataContextOriginalSource;
+                    detailFlyoutItem.CommandParameter = dataContextOriginalSource;
+                    removeFlyoutItem.CommandParameter = dataContextOriginalSource;
+
+                    FrameworkElement senderElement = sender as FrameworkElement;
+                    var flyoutBase = (MenuFlyout)senderElement.ContextFlyout;
+                    var cursorPosition = e.GetPosition(ModuleData);
+
+                    flyoutBase.ShowAt(ModuleData, cursorPosition);
+                }
+            }
         }
 
         private void AddInAppNotify(Panel container)
@@ -493,8 +575,9 @@ namespace ISUF.UI.Views
             StackPanel LoadingStack = new StackPanel()
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
             };
+            LoadingStack.Loaded += LoadingStack_Loaded;
 
             Binding loadingStackVisibilityBinding = new Binding()
             {
@@ -506,7 +589,36 @@ namespace ISUF.UI.Views
 
             ApplicationBase.Current.PropertyChangedNotifier.RegisterProperty(LoadingStack, StackPanel.VisibilityProperty, "Source", viewModelType, converter: new NullToVisibilityConverter(), converterParameter: "not");
 
+            ProgressRing loadingRing = new ProgressRing()
+            {
+                Height = 75,
+                Width = 75,
+                IsActive = true,
+                Margin = new Thickness(15),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            TextBlock loadingText = new TextBlock()
+            {
+                Text = "Please wait. Loading data...",
+                FontSize = 21
+            };
+
+            LoadingStack.Children.Add(loadingRing);
+            LoadingStack.Children.Add(loadingText);
+
             container.Children.Add(LoadingStack);
+        }
+
+        private void LoadingStack_Loaded(object sender, RoutedEventArgs e)
+        {
+            FormLoadedMsg msg = new FormLoadedMsg()
+            {
+                FormType = DataContext.GetType()
+            };
+
+            ApplicationBase.Current.VMLocator.GetMessenger().Send(msg);
         }
 
         private void AddSlavePane(Panel container)

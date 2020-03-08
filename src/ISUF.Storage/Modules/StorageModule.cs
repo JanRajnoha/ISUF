@@ -2,7 +2,9 @@
 using ISUF.Base.Template;
 using ISUF.Interface.Storage;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace ISUF.Storage.Modules
 {
@@ -43,24 +45,29 @@ namespace ISUF.Storage.Modules
             return itemManager.GetItem<T>(id);
         }
 
-        public bool AddItem<T>(T newItem) where T : AtomicItem
+        public bool AddItem<T>(T newItem, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
-            return itemManager.AddItem(newItem);
+            return itemManager.AddItem(newItem, moduleManager, ignoreLinkedTableUpdate);
         }
 
         public bool RemoveItemById<T>(int id) where T : AtomicItem
         {
-            return itemManager.RemoveItem<T>(id).Result;
+            return RemoveItemByIdAsync<T>(id).Result;
         }
 
-        public ObservableCollection<T> GetAllItems<T>() where T : AtomicItem
+        public Task<bool> RemoveItemByIdAsync<T>(int id) where T : AtomicItem
         {
-            return itemManager.GetAllItems<T>().Result;
+            return itemManager.RemoveItem<T>(id, moduleManager);
+        }
+
+        public List<T> GetAllItems<T>() where T : AtomicItem
+        {
+            return itemManager.GetAllItems<T>();
         }
 
         public bool EditItem<T>(T editedItem) where T : AtomicItem
         {
-            return itemManager.AddItem(editedItem);
+            return itemManager.AddItem(editedItem, moduleManager);
         }
 
         public virtual void UpdateDatabaseTable()

@@ -15,7 +15,7 @@ namespace ISUF.Storage.DatabaseAccess
     {
         protected string connectionsString;
         protected bool useInMemoryCache;
-        protected Dictionary<Type, ObservableCollection<AtomicItem>> inMemoryCache = new Dictionary<Type, ObservableCollection<AtomicItem>>();
+        protected Dictionary<Type, List<AtomicItem>> inMemoryCache = new Dictionary<Type, List<AtomicItem>>();
         protected Dictionary<Type, string> registeredModules = new Dictionary<Type, string>();
         protected List<StorageChange> dbChanges = new List<StorageChange>();
         protected Type historyModuleType;
@@ -88,7 +88,7 @@ namespace ISUF.Storage.DatabaseAccess
             dbChanges.Add(addStorageChange);
         }
 
-        public abstract ObservableCollection<T> GetAllItems<T>() where T : AtomicItem;
+        public abstract List<T> GetAllItems<T>() where T : AtomicItem;
 
         public abstract T GetItem<T>(int ID) where T : AtomicItem;
 
@@ -163,9 +163,9 @@ namespace ISUF.Storage.DatabaseAccess
 
         public abstract Task ClearChangesInMemoryCache<T>() where T : AtomicItem;
 
-        public abstract Task<ObservableCollection<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB) where T : AtomicItem;
+        public abstract Task<List<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB) where T : AtomicItem;
 
-        public abstract Task SetSourceCollection<T>(ObservableCollection<T> source) where T : AtomicItem;
+        public abstract Task SetSourceCollection<T>(List<T> source) where T : AtomicItem;
 
         /// <summary>
         /// Get true/false statement for filtering items based on security
@@ -188,7 +188,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
             if (!HasInMemoryCacheItem<T>())
             {
-                inMemoryCache.Add(typeof(T), (ObservableCollection<AtomicItem>)new ObservableCollection<T>().Cast<AtomicItem>());
+                inMemoryCache.Add(typeof(T), (List<AtomicItem>)new List<T>().Cast<AtomicItem>());
                 return true;
             }
             else

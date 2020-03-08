@@ -1,6 +1,7 @@
 ﻿using ISUF.Base.Modules;
 using System;
 using ISUF.Interface.Storage;
+using Windows.Storage;
 
 namespace ISUF.Storage.Modules
 {
@@ -10,6 +11,9 @@ namespace ISUF.Storage.Modules
 
         public StorageModuleManager(Type dbAccessType, string connectionString = "", bool useCache = false) : base()
         {
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = ApplicationData.Current.LocalFolder.Path;
+
             CreateDbAccess(dbAccessType, connectionString, useCache);
         }
 

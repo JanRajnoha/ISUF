@@ -12,7 +12,5 @@ namespace ISUF.Base.Messages
         public int ID { get; set; } = -1;
 
         public bool Edit { get; set; } = false;
-
-        public string ManagerID { get; set; } = string.Empty;
     }
 }

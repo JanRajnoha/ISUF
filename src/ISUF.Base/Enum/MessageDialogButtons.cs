@@ -12,6 +12,7 @@ namespace ISUF.Base.Enum
     public enum MessageDialogButtons
     {
         Ok,
+        OkCancel,
         YesNo,
         AbortRetryIgnore
     }

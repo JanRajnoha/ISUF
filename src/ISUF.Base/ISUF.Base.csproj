@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="Attributes\DbIgnoreAttribute.cs" />
     <Compile Include="Attributes\LinkedTableAttribute.cs" />
+    <Compile Include="Enum\LinkedTableRelation.cs" />
     <Compile Include="Attributes\UIIgnoreAttribute.cs" />
     <Compile Include="Attributes\UIParamsAttribute.cs" />
     <Compile Include="Classes\Constants.cs" />
@@ -136,21 +137,24 @@
     <Compile Include="Enum\LogLevel.cs" />
     <Compile Include="Enum\MessageDialogButtons.cs" />
     <Compile Include="Enum\MessageDialogResult.cs" />
+    <Compile Include="Enum\PropertyType.cs" />
     <Compile Include="Exceptions\ArgumentException.cs" />
     <Compile Include="Exceptions\ArgumentNullException.cs" />
     <Compile Include="Exceptions\ArgumentOutOfRangeException.cs" />
     <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Exceptions\NotImplementedException.cs" />
+    <Compile Include="Exceptions\NotSupportedAttributeCombinationException.cs" />
     <Compile Include="Exceptions\NotSupportedException.cs" />
-    <Compile Include="Exceptions\NotSupportedPropertyType.cs" />
+    <Compile Include="Exceptions\NotSupportedPropertyTypeException.cs" />
     <Compile Include="Exceptions\MissingRequiredAdditionalDataException.cs" />
+    <Compile Include="Exceptions\UnsuccessfulConversionException.cs" />
     <Compile Include="Interface\IFake.cs" />
     <Compile Include="Interface\IMessenger.cs" />
     <Compile Include="Enum\AppTheme.cs" />
     <Compile Include="Enum\PathType.cs" />
-    <Compile Include="Locator\LocatorBase.cs" />
-    <Compile Include="Locator\ManagerLocator.cs" />
+    <Compile Include="Messages\AnswerMsg.cs" />
     <Compile Include="Messages\Base\ItemBaseMsg.cs" />
+    <Compile Include="Messages\FormLoadedMsg.cs" />
     <Compile Include="Messages\ItemAddCloseMsg.cs" />
     <Compile Include="Messages\ItemAddErrorMsg.cs" />
     <Compile Include="Messages\ItemAddMsg.cs" />
@@ -163,10 +167,12 @@
     <Compile Include="Messages\ItemDetailMsg.cs" />
     <Compile Include="Messages\ItemDetailOpenMsg.cs" />
     <Compile Include="Messages\ItemEditMsg.cs" />
+    <Compile Include="Messages\ItemRemoveMsg.cs" />
     <Compile Include="Messages\ItemSelectedAddMsg.cs" />
     <Compile Include="Messages\ItemSelectedDetailMsg.cs" />
     <Compile Include="Messages\ItemSourceUpdatedMsg.cs" />
     <Compile Include="Messages\PropertyChangedMsg.cs" />
+    <Compile Include="Messages\RequestMsg.cs" />
     <Compile Include="Messages\ShowModalActivationMsg.cs" />
     <Compile Include="Messages\ShowNotificationMsg.cs" />
     <Compile Include="Messages\UserLoggedInMsg.cs" />
@@ -197,7 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.8</Version>
+      <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>10.0.3</Version>
@@ -210,6 +216,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="ISUF.Base.nuspec" />
   </ItemGroup>
   <ItemGroup>

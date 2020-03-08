@@ -20,9 +20,9 @@ namespace ISUF.Storage.Manager
         /// Return list of names of items
         /// </summary>
         /// <returns>List of names of items</returns>
-        public virtual List<string> GetItemsNameList<T>() where T : BaseItem => GetAllItems<T>().Result?.Select(x => x.Name).ToList() ?? new List<string>();
+        public virtual List<string> GetItemsNameList<T>() where T : BaseItem => GetAllItems<T>()?.Select(x => x.Name).ToList() ?? new List<string>();
 
-        public virtual async Task<ObservableCollection<T>> GetItemsAsync<T>() where T : BaseItem
+        public virtual async Task<List<T>> GetItemsAsync<T>() where T : BaseItem
         {
             var itemSource = dbAccess.GetAllItems<T>();
 

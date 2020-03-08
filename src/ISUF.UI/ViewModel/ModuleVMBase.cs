@@ -7,6 +7,7 @@ using ISUF.Interface.UI;
 using ISUF.Storage.Storage;
 using ISUF.UI.App;
 using ISUF.UI.Command;
+using ISUF.UI.Controls;
 using ISUF.UI.Design;
 using ISUF.UI.Modules;
 using System;
@@ -72,8 +73,8 @@ namespace ISUF.UI.ViewModel
             }
         }
 
-        private ObservableCollection<T> source = new ObservableCollection<T>();
-        public ObservableCollection<T> Source
+        private List<T> source /*= new ObservableCollection<T>()*/;
+        public List<T> Source
         {
             get => source;
             set
@@ -186,26 +187,25 @@ namespace ISUF.UI.ViewModel
 
         public ICommand SlavePaneVisibilityCommand { get; set; }
 
-        public ICommand DeleteItems { get; set; }
+        public ICommand RemoveItemsCommand { get; set; }
 
-        public ICommand SelectAllItems { get; set; }
+        public ICommand SelectAllItemsCommand { get; set; }
 
-        public ICommand ShareItems { get; set; }
+        public ICommand ShareItemsCommand { get; set; }
 
-        public ICommand AddStartTile { get; set; }
+        public ICommand AddStartTileCommand { get; set; }
 
-        public ICommand ChangePaneVisibility { get; set; }
+        public ICommand ChangePaneVisibilityCommand { get; set; }
 
-        public ICommand AddItem { get; set; }
+        public ICommand AddItemCommand { get; set; }
 
-        public ICommand ChangeSelectionMode { get; set; }
+        public ICommand ChangeSelectionModeCommand { get; set; }
 
-        public ICommand DetailCommand { get; set; }
+        public ICommand ShowDetailCommand { get; set; }
+
+        public ICommand RemoveCommand { get; set; }
 
         public ICommand EditCommand { get; set; }
-
-        protected abstract void NewItemAdded(ItemAddSavedMsg obj);
-        protected abstract Task UpdateSourceAsync(bool secureChanged = false);
 
         public abstract Task OnLoadAsync(bool SecureChanged = false);
 
@@ -223,7 +223,7 @@ namespace ISUF.UI.ViewModel
 
             DataTransferManager daTranManaItems = DataTransferManager.GetForCurrentView();
 
-            ChangeSelectionMode = new RelayCommand(() =>
+            ChangeSelectionModeCommand = new RelayCommand(() =>
             {
                 if (ListSelectionMode == ListViewSelectionMode.None)
                     ListSelectionMode = ListViewSelectionMode.Multiple;
@@ -231,8 +231,8 @@ namespace ISUF.UI.ViewModel
                     ListSelectionMode = ListViewSelectionMode.None;
             });
 
+            AddItemCommand = new RelayCommand(ItemNew);
             Messenger.Register<ItemAddCloseMsg>(CloseAddPane);
-            AddItem = new RelayCommand(ItemNew);
 
             Messenger.Register<ItemAddSavedMsg>(NewItemAdded);
             Messenger.Register<ItemEditMsg>(EditItem);
@@ -240,10 +240,47 @@ namespace ISUF.UI.ViewModel
             Messenger.Register<ItemDetailOpenMsg>(OpenDetailPane);
             Messenger.Register<ItemDetailCloseMsg>(CloseDetailPane);
 
-            AddStartTile = new RelayCommand(() => SecTileManageAsync());
-            ChangePaneVisibility = new RelayCommand(InversePaneVisibility);
+            Messenger.Register<ItemRemoveMsg>(RemoveItem);
 
-            ShareItems = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
+            messenger.Register<FormLoadedMsg>(FormLoaded);
+
+            AddStartTileCommand = new RelayCommand(() => SecTileManageAsync());
+            ChangePaneVisibilityCommand = new RelayCommand(InversePaneVisibility);
+
+            EditCommand = new DelegateCommand<T>((T editedItem) =>
+            {
+                ItemEditMsg msg = new ItemEditMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = editedItem.Id,
+                };
+
+                EditItem(msg);
+            });
+
+            ShowDetailCommand = new DelegateCommand<T>((T detailedItem) =>
+            {
+                ItemDetailOpenMsg msg = new ItemDetailOpenMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = detailedItem.Id,
+                };
+
+                OpenDetailPane(msg);
+            });
+
+            RemoveCommand = new DelegateCommand<T>((T removedItem) =>
+            {
+                ItemRemoveMsg msg = new ItemRemoveMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = removedItem.Id,
+                };
+
+                RemoveItem(msg);
+            });
+
+            ShareItemsCommand = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
             {
                 daTranManaItems = DataTransferManager.GetForCurrentView();
                 daTranManaItems.DataRequested += DaTranManaItems_DataRequestedAsync;
@@ -256,6 +293,56 @@ namespace ISUF.UI.ViewModel
             ModuleTitle = uiModule.ModuleDisplayName;
             ModuleName = uiModule.ModuleName;
             ItemType = uiModule.ModuleItemType;
+        }
+
+        private void FormLoaded(FormLoadedMsg obj)
+        {
+            if (obj.FormType == GetType())
+                Source = uiModule.GetAllItems<T>();
+
+            UpdateSource(true);
+        }
+
+        protected virtual async void NewItemAdded(ItemAddSavedMsg obj)
+        {
+            if (obj.ItemType == ItemType)
+            {
+                UpdateSource();
+
+                string NotifyText = "Item was added";
+
+                if (obj.ID != -1)
+                    NotifyText = "Item was edited";
+
+                if (obj.MoreItemsAdded)
+                    NotifyText = "Items were added";
+
+
+                Messenger.Send(new ShowNotificationMsg()
+                {
+                    Text = NotifyText
+                });
+            }
+        }
+
+        private void RemoveItem(ItemRemoveMsg msg)
+        {
+            if (msg.ItemType == ItemType)
+            {
+                uiModule.RemoveItemById<T>(msg.ID);
+
+                UpdateSource();
+
+                Messenger.Send(new ShowNotificationMsg()
+                {
+                    Text = "Items were removed"
+                });
+            }
+        }
+
+        protected virtual void UpdateSource(bool secureChanged = false)
+        {
+            Source = uiModule.GetAllItems<T>();
         }
 
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -293,7 +380,7 @@ namespace ISUF.UI.ViewModel
         }
 
         protected virtual void AddPane<TMessage>(string paneName, TMessage msg)
-        { 
+        {
         }
 
         private void Data_ShareCompleted(DataPackage sender, ShareCompletedEventArgs args)
@@ -485,8 +572,7 @@ namespace ISUF.UI.ViewModel
                 {
                     ItemType = ItemType,
                     ID = obj.ID,
-                    Edit = obj.Edit,
-                    ManagerID = obj.ManagerID
+                    Edit = obj.Edit
                 });
         }
 
@@ -516,8 +602,7 @@ namespace ISUF.UI.ViewModel
                     AddPane(addPivotItemName, new ItemSelectedAddMsg()
                     {
                         ItemType = ItemType,
-                        ID = obj.ID,
-                        ManagerID = obj.ManagerID
+                        ID = obj.ID
                     });
             }
         }

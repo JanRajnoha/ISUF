@@ -19,7 +19,7 @@ namespace ISUF.Base.Modules
         protected ModuleManager moduleManager;
 
         /// <summary>
-        /// Create module by type. 
+        /// Create module by type.
         /// </summary>
         /// <param name="moduleItemType">Type of module</param>
         public Module(Type moduleItemType)
@@ -39,6 +39,5 @@ namespace ISUF.Base.Modules
         }
 
         public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;
-
     }
 }

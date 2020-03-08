@@ -232,6 +232,7 @@ namespace ISUF.UI.Controls
             catch (Exception e)
             {
                 LogService.AddLogMessage(e.Message);
+                throw new Base.Exceptions.Exception("Unhandled exception", e);
             }
         }
     }
