@@ -57,7 +57,7 @@ namespace ISUF.Storage.Modules
 
         public Task<bool> RemoveItemByIdAsync<T>(int id) where T : AtomicItem
         {
-            return itemManager.RemoveItem<T>(id);
+            return itemManager.RemoveItem<T>(id, moduleManager);
         }
 
         public List<T> GetAllItems<T>() where T : AtomicItem

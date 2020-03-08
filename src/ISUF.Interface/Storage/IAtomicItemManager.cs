@@ -19,9 +19,9 @@ namespace ISUF.Interface.Storage
 
         List<T> GetAllItems<T>() where T : AtomicItem;
 
-        Task<bool> RemoveItem<T>(T detailedItem) where T : AtomicItem;
+        Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager) where T : AtomicItem;
 
-        Task<bool> RemoveItem<T>(int id) where T : AtomicItem;
+        Task<bool> RemoveItem<T>(int id, ModuleManager moduleManager) where T : AtomicItem;
 
         T GetItem<T>(int ID) where T : AtomicItem;
 
@@ -30,7 +30,5 @@ namespace ISUF.Interface.Storage
         void CreateDatabaseTable();
 
         void RemoveDatabaseTable();
-
-        void UpdateLinkedTableValues<T>(T item, ModuleManager moduleManager) where T : AtomicItem;
     }
 }
