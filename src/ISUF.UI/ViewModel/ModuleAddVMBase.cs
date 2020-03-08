@@ -138,7 +138,13 @@ namespace ISUF.UI.ViewModel
         }
 
         protected abstract void AddNewItem(ItemAddNewMsg obj);
-        protected abstract void SelectedItemChanged(ItemSelectedAddMsg obj);
+        protected virtual void SelectedItemChanged(ItemSelectedAddMsg obj)
+        {
+            if (obj == null || (obj != null && obj.ID == -1))
+                AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+            else
+                AddEditItem = uiModule.GetItemById<T>(obj.ID);
+        }
 
         public void CloseModal()
         {
@@ -152,6 +158,8 @@ namespace ISUF.UI.ViewModel
 
         protected virtual void SaveItem()
         {
+            bool newItem = AddEditItem.Id == -1;
+
             FillValuesFromFormIntoItem();
 
             ItemAddSavedMsg msg = new ItemAddSavedMsg()
@@ -165,6 +173,9 @@ namespace ISUF.UI.ViewModel
             messenger.Send(msg);
 
             AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+
+            if (!newItem)
+                CloseAddPane();
         }
 
         private void FillValuesFromFormIntoItem()

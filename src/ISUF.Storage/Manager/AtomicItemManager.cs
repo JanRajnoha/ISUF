@@ -9,6 +9,10 @@ using ISUF.Security;
 using ISUF.Base.Service;
 using System;
 using ISUF.Interface.Storage;
+using ISUF.Base.Modules;
+using ISUF.Base.Attributes;
+using ISUF.Storage.Modules;
+using System.Reflection;
 
 namespace ISUF.Storage.Manager
 {
@@ -23,6 +27,7 @@ namespace ISUF.Storage.Manager
         protected IDatabaseAccess dbAccess;
         protected object itemsSource;
         protected bool dbMemoryDirty = true;
+        protected object oldItem;
 
         // TODO dopsat dokumentaci
         /// <summary>
@@ -58,7 +63,7 @@ namespace ISUF.Storage.Manager
         /// <param name="item">New item</param>
         /// <param name="saveData">Save data after adding item into collection</param>
         /// <returns>True, if action was succesfull</returns>
-        public virtual bool AddItem<T>(T item) where T : AtomicItem
+        public virtual bool AddItem<T>(T item, ModuleManager moduleManager, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
             T newItem = item;
 
@@ -75,10 +80,19 @@ namespace ISUF.Storage.Manager
             {
                 newItem.Id = itemSource != null ? GetID(itemSource) : 0;
 
+                if (ignoreLinkedTableUpdate == false)
+                    UpdateLinkedTableValues(item, moduleManager);
+
                 return dbAccess.AddItemIntoDatabase(newItem).Result;
             }
             else
             {
+                oldItem = GetItem<T>(newItem.Id);
+                dbMemoryDirty = true;
+
+                if (ignoreLinkedTableUpdate == false)
+                    UpdateLinkedTableValues(item, moduleManager);
+
                 return dbAccess.EditItemInDatabase(newItem).Result;
             }
         }
@@ -99,7 +113,7 @@ namespace ISUF.Storage.Manager
         /// <param name="itemList">List of imported items</param>
         /// <param name="checkItems">Before add check items</param>
         /// <returns>True, if action was succesfull</returns>
-        public virtual async Task<bool> AddItemRange<T>(List<T> itemList, bool checkItems = true) where T : AtomicItem
+        public virtual async Task<bool> AddItemRange<T>(List<T> itemList, ModuleManager moduleManager, bool checkItems = true) where T : AtomicItem
         {
             bool res = true;
             dbMemoryDirty = true;
@@ -107,7 +121,7 @@ namespace ISUF.Storage.Manager
             foreach (var item in itemList)
             {
                 if (checkItems)
-                    res &= AddItem(item);
+                    res &= AddItem(item, moduleManager);
                 else
                     res &= await dbAccess.AddItemIntoDatabase(item);
 
@@ -223,6 +237,156 @@ namespace ISUF.Storage.Manager
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void UpdateLinkedTableValues<T>(T item, ModuleManager moduleManager) where T : AtomicItem
+        {
+            var currentModule = moduleManager.GetModuleByItemType(typeof(T));
+            var propsAnalyze = moduleManager.ModuleAnalyser.AnalyseAndGet(currentModule.ModuleItemType);
+            var linkedTableInfoPropsAnalyze = propsAnalyze.Where(x => x.Value.PropertyAttributes.FirstOrDefault(y => y.GetType() == typeof(LinkedTableAttribute)) != null).Select(x => x.Value).ToList();
+
+            foreach (var propAnalyze in linkedTableInfoPropsAnalyze)
+            {
+                var linkedTableInfo = propAnalyze.PropertyAttributes.First(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+
+                var linkedModule = moduleManager.GetModule(linkedTableInfo.LinkedTableType) as StorageModule;
+
+                if (linkedModule == null)
+                    throw new Base.Exceptions.NotSupportedException("Linked table must have base class StorageModule");
+
+                var linkedPropsAnalyze = moduleManager.ModuleAnalyser.AnalyseAndGet(linkedModule.ModuleItemType);
+                var linkedTablePropsAnalyze = linkedPropsAnalyze.Where(x => x.Value.PropertyAttributes.FirstOrDefault(y => y.GetType() == typeof(LinkedTableAttribute)) != null).Select(x => x.Value).ToList();
+
+                foreach (var linkedTablePropAnalyze in linkedTablePropsAnalyze)
+                {
+                    var linkedTableLinkedTableInfo = linkedTablePropAnalyze.PropertyAttributes.First(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
+
+                    if (linkedTableLinkedTableInfo.LinkedTableType != currentModule.ModuleItemType)
+                        continue;
+
+                    if (linkedTableLinkedTableInfo.LinkedTableRelation == Base.Enum.LinkedTableRelation.Many &&
+                        linkedTableInfo.LinkedTableRelation == Base.Enum.LinkedTableRelation.Many)
+                        throw new Base.Exceptions.NotSupportedException("Many to many relations for tables are not allowed.");
+
+
+                    switch (linkedTableInfo.LinkedTableRelation)
+                    {
+                        case Base.Enum.LinkedTableRelation.One:
+
+                            int linkedNewItemId = (int)typeof(T).GetProperty(propAnalyze.PropertyName).GetValue(item, null);
+
+                            if (linkedTableLinkedTableInfo.LinkedTableRelation == Base.Enum.LinkedTableRelation.Many)
+                            {
+                                if (oldItem != null)
+                                {
+                                    int linkedOldItemId = (int)typeof(T).GetProperty(propAnalyze.PropertyName).GetValue(oldItem, null);
+
+                                    if (linkedOldItemId != linkedNewItemId || linkedOldItemId != -1)
+                                    {
+                                        MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                                        MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                                        var linkedItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { linkedOldItemId }), genericMethod.ReturnType) as AtomicItem;
+
+                                        var linkedItemLinkedList = linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).GetValue(linkedItem, null) as List<int>;
+                                        linkedItemLinkedList.Remove(item.Id);
+
+                                        linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).SetValue(linkedItem, linkedItemLinkedList);
+
+                                        method = typeof(StorageModule).GetMethod("AddItem");
+                                        genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+                                        genericMethod.Invoke(linkedModule, new object[] { linkedItem, true });
+                                    }
+                                    else
+                                        continue;
+                                }
+
+                                if (linkedNewItemId != -1)
+                                {
+                                    MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                                    MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                                    var linkedItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { linkedNewItemId }), genericMethod.ReturnType) as AtomicItem;
+
+                                    var linkedItemLinkedList = linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).GetValue(linkedItem, null) as List<int>;
+                                    linkedItemLinkedList.Add(item.Id);
+
+                                    linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).SetValue(linkedItem, linkedItemLinkedList);
+
+                                    method = typeof(StorageModule).GetMethod("AddItem");
+                                    genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+                                    genericMethod.Invoke(linkedModule, new object[] { linkedItem, true });
+                                }
+                            }
+                            else
+                            {
+                                MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                                MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                                var linkedItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { linkedNewItemId }), genericMethod.ReturnType) as AtomicItem;
+
+                                linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).SetValue(linkedItem, item.Id);
+
+                                method = typeof(StorageModule).GetMethod("AddItem");
+                                genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+                                genericMethod.Invoke(linkedModule, new object[] { linkedItem, true });
+                            }
+                            break;
+
+                        case Base.Enum.LinkedTableRelation.Many:
+
+                            List<int> linkedNewItemIds = typeof(T).GetProperty(propAnalyze.PropertyName).GetValue(item, null) as List<int>;
+                            List<int> removedIds = new List<int>(), addedIds = new List<int>();
+
+                            if (oldItem != null)
+                            {
+                                List<int> linkedOldItemIds = typeof(T).GetProperty(propAnalyze.PropertyName).GetValue(oldItem, null) as List<int>;
+
+                                if (linkedOldItemIds != linkedNewItemIds)
+                                {
+                                    removedIds = linkedOldItemIds.Where(x => !linkedNewItemIds.Contains(x)).ToList();
+                                    addedIds = linkedNewItemIds.Where(x => !linkedOldItemIds.Contains(x)).ToList();
+                                }
+                            }
+                            else
+                                addedIds = linkedNewItemIds;
+
+                            foreach (var removedId in removedIds)
+                            {
+                                MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                                MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                                var linkedItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { removedId }), genericMethod.ReturnType) as AtomicItem;
+
+                                linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).SetValue(linkedItem, -1);
+
+                                method = typeof(StorageModule).GetMethod("AddItem");
+                                genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+                                genericMethod.Invoke(linkedModule, new object[] { linkedItem, true });
+                            }
+
+                            foreach (var addedId in addedIds)
+                            {
+                                MethodInfo method = typeof(StorageModule).GetMethod("GetItemById");
+                                MethodInfo genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+
+                                var linkedItem = Convert.ChangeType(genericMethod.Invoke(linkedModule, new object[] { addedId }), genericMethod.ReturnType) as AtomicItem;
+
+                                linkedItem.GetType().GetProperty(linkedTablePropAnalyze.PropertyName).SetValue(linkedItem, item.Id);
+
+                                method = typeof(StorageModule).GetMethod("AddItem");
+                                genericMethod = method.MakeGenericMethod(linkedModule.ModuleItemType);
+                                genericMethod.Invoke(linkedModule, new object[] { linkedItem, false });
+                            }
+                            break;
+
+                        default:
+                            throw new Base.Exceptions.NotSupportedException("Unsupported relations between tables.");
+                    }
+                }
+            }
+
+            oldItem = null;
         }
 
         //public IItemManager<BaseItem> CastToGenericType()

@@ -45,9 +45,9 @@ namespace ISUF.Storage.Modules
             return itemManager.GetItem<T>(id);
         }
 
-        public bool AddItem<T>(T newItem) where T : AtomicItem
+        public bool AddItem<T>(T newItem, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
-            return itemManager.AddItem(newItem);
+            return itemManager.AddItem(newItem, moduleManager, ignoreLinkedTableUpdate);
         }
 
         public bool RemoveItemById<T>(int id) where T : AtomicItem
@@ -67,7 +67,7 @@ namespace ISUF.Storage.Modules
 
         public bool EditItem<T>(T editedItem) where T : AtomicItem
         {
-            return itemManager.AddItem(editedItem);
+            return itemManager.AddItem(editedItem, moduleManager);
         }
 
         public virtual void UpdateDatabaseTable()

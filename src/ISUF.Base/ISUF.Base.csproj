@@ -167,6 +167,7 @@
     <Compile Include="Messages\ItemDetailMsg.cs" />
     <Compile Include="Messages\ItemDetailOpenMsg.cs" />
     <Compile Include="Messages\ItemEditMsg.cs" />
+    <Compile Include="Messages\ItemRemoveMsg.cs" />
     <Compile Include="Messages\ItemSelectedAddMsg.cs" />
     <Compile Include="Messages\ItemSelectedDetailMsg.cs" />
     <Compile Include="Messages\ItemSourceUpdatedMsg.cs" />

@@ -22,7 +22,6 @@ namespace ISUF.UI.Controls
     {
         readonly PropertyAnalyze controlData;
 
-        private List<int> selectedIds = new List<int>();
         private ListBox linkedTableSelectedIds;
 
         public Type LinkedTableType { get; private set; }
@@ -100,8 +99,9 @@ namespace ISUF.UI.Controls
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(5, 0, 0, 0)
             };
-
             SetColumn(linkedTableRowRemover, 1);
+
+            linkedTableRowRemover.Click += LinkedTableRowRemover_Click;
 
             //TextBlock linkedTableCountRowText = new TextBlock()
             //{
@@ -120,25 +120,29 @@ namespace ISUF.UI.Controls
             {
                 VerticalAlignment = VerticalAlignment.Stretch,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Margin = new Thickness(0, 0, 0, 5)
+                Margin = new Thickness(0, 5, 0, 5)
             };
 
             SetRow(linkedTableSelectedIds, 2);
             Children.Add(linkedTableSelectedIds);
         }
 
+        private void LinkedTableRowRemover_Click(object sender, RoutedEventArgs e)
+        {
+            if (linkedTableSelectedIds.SelectedItem != null)
+                linkedTableSelectedIds.Items.Remove(linkedTableSelectedIds.SelectedItem);
+        }
+
         public List<int> GetSelectedIds()
         {
-            return selectedIds;
+            return linkedTableSelectedIds.Items.Select(x => (x as AtomicItem).Id).ToList();
         }
 
         public void SetSelectedIds(List<AtomicItem> selectedItems)
         {
-            selectedIds = selectedItems.Select(x => x.Id).ToList();
-
             foreach (var item in selectedItems)
             {
-                linkedTableSelectedIds.Items.Add(item.ToString());
+                linkedTableSelectedIds.Items.Add(item);
             }
         }
 
@@ -165,7 +169,7 @@ namespace ISUF.UI.Controls
         private void LinkedTableRowSelector_Click(object sender, RoutedEventArgs e)
         {
             LinkedTableSelector selector = new LinkedTableSelector(controlData);
-            selector.ShowSelector(Selector_Closed, selectedIds);
+            selector.ShowSelector(Selector_Closed, linkedTableSelectedIds.Items.Select(x => (x as AtomicItem).Id).ToList());
         }
 
         private void Selector_Closed(MessageDialogResult result, List<object> selectedIds)

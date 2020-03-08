@@ -34,6 +34,7 @@ namespace ISUF.Base.Modules
         private void DoAnalysis(Type analysedClass)
         {
             Dictionary<string, PropertyAnalyze> analysedClassDictionary = new Dictionary<string, PropertyAnalyze>();
+            List<Type> linkedTablesRelations = new List<Type>();
 
             foreach (var prop in analysedClass.GetProperties())
             {
@@ -44,10 +45,17 @@ namespace ISUF.Base.Modules
 
                 LinkedTableAttribute linkedTableInfo = attributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
 
-                if (linkedTableInfo != null && 
-                    ((linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.Many && prop.PropertyType != typeof(List<int>)) ||
-                    (linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.One && prop.PropertyType != typeof(int))))
-                    throw new NotSupportedAttributeCombinationException("Property type can't be used with this type of Linked Table attribute");
+                if (linkedTableInfo != null)
+                {
+                    if ((linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.Many && prop.PropertyType != typeof(List<int>)) ||
+                    (linkedTableInfo.LinkedTableRelation == Enum.LinkedTableRelation.One && prop.PropertyType != typeof(int)))
+                        throw new NotSupportedAttributeCombinationException("Property type can't be used with this type of Linked Table attribute");
+
+                    if (linkedTablesRelations.Contains(linkedTableInfo.LinkedTableType))
+                        throw new NotSupportedAttributeCombinationException("Only one linked table relation for linked table.");
+                    else
+                        linkedTablesRelations.Add(linkedTableInfo.LinkedTableType);
+                }
 
                 UIParamsAttribute uiParams = attributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
 

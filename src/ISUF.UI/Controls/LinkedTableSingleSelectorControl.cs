@@ -19,7 +19,7 @@ namespace ISUF.UI.Controls
     {
         readonly PropertyAnalyze controlData;
 
-        private int selectedLinkedId;
+        private int selectedLinkedId = -1;
         private TextBlock selectedIdLabel;
 
         public Type LinkedTableType { get; private set; }
@@ -64,14 +64,33 @@ namespace ISUF.UI.Controls
                 Width = new GridLength(1, GridUnitType.Auto)
             };
 
-            ColumnDefinition linkedTableSelectedInfoColumn = new ColumnDefinition()
+            ColumnDefinition linkedTableCleanerColumn = new ColumnDefinition()
             {
                 Width = new GridLength(1, GridUnitType.Auto)
             };
 
+            ColumnDefinition linkedTableFreeColumn = new ColumnDefinition()
+            {
+                Width = new GridLength(1, GridUnitType.Auto)
+            };
+
+            RowDefinition linkedTableButtonsRow = new RowDefinition()
+            {
+                Height  = new GridLength(1, GridUnitType.Auto)
+            };
+
+            RowDefinition linkedTableInfoRow = new RowDefinition()
+            {
+                Height = new GridLength(1, GridUnitType.Auto)
+            };
+
             Grid linkedTableControlsRowGrid = new Grid();
             linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableSelectorColumn);
-            linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableSelectedInfoColumn);
+            linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableCleanerColumn);
+            linkedTableControlsRowGrid.ColumnDefinitions.Add(linkedTableFreeColumn);
+
+            linkedTableControlsRowGrid.RowDefinitions.Add(linkedTableButtonsRow);
+            linkedTableControlsRowGrid.RowDefinitions.Add(linkedTableInfoRow);
 
             SetRow(linkedTableControlsRowGrid, 1);
             Children.Add(linkedTableControlsRowGrid);
@@ -80,23 +99,50 @@ namespace ISUF.UI.Controls
             {
                 Content = "Choose row",
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(0, 0, 5, 0)
+                Margin = new Thickness(0, 0, 5, 5)
             };
 
             linkedTableRowSelector.Click += LinkedTableRowSelector_Click;
 
+            Button linkedTableRowCleaner = new Button
+            {
+                Content = "Clear link",
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(5, 0, 5, 5)
+            };
+            SetColumn(linkedTableRowCleaner, 1);
+
+            linkedTableRowCleaner.Click += LinkedTableRowCleaner_Click;
+
+            TextBlock selectedIdTextLabel = new TextBlock()
+            {
+                Name = controlName + "InfoLabel",
+                Text = "Selected ID: ",
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(5, 5, 0, 0)
+            };
+
+            SetRow(selectedIdTextLabel, 1);
+
             selectedIdLabel = new TextBlock()
             {
                 Name = controlName + "Label",
-                Text = "Selected ID:",
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(5, 0, 0, 0)
+                Margin = new Thickness(5, 5, 0, 0)
             };
 
             SetColumn(selectedIdLabel, 1);
+            SetRow(selectedIdLabel, 1);
 
             linkedTableControlsRowGrid.Children.Add(linkedTableRowSelector);
+            linkedTableControlsRowGrid.Children.Add(linkedTableRowCleaner);
+            linkedTableControlsRowGrid.Children.Add(selectedIdTextLabel);
             linkedTableControlsRowGrid.Children.Add(selectedIdLabel);
+        }
+
+        private void LinkedTableRowCleaner_Click(object sender, RoutedEventArgs e)
+        {
+            SetSelectedId(null);
         }
 
         public int GetSelectedId()
@@ -106,10 +152,23 @@ namespace ISUF.UI.Controls
 
         public void SetSelectedId(AtomicItem selectedItem)
         {
-            selectedLinkedId = selectedItem.Id;
+            if (selectedItem != null)
+            {
+                selectedLinkedId = selectedItem.Id;
 
+                if (selectedIdLabel != null)
+                    selectedIdLabel.Text = selectedLinkedId.ToString();
+            }
+            else
+                selectedLinkedId = -1;
+
+            FormatSelectedIdText();
+        }
+
+        private void FormatSelectedIdText()
+        {
             if (selectedIdLabel != null)
-                selectedIdLabel.Text = "Selected ID: " + selectedLinkedId.ToString();
+                selectedIdLabel.Text = selectedLinkedId != -1 ? selectedLinkedId.ToString() : "-";
         }
 
         public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, LinkedTableAttribute linkedTableAttribute)

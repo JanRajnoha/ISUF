@@ -240,6 +240,8 @@ namespace ISUF.UI.ViewModel
             Messenger.Register<ItemDetailOpenMsg>(OpenDetailPane);
             Messenger.Register<ItemDetailCloseMsg>(CloseDetailPane);
 
+            Messenger.Register<ItemRemoveMsg>(RemoveItem);
+
             messenger.Register<FormLoadedMsg>(FormLoaded);
 
             AddStartTileCommand = new RelayCommand(() => SecTileManageAsync());
@@ -247,8 +249,13 @@ namespace ISUF.UI.ViewModel
 
             EditCommand = new DelegateCommand<T>((T editedItem) =>
             {
-                MessageDialog aa = new MessageDialog("Edit placeholder");
-                aa.ShowAsync();
+                ItemEditMsg msg = new ItemEditMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = editedItem.Id,
+                };
+
+                EditItem(msg);
             });
 
             ShowDetailCommand = new DelegateCommand<T>((T detailedItem) =>
@@ -264,8 +271,13 @@ namespace ISUF.UI.ViewModel
 
             RemoveCommand = new DelegateCommand<T>((T removedItem) =>
             {
+                ItemRemoveMsg msg = new ItemRemoveMsg()
+                {
+                    ItemType = typeof(T),
+                    ID = removedItem.Id,
+                };
 
-                //messenger.Sendc
+                RemoveItem(msg);
             });
 
             ShareItemsCommand = new DelegateCommand<ListViewBase>((ListViewBase selectedItems) =>
@@ -295,7 +307,7 @@ namespace ISUF.UI.ViewModel
         {
             if (obj.ItemType == ItemType)
             {
-                UpdateSource(true);
+                UpdateSource();
 
                 string NotifyText = "Item was added";
 
@@ -309,6 +321,21 @@ namespace ISUF.UI.ViewModel
                 Messenger.Send(new ShowNotificationMsg()
                 {
                     Text = NotifyText
+                });
+            }
+        }
+
+        private void RemoveItem(ItemRemoveMsg msg)
+        {
+            if (msg.ItemType == ItemType)
+            {
+                uiModule.RemoveItemById<T>(msg.ID);
+
+                UpdateSource();
+
+                Messenger.Send(new ShowNotificationMsg()
+                {
+                    Text = "Items were removed"
                 });
             }
         }

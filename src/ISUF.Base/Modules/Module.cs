@@ -39,6 +39,5 @@ namespace ISUF.Base.Modules
         }
 
         public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;
-
     }
 }

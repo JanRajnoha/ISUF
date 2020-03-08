@@ -63,7 +63,7 @@ namespace ISUF.UI.App
             PropertyChangedNotifier = new PropertyChangedNotifier();
 
             RegisterModules();
-            AnalyseModules();
+            ModuleAnalyser = ModuleManager.ModuleAnalyser;
 
             Suspending += OnSuspending;
         }

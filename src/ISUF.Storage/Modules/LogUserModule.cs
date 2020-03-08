@@ -20,7 +20,7 @@ namespace ISUF.Storage.Modules
 
         public void LogUserActivity(LogUserActivityItem logitem)
         {
-            itemManager.AddItem(logitem);
+            itemManager.AddItem(logitem, moduleManager);
         }
     }
 }
