@@ -24,7 +24,7 @@ namespace ISUF.Base.Modules
         /// <summary>
         /// Check existence of module
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
+        /// <param name="moduleType"><inheritdoc/></param>
         /// <returns>Existence of module</returns>
         public bool ExistModule(Type moduleType)
         {

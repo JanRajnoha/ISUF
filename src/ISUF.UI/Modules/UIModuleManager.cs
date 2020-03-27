@@ -19,7 +19,7 @@ namespace ISUF.UI.Modules
             {
                 if (module is UIModule uiModule)
                 {
-                    uiModules.Add(new AppModuleItem(uiModule.ModuleName,uiModule.ModulePage, uiModule.ModuleIcon));
+                    uiModules.Add(new AppModuleItem(uiModule.ModuleDisplayName, uiModule.ModulePage, uiModule.ModuleIcon));
                 }
             }
 

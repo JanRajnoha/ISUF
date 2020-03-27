@@ -148,7 +148,6 @@
     <Compile Include="Exceptions\NotSupportedPropertyTypeException.cs" />
     <Compile Include="Exceptions\MissingRequiredAdditionalDataException.cs" />
     <Compile Include="Exceptions\UnsuccessfulConversionException.cs" />
-    <Compile Include="Interface\IFake.cs" />
     <Compile Include="Interface\IMessenger.cs" />
     <Compile Include="Enum\AppTheme.cs" />
     <Compile Include="Enum\PathType.cs" />

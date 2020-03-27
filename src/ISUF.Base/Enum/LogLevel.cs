@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Enum
 {
+    /// <summary>
+    /// Log levels
+    /// </summary>
     public enum LogLevel
     {
         None,

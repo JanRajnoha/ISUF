@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Enum
 {
+    /// <summary>
+    /// Date picker modes
+    /// </summary>
     public enum DatePickerMode
     {
         Date,

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Create new instance of item for add pane message
+    /// </summary>
     public class ItemAddNewMsg : ItemBaseMsg
     {
     }

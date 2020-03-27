@@ -12,30 +12,55 @@ namespace ISUF.Base.Classes
     /// </summary>
     public class Constants
     {
+        /// <summary>
+        /// Enable beta functions
+        /// </summary>
         [XmlIgnore]
         [JsonIgnore]
         public bool BetaMode { get; set; } = false;
+
+        /// <summary>
+        /// Inform about setting constants were completed
+        /// </summary>
         [XmlIgnore]
         [JsonIgnore]
         public bool ConstantsSetComplete { get; set; } = false;
 
+        /// <summary>
+        /// Enable log in application
+        /// </summary>
         [XmlElement(IsNullable = true)]
         public bool? LogEnable { get; set; }
 
+        /// <summary>
+        /// Enable debug functions
+        /// </summary>
         [XmlElement(IsNullable = true)]
         public bool? Debug { get; set; }
 
+        /// <summary>
+        /// Set app fail flag
+        /// </summary>
         [XmlElement(IsNullable = true)]
         public bool? AppFail { get; set; }
 
+        /// <summary>
+        /// Set log level
+        /// </summary>
         [XmlElement(IsNullable = true)]
         public LogLevel LogLevel { get; set; }
 
+        /// <summary>
+        /// Developers constants
+        /// </summary>
         [XmlElement(IsNullable = true)]
         public Dictionary<string, bool> CustomConstants { get; set; }
 
         private bool saveSettings = false;
 
+        /// <summary>
+        /// COnstants instance
+        /// </summary>
         public static Constants Instance = new Constants();
 
         /// <summary>

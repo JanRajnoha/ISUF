@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace ISUF.Base.Classes
 {
+    /// <summary>
+    /// Relay command
+    /// </summary>
     public class RelayCommand : ICommand
     {
         private readonly Action<object> executeAction;
@@ -38,6 +41,10 @@ namespace ISUF.Base.Classes
         public event EventHandler CanExecuteChanged;
     }
 
+    /// <summary>
+    /// Relay command
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
