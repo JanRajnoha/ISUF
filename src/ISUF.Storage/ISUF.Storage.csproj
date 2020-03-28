@@ -130,7 +130,6 @@
     <Compile Include="Enum\UserLogType.cs" />
     <Compile Include="Manager\BaseItemManager.cs" />
     <Compile Include="Manager\AtomicItemManager.cs" />
-    <Compile Include="Manager\StorageManager.cs" />
     <Compile Include="Manager\TaskItemManager.cs" />
     <Compile Include="Manager\UserItemManager.cs" />
     <Compile Include="Modules\LogUserModule.cs" />

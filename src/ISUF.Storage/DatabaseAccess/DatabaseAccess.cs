@@ -149,14 +149,14 @@ namespace ISUF.Storage.DatabaseAccess
         /// <summary>
         /// Check, if item exist in collection
         /// </summary>
-        /// <param name="x">Check item</param>
+        /// <param name="item">Check item</param>
         /// <returns>True, if exist</returns>
-        public virtual bool IsItemInDatabase<T>(T x) where T : AtomicItem
+        public virtual bool IsItemInDatabase<T>(T item) where T : AtomicItem
         {
             if (useInMemoryCache)
-                return inMemoryCache[typeof(T)].Contains(x);
+                return inMemoryCache[typeof(T)].Contains(item);
             else
-                return IsItemInDatabase<T>(x.Id);
+                return IsItemInDatabase<T>(item.Id);
         }
 
         public abstract Task WriteInMemoryCache<T>() where T : AtomicItem;
