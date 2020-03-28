@@ -11,7 +11,7 @@ namespace ISUF.Base.Interface
     /// <summary>
     /// Module enum interface
     /// </summary>
-    interface IModuleEnum
+    interface IModuleManager
     {
         /// <summary>
         /// Register module with selected type
@@ -65,7 +65,7 @@ namespace ISUF.Base.Interface
         bool ExistModule(string moduleName);
 
         /// <summary>
-        /// Remove module by type.
+        /// Remove module by type
         /// </summary>
         /// <param name="moduleType">Type of module</param>
         /// <param name="removeAll">Remove all modules with same type</param>

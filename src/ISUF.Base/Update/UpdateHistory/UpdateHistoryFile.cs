@@ -11,7 +11,14 @@ namespace ISUF.Base.Update.UpdateHistory
     /// </summary>
     public class UpdateHistoryFile
     {
+        /// <summary>
+        /// Last updated version
+        /// </summary>
         public string LastVersion { get; set; }
+
+        /// <summary>
+        /// Completed updates
+        /// </summary>
         public List<UpdateItem> UpdateList { get; set; }
     }
 }

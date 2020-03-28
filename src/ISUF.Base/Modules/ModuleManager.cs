@@ -10,12 +10,21 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
-    public class ModuleManager : IModuleEnum
+    /// <summary>
+    /// Base module manager
+    /// </summary>
+    public class ModuleManager : IModuleManager
     {
         protected ObservableCollection<Module> registeredModules = new ObservableCollection<Module>();
 
+        /// <summary>
+        /// Module analyser
+        /// </summary>
         public ModuleAnalyser ModuleAnalyser { get; private set; }
 
+        /// <summary>
+        /// Initialize new Module Manager with Module analyser
+        /// </summary>
         public ModuleManager()
         {
             ModuleAnalyser = new ModuleAnalyser();
@@ -25,28 +34,28 @@ namespace ISUF.Base.Modules
         /// Check existence of module
         /// </summary>
         /// <param name="moduleType"><inheritdoc/></param>
-        /// <returns>Existence of module</returns>
+        /// <returns><inheritdoc/></returns>
         public bool ExistModule(Type moduleType)
         {
             return registeredModules.Where(x => x.ModuleItemType == moduleType).Count() != 0;
         }
 
         /// <summary>
-        /// Check existence of module
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Existence of module</returns>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool ExistModule(string moduleName)
         {
             return registeredModules.Where(x => x.ModuleName == moduleName).Count() != 0;
         }
 
         /// <summary>
-        /// Check existence of module
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Existence of module</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool ExistModule(Type moduleType, string moduleName)
         {
             if (moduleType == null || moduleName == null)
@@ -56,10 +65,10 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Check existence of module
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="module">Module</param>
-        /// <returns>Existence of module</returns>
+        /// <param name="module"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool ExistModule(Module module)
         {
             if (module == null)
@@ -69,100 +78,100 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Return module by type
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <returns>Module</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public Module GetModule(Type moduleType)
         {
             return registeredModules.Where(x => x.ModuleItemType == moduleType).FirstOrDefault();
         }
 
         /// <summary>
-        /// Return module by type and name
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Module</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public Module GetModule(Type moduleType, string moduleName)
         {
             return registeredModules.Where(x => x.ModuleItemType == moduleType && x.ModuleName == moduleName).FirstOrDefault();
         }
 
         /// <summary>
-        /// Return module by name
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Module</returns>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public Module GetModule(string moduleName)
         {
             return registeredModules.Where(x => x.ModuleName == moduleName).FirstOrDefault();
         }
 
         /// <summary>
-        /// Return module by module item type
+        /// Return<inheritdoc/>
         /// </summary>
-        /// <param name="moduleItemType">Module item type</param>
-        /// <returns>Module</returns>
+        /// <param name="moduleItemType"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public Module GetModuleByItemType(Type moduleItemType)
         {
             return registeredModules.Where(x => x.ModuleItemType == moduleItemType).FirstOrDefault();
         }
 
         /// <summary>
-        /// Return module by index
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">Index of module</param>
-        /// <returns>Module</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public Module GetModule(int index)
         {
             return registeredModules[index];
         }
 
         /// <summary>
-        /// Return all modules
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns>All modules</returns>
+        /// <returns><inheritdoc/></returns>
         public List<Module> GetModules()
         {
             return new List<Module>(registeredModules);
         }
 
         /// <summary>
-        /// Return count of modules
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns>Count of modules</returns>
+        /// <returns><inheritdoc/></returns>
         public int ModuleCount()
         {
             return registeredModules.Count;
         }
 
         /// <summary>
-        /// Register module with selected type
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <returns>Registration completed succesfully</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual bool RegisterModule(Type moduleType)
         {
             return RegisterModule(moduleType, moduleType.ToString());
         }
 
         /// <summary>
-        /// Register module with selected type and name
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Registration completed succesfully</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual bool RegisterModule(Type moduleType, string moduleName)
         {
             return RegisterModule(new Module(moduleType, moduleName));
         }
 
         /// <summary>
-        /// Register module
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="module">Module</param>
-        /// <returns>Registration completed succesfully</returns>
+        /// <param name="module"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual bool RegisterModule(Module module)
         {
             if (ExistModule(module))
@@ -178,11 +187,11 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Remove module by type.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <param name="removeAll">Remove all modules with same type</param>
-        /// <returns>Operation completed succesfully</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <param name="removeAll"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveModule(Type moduleType, bool removeAll = false)
         {
             while (ExistModule(moduleType))
@@ -197,11 +206,11 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Remove module by type and name
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="moduleType">Type of module</param>
-        /// <param name="moduleName">Name of module</param>
-        /// <returns>Operation completed succesfully</returns>
+        /// <param name="moduleType"><inheritdoc/></param>
+        /// <param name="moduleName"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveModule(Type moduleType, string moduleName)
         {
             if (ExistModule(moduleType, moduleName))
@@ -215,10 +224,10 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Remove module on selected index
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">Index of module</param>
-        /// <returns>Operation completed succesfully</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveModule(int index)
         {
             if (index < registeredModules.Count())
@@ -230,10 +239,10 @@ namespace ISUF.Base.Modules
         }
 
         /// <summary>
-        /// Remove module
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="module">Module</param>
-        /// <returns>Operation completed succesfully</returns>
+        /// <param name="module"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveModule(Module module)
         {
             if (ExistModule(module))

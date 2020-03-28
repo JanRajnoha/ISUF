@@ -28,8 +28,6 @@ namespace ISUF.Storage.Manager
 
             foreach (var item in itemSource)
             {
-                item.ManagerID = id;
-
                 if (item.Secured && item.Encrypted)
                 {
                     item.Name = Crypting.Decrypt(item.Name);

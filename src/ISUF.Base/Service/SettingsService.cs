@@ -5,6 +5,9 @@ using Windows.UI.Xaml;
 
 namespace ISUF.Base.Service
 {
+    /// <summary>
+    /// Class for getting settings from file
+    /// </summary>
     public class SettingsService
     {
         public static SettingsService Instance { get; } = new SettingsService();

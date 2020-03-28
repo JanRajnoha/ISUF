@@ -17,11 +17,10 @@ using System.Reflection;
 namespace ISUF.Storage.Manager
 {
     /// <summary>
-    /// Item manager class
+    /// Basic item manager class
     /// </summary>
     public class AtomicItemManager : IAtomicItemManager
     {
-        protected string id;
         protected string moduleName;
         protected Type moduleItemType;
         protected IDatabaseAccess dbAccess;
@@ -68,7 +67,6 @@ namespace ISUF.Storage.Manager
             T newItem = item;
 
             newItem.Encrypted = false;
-            newItem.ManagerID = id;
 
             var itemSource = GetAllItems<T>();
             dbMemoryDirty = true;
@@ -258,8 +256,6 @@ namespace ISUF.Storage.Manager
 
             foreach (var item in itemSource)
             {
-                item.ManagerID = id;
-
                 if (item.Secured && item.Encrypted)
                     item.Encrypted = false;
             }

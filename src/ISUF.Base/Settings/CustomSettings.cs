@@ -5,10 +5,13 @@ namespace ISUF.Base.Settings
     /// <summary>
     /// Custom Settings class
     /// </summary>
-    public class CustomSettings
+    public static class CustomSettings
     {
         private static bool isUserLogged = false;
 
+        /// <summary>
+        /// Switch for logged user
+        /// </summary>
         public static bool IsUserLogged
         {
             get { return isUserLogged; }
@@ -25,11 +28,18 @@ namespace ISUF.Base.Settings
             }
         }
 
-        static void UserLoggedEvent(UserLoggedEventArgs e)
+        /// <summary>
+        /// User logged event
+        /// </summary>
+        /// <param name="e"></param>
+        private static void UserLoggedEvent(UserLoggedEventArgs e)
         {
             UserLogChanged?.Invoke(null, e);
         }
 
+        /// <summary>
+        /// User logged event
+        /// </summary>
         public static event EventHandler<UserLoggedEventArgs> UserLogChanged;
 
         //
@@ -38,6 +48,9 @@ namespace ISUF.Base.Settings
 
         private static bool showAds = true;
 
+        /// <summary>
+        /// Switch for showing ads
+        /// </summary>
         public static bool ShowAds
         {
             get { return showAds; }
@@ -54,11 +67,18 @@ namespace ISUF.Base.Settings
             }
         }
 
-        static void ShowAdsChangedEvent(ShowAdsChangedEventArgs e)
+        /// <summary>
+        /// Show ads changed event
+        /// </summary>
+        /// <param name="e"></param>
+        private static void ShowAdsChangedEvent(ShowAdsChangedEventArgs e)
         {
             ShowAdsChanged?.Invoke(null, e);
         }
 
+        /// <summary>
+        /// Show ads changed
+        /// </summary>
         public static event EventHandler<ShowAdsChangedEventArgs> ShowAdsChanged;
     }
 }

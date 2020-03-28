@@ -7,7 +7,14 @@ namespace ISUF.Base.Settings
     /// </summary>
     public class UserLoggedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Old state 
+        /// </summary>
         public bool UserLoggedOldState { get; set; }
+
+        /// <summary>
+        /// New state
+        /// </summary>
         public bool UserLoggedNewState { get; set; }
     }
 }

@@ -9,15 +9,26 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
+    /// <summary>
+    /// Module analyser
+    /// </summary>
     public class ModuleAnalyser
     {
         Dictionary<Type, Dictionary<string, PropertyAnalyze>> analysedClassesDictionary = new Dictionary<Type, Dictionary<string, PropertyAnalyze>>();
 
+        /// <summary>
+        /// Init new module analyser
+        /// </summary>
         public ModuleAnalyser()
         {
 
         }
 
+        /// <summary>
+        /// Analyse and return analysed
+        /// </summary>
+        /// <param name="analysedClass">Type of class to be analysed</param>
+        /// <returns> Analysed class</returns>
         public Dictionary<string, PropertyAnalyze> AnalyseAndGet(Type analysedClass)
         {
             if (!analysedClassesDictionary.ContainsKey(analysedClass))
@@ -26,11 +37,19 @@ namespace ISUF.Base.Modules
             return analysedClassesDictionary[analysedClass];
         }
 
+        /// <summary>
+        /// Analyse class
+        /// </summary>
+        /// <param name="analysedClass">Type fo class to by analysed</param>
         public void Analyse(Type analysedClass)
         {
             _ = AnalyseAndGet(analysedClass);
         }
 
+        /// <summary>
+        /// Analyse class and save analyse into dictionary
+        /// </summary>
+        /// <param name="analysedClass">Type of class to by analysed</param>
         private void DoAnalysis(Type analysedClass)
         {
             Dictionary<string, PropertyAnalyze> analysedClassDictionary = new Dictionary<string, PropertyAnalyze>();
@@ -70,6 +89,11 @@ namespace ISUF.Base.Modules
             analysedClassesDictionary.Add(analysedClass, analysedClassDictionary);
         }
 
+        /// <summary>
+        /// Sort properties according to UIOrder from UIParamsAttribute to show in UI
+        /// </summary>
+        /// <param name="analysedClass">Type of class to by analysed</param>
+        /// <returns>Sorted properties</returns>
         public List<KeyValuePair<string, PropertyAnalyze>> SortProperties(Type analysedClass)
         {
             if (!analysedClassesDictionary.ContainsKey(analysedClass))

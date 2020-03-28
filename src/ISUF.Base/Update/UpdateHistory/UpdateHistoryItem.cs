@@ -11,7 +11,14 @@ namespace ISUF.Base.Update.UpdateHistory
     /// </summary>
     public class UpdateHistoryItem<T>
     {
+        /// <summary>
+        /// Update type
+        /// </summary>
         public T Key { get; set; }
+
+        /// <summary>
+        /// Update completed in version
+        /// </summary>
         public Version UpdateVersion { get; set; }
     }
 }

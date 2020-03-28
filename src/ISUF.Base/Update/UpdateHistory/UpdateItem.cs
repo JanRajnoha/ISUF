@@ -11,7 +11,14 @@ namespace ISUF.Base.Update.UpdateHistory
     /// </summary>
     public class UpdateItem
     {
+        /// <summary>
+        /// Name of update
+        /// </summary>
         public string Key { get; set; }
+
+        /// <summary>
+        /// Update task was completed
+        /// </summary>
         public bool UpdateDone { get; set; } = false;
     }
 }
