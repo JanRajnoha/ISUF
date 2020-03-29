@@ -151,7 +151,7 @@ namespace ISUF.UI.ViewModel
             // TODO
         }
 
-        public void SetDetailItem(T currentItem)
+        public void SetAddEditItem(T currentItem)
         {
             AddEditItem = currentItem;
         }
