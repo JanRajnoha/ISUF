@@ -37,6 +37,10 @@ namespace ISUF.UI.ViewModel
         public const string ShareFileName = "Share.isuf";
         protected string shareMessage = string.Empty;
         protected string shareHtml;
+        protected Type addPaneType;
+        protected Type detailPaneType;
+        protected Type addViewModel;
+        protected Type detailViewModel;
 
         Type ItemType;
 
@@ -379,8 +383,79 @@ namespace ISUF.UI.ViewModel
             daTranManaItems.DataRequested -= DaTranManaItems_DataRequestedAsync;
         }
 
-        protected virtual void AddPane<TMessage>(string paneName, TMessage msg)
+        protected virtual void AddPane<TMessage>(string paneName, TMessage msg, UserControl paneType, ViewModelBase paneViewModel)
         {
+            string header = "";
+            object content = Functions.CreateInstance(paneType.GetType(), uiModule, paneViewModel.GetType(), Messenger, modulePage);
+
+            switch (paneName)
+            {
+                case addPivotItemName:
+
+                    if (msg.GetType() == typeof(ItemAddNewMsg))
+                    {
+                        header = "Add";
+                    }
+                    else
+                    {
+                        header = "Edit";
+                    }
+
+                    break;
+
+                case detailPivotItemName:
+
+                    header = "Detail";
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            try
+            {
+                if (PivotPanes.FirstOrDefault(x => x.Name == paneName) == null)
+                    PivotPanes.Insert(0, new PivotItem()
+                    {
+                        Name = paneName,
+                        Header = header,
+                        Margin = new Thickness(0),
+                        Content = content
+                    });
+                else
+                {
+                    PivotPanes.FirstOrDefault(x => x.Name == paneName).Header = header;
+                    PivotPanes.FirstOrDefault(x => x.Name == paneName).Content = content;
+                }
+            }
+            catch (Exception e)
+            {
+                PivotPanes.Clear();
+                PivotPanes.Insert(0, new PivotItem()
+                {
+                    Name = paneName,
+                    Header = header,
+                    Content = content
+                });
+            }
+            finally
+            {
+                if (PivotPanes.FirstOrDefault(x => x.Name == paneName) != null)
+                {
+                    //pivotPanes = PivotPanes;
+                    RaisePropertyChanged(nameof(PivotPanes));
+
+                    PaneVisibility = true;
+
+                    double MinNormalWidth = (double)Application.Current.Resources["NormalMinWidth"];
+                    if (MinNormalWidth > ApplicationView.GetForCurrentView().VisibleBounds.Width)
+                    {
+                        MasterFrame = new GridLength(0);
+                    }
+
+                    Messenger.Send(msg);
+                }
+            }
         }
 
         private void Data_ShareCompleted(DataPackage sender, ShareCompletedEventArgs args)
@@ -573,7 +648,7 @@ namespace ISUF.UI.ViewModel
                     ItemType = ItemType,
                     ID = obj.ID,
                     Edit = obj.Edit
-                });
+                }, null, null);
         }
 
         /// <summary>
@@ -603,7 +678,7 @@ namespace ISUF.UI.ViewModel
                     {
                         ItemType = ItemType,
                         ID = obj.ID
-                    });
+                    }, null, null);
             }
         }
 
@@ -616,7 +691,7 @@ namespace ISUF.UI.ViewModel
             AddPane(addPivotItemName, new ItemAddNewMsg()
             {
                 ItemType = ItemType
-            });
+            }, null, null);
         }
     }
 }

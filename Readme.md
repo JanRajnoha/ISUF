@@ -22,6 +22,8 @@ Framework for information systems for UWP
 
 ### Project
 
+- [ ] Release
+
 - [ ] Bug fixes
 
 	- [ ] Sometimes inability reopen side pane

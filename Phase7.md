@@ -4,6 +4,8 @@
 
 ### Project
 
+- [ ] Release
+
 - [ ] Bug fixes
 
 	- [ ] Sometimes inability reopen side pane
