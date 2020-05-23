@@ -137,7 +137,14 @@ namespace ISUF.UI.ViewModel
             });
         }
 
-        protected abstract void AddNewItem(ItemAddNewMsg obj);
+        protected virtual void AddNewItem(ItemAddNewMsg obj)
+        {
+            if (obj != null && obj.ItemType != typeof(T))
+                return;
+
+            AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+        }
+
         protected virtual void SelectedItemChanged(ItemSelectedAddMsg obj)
         {
             if (obj == null || (obj != null && obj.ID == -1))

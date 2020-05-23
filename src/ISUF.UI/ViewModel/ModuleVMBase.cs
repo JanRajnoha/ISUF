@@ -211,7 +211,10 @@ namespace ISUF.UI.ViewModel
 
         public ICommand EditCommand { get; set; }
 
-        public abstract Task OnLoadAsync(bool SecureChanged = false);
+        public virtual Task OnLoadAsync(bool SecureChanged = false)
+        {
+            return null;
+        }
 
         public ModuleVMBase(Type modulePage)
         {
@@ -360,7 +363,9 @@ namespace ISUF.UI.ViewModel
             StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
         }
 
-        protected abstract void ShowModal(ShowModalActivationMsg obj);
+        protected virtual void ShowModal(ShowModalActivationMsg obj) 
+        {
+        }
 
         /// <summary>
         /// Prepare package for share
@@ -383,10 +388,10 @@ namespace ISUF.UI.ViewModel
             daTranManaItems.DataRequested -= DaTranManaItems_DataRequestedAsync;
         }
 
-        protected virtual void AddPane<TMessage>(string paneName, TMessage msg, UserControl paneType, ViewModelBase paneViewModel)
+        protected virtual void AddPane<TMessage>(string paneName, TMessage msg, Type paneType, Type paneViewModel)
         {
             string header = "";
-            object content = Functions.CreateInstance(paneType.GetType(), uiModule, paneViewModel.GetType(), Messenger, modulePage);
+            object content = Functions.CreateInstance(paneType, uiModule, paneViewModel, Messenger, modulePage);
 
             switch (paneName)
             {
@@ -648,7 +653,7 @@ namespace ISUF.UI.ViewModel
                     ItemType = ItemType,
                     ID = obj.ID,
                     Edit = obj.Edit
-                }, null, null);
+                }, detailPaneType, detailViewModel);
         }
 
         /// <summary>
@@ -678,7 +683,7 @@ namespace ISUF.UI.ViewModel
                     {
                         ItemType = ItemType,
                         ID = obj.ID
-                    }, null, null);
+                    }, addPaneType, addViewModel);
             }
         }
 
@@ -691,7 +696,7 @@ namespace ISUF.UI.ViewModel
             AddPane(addPivotItemName, new ItemAddNewMsg()
             {
                 ItemType = ItemType
-            }, null, null);
+            }, addPaneType, addViewModel);
         }
     }
 }
