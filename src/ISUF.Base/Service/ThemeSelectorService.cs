@@ -9,10 +9,19 @@ using Windows.UI.Xaml;
 
 namespace ISUF.Base.Service
 {
+    /// <summary>
+    /// Class for selecting theme of application
+    /// </summary>
     public static class ThemeSelectorService
     {
+        /// <summary>
+        /// Event for changed theme
+        /// </summary>
         public static event EventHandler<AppTheme> OnThemeChanged = (sender, args) => { };
 
+        /// <summary>
+        /// Selected theme
+        /// </summary>
         public static AppTheme Theme { get; set; } = AppTheme.System;
 
         /// <summary>
@@ -71,7 +80,7 @@ namespace ISUF.Base.Service
         /// <returns>Loaded theme</returns>
         private static AppTheme LoadThemeFromSettings()
         {
-            AppTheme cacheTheme = AppTheme.System;
+            AppTheme cacheTheme;
 
             if (!SettingsService.Instance.UseSystemAppTheme)
                 cacheTheme = (AppTheme)SettingsService.Instance.AppTheme;

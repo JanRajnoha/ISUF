@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 
 namespace ISUF.UI.Controls
 {
-    public sealed class NavigationView : Windows.UI.Xaml.Controls.NavigationView
+    public sealed class NavigationView : Windows.UI.Xaml.Controls.NavigationView, INotifyPropertyChanged
     {
         public static readonly DependencyProperty ShowAdProperty = DependencyProperty.Register("ShowAd", typeof(Visibility), typeof(NavigationView), new PropertyMetadata(false));
 
@@ -18,16 +18,29 @@ namespace ISUF.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Set visibility of ad
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="value">Visibility</param>
         public static void SetShowAd(UIElement element, Visibility value)
         {
             element.SetValue(ShowAdProperty, value);
         }
 
+        /// <summary>
+        /// Get visibility of ad
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>Ad visibility</returns>
         public static Visibility GetShowAd(UIElement element)
         {
             return (Visibility)element.GetValue(ShowAdProperty);
         }
 
+        /// <summary>
+        /// Visibility of ad
+        /// </summary>
         public Visibility ShowAd
         {
             get => (Visibility)GetValue(ShowAdProperty);

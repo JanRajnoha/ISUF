@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Classes
 {
+    /// <summary>
+    /// General functions
+    /// </summary>
     public class Functions
     {
         /// <summary>

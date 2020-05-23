@@ -18,6 +18,9 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// Linked table selector for multiple values
+    /// </summary>
     public class LinkedTableMultiSelectorControl : Grid
     {
         readonly PropertyAnalyze controlData;
@@ -26,6 +29,12 @@ namespace ISUF.UI.Controls
 
         public Type LinkedTableType { get; private set; }
 
+        /// <summary>
+        /// Init Linked table selector for multi values
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
+        /// <param name="linkedTableAttribute">Attributes of property</param>
         public LinkedTableMultiSelectorControl(string controlName, PropertyAnalyze controlData, LinkedTableAttribute linkedTableAttribute)
         {
             this.controlData = controlData;
@@ -34,6 +43,11 @@ namespace ISUF.UI.Controls
             CreateUI(controlName, controlData);
         }
 
+        /// <summary>
+        /// Create UI of selector
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
         private void CreateUI(string controlName, PropertyAnalyze controlData)
         {
             var customization = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(UIParamsAttribute)) as UIParamsAttribute;
@@ -127,17 +141,30 @@ namespace ISUF.UI.Controls
             Children.Add(linkedTableSelectedIds);
         }
 
+        /// <summary>
+        /// Remove linked table record
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LinkedTableRowRemover_Click(object sender, RoutedEventArgs e)
         {
             if (linkedTableSelectedIds.SelectedItem != null)
                 linkedTableSelectedIds.Items.Remove(linkedTableSelectedIds.SelectedItem);
         }
 
+        /// <summary>
+        /// Get selected IDs
+        /// </summary>
+        /// <returns>List of selected IDs</returns>
         public List<int> GetSelectedIds()
         {
             return linkedTableSelectedIds.Items.Select(x => (x as AtomicItem).Id).ToList();
         }
 
+        /// <summary>
+        /// Set selected items
+        /// </summary>
+        /// <param name="selectedItems">List of selected items</param>
         public void SetSelectedIds(List<AtomicItem> selectedItems)
         {
             foreach (var item in selectedItems)
@@ -146,6 +173,14 @@ namespace ISUF.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Create linked table control
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
+        /// <param name="controlType">Control type</param>
+        /// <param name="linkedTableAttribute">Linked table attributes</param>
+        /// <returns>Created control</returns>
         public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, LinkedTableAttribute linkedTableAttribute)
         {
             if (controlData is null)
@@ -166,12 +201,22 @@ namespace ISUF.UI.Controls
             return control;
         }
 
+        /// <summary>
+        /// Add selected items
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LinkedTableRowSelector_Click(object sender, RoutedEventArgs e)
         {
             LinkedTableSelector selector = new LinkedTableSelector(controlData);
             selector.ShowSelector(Selector_Closed, linkedTableSelectedIds.Items.Select(x => (x as AtomicItem).Id).ToList());
         }
 
+        /// <summary>
+        /// Selector closed
+        /// </summary>
+        /// <param name="result">Result of closing</param>
+        /// <param name="selectedIds">Selected IDs</param>
         private void Selector_Closed(MessageDialogResult result, List<object> selectedIds)
         {
             if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)

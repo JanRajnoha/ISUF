@@ -11,7 +11,14 @@ namespace ISUF.Base.Classes
     /// </summary>
     public class DocSection
     {
+        /// <summary>
+        /// Title of document section
+        /// </summary>
         public string Title { get; set; }
+        
+        /// <summary>
+        /// Content of document section
+        /// </summary>
         public string Content { get; set; }
     }
 }

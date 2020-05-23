@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Storage
 {
+    /// <summary>
+    /// Model for storing change data in database
+    /// </summary>
     public class StorageChange
     {
         public int ID { get; set; }

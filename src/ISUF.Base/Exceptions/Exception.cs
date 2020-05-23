@@ -10,22 +10,26 @@ using System.Threading.Tasks;
 namespace ISUF.Base.Exceptions
 {
     /// <summary>
-    /// Base exception with logging
+    /// ISUF exception
     /// </summary>
     public class Exception : System.Exception
     {
+        /// <inheritdoc/>
         public Exception() : base()
         {
         }
 
+        /// <inheritdoc/>
         public Exception(string message) : base(message)
         {
         }
 
+        /// <inheritdoc/>
         public Exception(string message, System.Exception innerException) : base(message, innerException)
         {
         }
 
+        /// <inheritdoc/>
         protected Exception(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

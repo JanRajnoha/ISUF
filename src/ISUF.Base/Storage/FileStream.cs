@@ -30,13 +30,9 @@ namespace ISUF.Base.Storage
                         readedObjects = (T)serializ.Deserialize(xmlStream);
 
                 if (readedObjects != null)
-                {
                     return readedObjects;
-                }
                 else
-                {
                     return default;
-                }
             }
 
             // When is file unavailable - 10 attempts is enough

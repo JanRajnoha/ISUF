@@ -7,6 +7,9 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Classes
 {
+    /// <summary>
+    /// Support functions for UI part
+    /// </summary>
     class Functions
     {
         /// <summary>
@@ -33,6 +36,14 @@ namespace ISUF.UI.Classes
                 (byte)(255 - defaultColor.B));
         }
 
+        /// <summary>
+        /// Get control by name
+        /// </summary>
+        /// <typeparam name="T">Type of element</typeparam>
+        /// <param name="parent">Parent element</param>
+        /// <param name="targetType">Terget type of searched control</param>
+        /// <param name="controlName">Searched control name</param>
+        /// <returns>Searched control</returns>
         public static T FindControl<T>(UIElement parent, Type targetType, string controlName) where T : FrameworkElement
         {
             if (controlName is null)
@@ -66,6 +77,13 @@ namespace ISUF.UI.Classes
             return null;
         }
 
+        /// <summary>
+        /// Find controls by name
+        /// </summary>
+        /// <param name="parent">Parent control</param>
+        /// <param name="controlName">Controls common name</param>
+        /// <param name="partMatch">Find controls with part match of name</param>
+        /// <returns>List of searched controls</returns>
         public static IList<FrameworkElement> GetControlsByName(FrameworkElement parent, string controlName, bool partMatch = false)
         {
             var results = new List<FrameworkElement>();
@@ -96,6 +114,12 @@ namespace ISUF.UI.Classes
             return results;
         }
 
+        /// <summary>
+        /// Create view model fromtype and arguemnts
+        /// </summary>
+        /// <param name="viewModelType">View model type</param>
+        /// <param name="rewriteViewModel">Replace view model in list of VMs</param>
+        /// <param name="viewModelArgs">View model arguments</param>
         public static void CreateViewModel(Type viewModelType, bool rewriteViewModel = false, params object[] viewModelArgs)
         {
             if (ApplicationBase.Current.VMLocator.GetViewModel(viewModelType) != null && !rewriteViewModel)

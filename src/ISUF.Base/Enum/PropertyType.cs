@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Enum
 {
+    /// <summary>
+    /// Supported property types
+    /// </summary>
     public enum PropertyType
     {
         Int,

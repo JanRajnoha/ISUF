@@ -14,6 +14,9 @@ namespace ISUF.UI.Controls
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Busy text to be shown
+        /// </summary>
         public string BusyText
         {
             get { return (string)GetValue(BusyTextProperty); }
@@ -22,6 +25,9 @@ namespace ISUF.UI.Controls
         public static readonly DependencyProperty BusyTextProperty =
             DependencyProperty.Register(nameof(BusyText), typeof(string), typeof(Busy), new PropertyMetadata("Please wait..."));
 
+        /// <summary>
+        /// Show busy text
+        /// </summary>
         public bool IsBusy
         {
             get { return (bool)GetValue(IsBusyProperty); }
@@ -30,7 +36,11 @@ namespace ISUF.UI.Controls
         public static readonly DependencyProperty IsBusyProperty =
             DependencyProperty.Register(nameof(IsBusy), typeof(bool), typeof(Busy), new PropertyMetadata(false));
 
-        // hide and show busy dialog
+        /// <summary>
+        /// Hide or show busy dialog
+        /// </summary>
+        /// <param name="busy">Set visibility</param>
+        /// <param name="text">Set text</param>
         public static void SetBusy(bool busy, string text = null)
         {
             WindowWrapper.Current().Dispatcher.Dispatch(() =>

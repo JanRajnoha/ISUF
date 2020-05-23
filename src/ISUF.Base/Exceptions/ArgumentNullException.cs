@@ -9,24 +9,32 @@ using ISUF.Base.Service;
 
 namespace ISUF.Base.Exceptions
 {
+    /// <summary>
+    /// ISUF Argument null exception
+    /// </summary>
     public class ArgumentNullException : System.ArgumentNullException
     {
+        /// <inheritdoc/>
         public ArgumentNullException() : base()
         {
         }
 
+        /// <inheritdoc/>
         public ArgumentNullException(string paramName) : base(paramName)
         {
         }
 
+        /// <inheritdoc/>
         public ArgumentNullException(string message, System.Exception inner) : base(message, inner)
         {
         }
 
+        /// <inheritdoc/>
         public ArgumentNullException(string paramName, string message) : base(paramName, message)
         {
         }
 
+        /// <inheritdoc/>
         protected ArgumentNullException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

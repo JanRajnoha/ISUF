@@ -12,14 +12,33 @@ using Windows.Storage;
 
 namespace ISUF.Base.Update.UpdateHistory
 {
+    /// <summary>
+    /// Update history manager
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class UpdateHistory<T>
     {
         List<UpdateHistoryItem<T>> updateHistoryList = new List<UpdateHistoryItem<T>>();
 
-        public string FileName = "UpdateHistory.xml";
-        public List<UpdateItem> UpdateList;
-        public Version LastVersion;
+        /// <summary>
+        /// Update history file
+        /// </summary>
+        public string FileName { get; set; } = "UpdateHistory.xml";
 
+        /// <summary>
+        /// Completed updates list
+        /// </summary>
+        public List<UpdateItem> UpdateList { get; set; }
+
+        /// <summary>
+        /// Last version of application
+        /// </summary>
+        public Version LastVersion { get; set; }
+
+        /// <summary>
+        /// Initialize new UpdateHistory from list of completed updates
+        /// </summary>
+        /// <param name="updateHistoryList"></param>
         public UpdateHistory(List<UpdateHistoryItem<T>> updateHistoryList)
         {
             this.updateHistoryList = updateHistoryList;

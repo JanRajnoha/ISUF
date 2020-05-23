@@ -7,8 +7,14 @@ using Windows.Storage;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Modal window activation activated message
+    /// </summary>
     public class ShowModalActivationMsg
     {
+        /// <summary>
+        /// Files for modal window
+        /// </summary>
         public IReadOnlyList<IStorageItem> Files { get; set; }
     }
 }

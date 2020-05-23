@@ -5,6 +5,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// Release notes user control
+    /// </summary>
     public sealed partial class ReleaseNotes : UserControl
     {
         public string ReleaseNote { get; set; }
@@ -13,6 +16,9 @@ namespace ISUF.UI.Controls
 
         public string Version { get; set; }
 
+        /// <summary>
+        /// Init release notes
+        /// </summary>
         public ReleaseNotes()
         {
             InitializeComponent();

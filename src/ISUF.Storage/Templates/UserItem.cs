@@ -9,6 +9,9 @@ using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
+    /// <summary>
+    /// Model for storing user record din database
+    /// </summary>
     public class UserItem : AtomicItem
     {
         public string Username { get; set; }

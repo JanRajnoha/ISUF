@@ -13,7 +13,14 @@ namespace ISUF.Base.Modules
     /// </summary>
     public class Module : IModule
     {
+        /// <summary>
+        /// Item type of module
+        /// </summary>
         public Type ModuleItemType { get; private set; }
+
+        /// <summary>
+        /// Module name
+        /// </summary>
         public string ModuleName { get; private set; }
 
         protected ModuleManager moduleManager;
@@ -38,6 +45,7 @@ namespace ISUF.Base.Modules
             ModuleName = moduleName;
         }
 
+        /// <inheritdoc/>
         public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;
     }
 }

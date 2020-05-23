@@ -14,29 +14,45 @@ using Windows.UI.Xaml.Data;
 
 namespace ISUF.UI.Design
 {
+    /// <summary>
+    /// Property changed notifier, replace of <see cref="INotifyPropertyChanged"/>
+    /// </summary>
     public class PropertyChangedNotifier
     {
         private readonly ConcurrentDictionary<RegisteredDestinationProperty, RegisteredTargetProperty> registeredProperties = new ConcurrentDictionary<RegisteredDestinationProperty, RegisteredTargetProperty>();
         private readonly object bagLock = new object();
 
+        /// <summary>
+        /// Init
+        /// </summary>
         public PropertyChangedNotifier()
         {
             ApplicationBase.Current.VMLocator.GetMessenger().Register<PropertyChangedMsg>(PropertyChanged);
         }
 
-        public static void NotifyPropertyChanged(Type parentObjectType, object value, [CallerMemberName] string propertyname = "")
+        /// <summary>
+        /// Notify all linked places about changed property
+        /// </summary>
+        /// <param name="parentObjectType">Parent object</param>
+        /// <param name="value">Changed value</param>
+        /// <param name="propertyName">Property name</param>
+        public static void NotifyPropertyChanged(Type parentObjectType, object value, [CallerMemberName] string propertyName = "")
         {
-            LogService.AddLogMessage("PropertyName: " + propertyname);
+            LogService.AddLogMessage("PropertyName: " + propertyName);
 
             var messenger = ApplicationBase.Current.VMLocator.GetMessenger();
             messenger.Send(new PropertyChangedMsg()
             {
-                PropertyName = propertyname,
+                PropertyName = propertyName,
                 PropertyValue = value,
                 PropertyParentObjectType = parentObjectType
             });
         }
 
+        /// <summary>
+        /// Property changed message recieved
+        /// </summary>
+        /// <param name="obj">Message property changed</param>
         private void PropertyChanged(PropertyChangedMsg obj)
         {
             var selectedRegisteredProperties = registeredProperties.Where(x => x.Value.PropertyName == obj.PropertyName && x.Value.PropertyParentObjectType == obj.PropertyParentObjectType);
@@ -61,6 +77,18 @@ namespace ISUF.UI.Design
             }
         }
 
+        /// <summary>
+        /// Register property
+        /// </summary>
+        /// <param name="destinationObject">Destination object</param>
+        /// <param name="destinationProperty">Destination property</param>
+        /// <param name="targetPropertyName">Target property name</param>
+        /// <param name="targetPropertyParentObjectType">Target property name parent opbject type</param>
+        /// <param name="targetInnerPropertyName">target inner property name</param>
+        /// <param name="converter">Converter</param>
+        /// <param name="converterTargetType">Converter target type</param>
+        /// <param name="converterParameter">Converter parameter</param>
+        /// <param name="converterLanguage">Converter language</param>
         public void RegisterProperty(DependencyObject destinationObject, DependencyProperty destinationProperty,
                                      string targetPropertyName, Type targetPropertyParentObjectType,
                                      string targetInnerPropertyName = "", IValueConverter converter = null,
@@ -90,6 +118,12 @@ namespace ISUF.UI.Design
             }
         }
 
+        /// <summary>
+        /// Unregister property
+        /// </summary>
+        /// <param name="destinationObject">Destination object</param>
+        /// <param name="destinationProperty">Destination property</param>
+        /// <param name="converter">Converter</param>
         public void UnregisterProperty(DependencyObject destinationObject, DependencyProperty destinationProperty, IValueConverter converter)
         {
             lock (bagLock)

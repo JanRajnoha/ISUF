@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Show add pane for selected item message
+    /// </summary>
     public class ItemSelectedAddMsg : ItemBaseMsg
     {
+        /// <summary>
+        /// Item index
+        /// </summary>
         public int ID { get; set; } = -1;
     }
 }

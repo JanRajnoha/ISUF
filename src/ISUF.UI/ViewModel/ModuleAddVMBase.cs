@@ -24,6 +24,10 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.ViewModel
 {
+    /// <summary>
+    /// View model base for add pane
+    /// </summary>
+    /// <typeparam name="T">Type of item</typeparam>
     public abstract class ModuleAddVMBase<T> : ViewModelBase, IModuleAddVMBase<T> where T : BaseItem
     {
         private readonly ModuleAddControlBase form;
@@ -93,13 +97,20 @@ namespace ISUF.UI.ViewModel
 
         public virtual DelegateCommand<T> SaveItemCloseCommand => new DelegateCommand<T>(async (T item) => { SaveCloseItem(); });
 
+        /// <summary>
+        /// Init add item view model base
+        /// </summary>
         public ModuleAddVMBase()
         {
 
         }
 
-
-        // To-Do solve
+        /// <summary>
+        /// Init add item view model base
+        /// </summary>
+        /// <param name="messenger">Messenger</param>
+        /// <param name="modulePage">Module page</param>
+        /// <param name="form">Form for adding controls</param>
         public ModuleAddVMBase(Messenger messenger, Type modulePage, ModuleAddControlBase form) : this()
         {
             this.messenger = messenger;
@@ -129,6 +140,9 @@ namespace ISUF.UI.ViewModel
             itemType = uiModule.ModuleItemType;
         }
 
+        /// <summary>
+        /// Close add pane
+        /// </summary>
         private void CloseAddPane()
         {
             messenger.Send(new ItemAddCloseMsg()
@@ -137,7 +151,22 @@ namespace ISUF.UI.ViewModel
             });
         }
 
-        protected abstract void AddNewItem(ItemAddNewMsg obj);
+        /// <summary>
+        /// Add new item message recieved
+        /// </summary>
+        /// <param name="obj">Add new item message</param>
+        protected virtual void AddNewItem(ItemAddNewMsg obj)
+        {
+            if (obj != null && obj.ItemType != typeof(T))
+                return;
+
+            AddEditItem = Base.Classes.Functions.CreateInstance(typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// Selected item changed message recieved
+        /// </summary>
+        /// <param name="obj">Selected item changed message</param>
         protected virtual void SelectedItemChanged(ItemSelectedAddMsg obj)
         {
             if (obj == null || (obj != null && obj.ID == -1))
@@ -146,16 +175,26 @@ namespace ISUF.UI.ViewModel
                 AddEditItem = uiModule.GetItemById<T>(obj.ID);
         }
 
+        /// <summary>
+        /// Close modal
+        /// </summary>
         public void CloseModal()
         {
             // TODO
         }
 
-        public void SetDetailItem(T currentItem)
+        /// <summary>
+        /// Set selected item
+        /// </summary>
+        /// <param name="currentItem">New selected item</param>
+        public void SetAddEditItem(T currentItem)
         {
             AddEditItem = currentItem;
         }
 
+        /// <summary>
+        /// Save item
+        /// </summary>
         protected virtual void SaveItem()
         {
             bool newItem = AddEditItem.Id == -1;
@@ -178,12 +217,18 @@ namespace ISUF.UI.ViewModel
                 CloseAddPane();
         }
 
+        /// <summary>
+        /// Fill values from form into item
+        /// </summary>
         private void FillValuesFromFormIntoItem()
         {
             var formControls = FormDataMiner.GetControlsFromForm(form);
             AddEditItem = FormDataMiner.FillValuesIntoProperty(formControls, AddEditItem);
         }
 
+        /// <summary>
+        /// Fill values from item into form
+        /// </summary>
         private void FillValuesFromItemIntoForm()
         {
             if (form == null)
@@ -193,6 +238,9 @@ namespace ISUF.UI.ViewModel
             FormDataMiner.FillValuesIntoForm(formControls, AddEditItem);
         }
 
+        /// <summary>
+        /// Save item and close pane
+        /// </summary>
         private void SaveCloseItem()
         {
             SaveItem();

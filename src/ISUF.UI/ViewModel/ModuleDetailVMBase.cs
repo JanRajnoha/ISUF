@@ -11,9 +11,12 @@ using Template10.Mvvm;
 
 namespace ISUF.UI.ViewModel
 {
+    /// <summary>
+    /// View model base for detail pane
+    /// </summary>
+    /// <typeparam name="T">Type of item</typeparam>
     public abstract class ModuleDetailVMBase<T> : ViewModelBase, IModuleDetailVMBase<T> where T : AtomicItem
     {
-        protected Messenger messenger;
         private readonly Type itemType;
 
         private T detailItem;
@@ -27,6 +30,10 @@ namespace ISUF.UI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Open detail pane message recieved
+        /// </summary>
+        /// <param name="obj">Selected detail item message</param>
         protected virtual void DetailOpen(ItemSelectedDetailMsg obj)
         {
             if (obj.ItemType != uiModule.ModuleItemType)
@@ -37,6 +44,11 @@ namespace ISUF.UI.ViewModel
 
         public ICommand Close { get; set; }
 
+        /// <summary>
+        /// Init view model bease for detail pane
+        /// </summary>
+        /// <param name="messenger">Messenger</param>
+        /// <param name="modulePage">Module page</param>
         public ModuleDetailVMBase(Messenger messenger, Type modulePage)
         {
             this.messenger = messenger;

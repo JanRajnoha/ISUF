@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Form loaded message
+    /// </summary>
     public class FormLoadedMsg
     {
+        /// <summary>
+        /// Loaded form type
+        /// </summary>
         public Type FormType { get; set; }
     }
 }

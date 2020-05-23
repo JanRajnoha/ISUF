@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Add pane closed message
+    /// </summary>
     public class ItemAddCloseMsg : ItemBaseMsg
     {
     }

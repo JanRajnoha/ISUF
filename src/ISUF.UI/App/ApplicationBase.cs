@@ -26,6 +26,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.App
 {
+    /// <summary>
+    /// Application base class
+    /// </summary>
     [Bindable]
     public abstract class ApplicationBase : BootStrapper
     {
@@ -50,6 +53,13 @@ namespace ISUF.UI.App
 
         public ModuleAnalyser ModuleAnalyser { get; set; }
 
+        /// <summary>
+        /// Init Application class
+        /// </summary>
+        /// <param name="appDisplayName">App display name</param>
+        /// <param name="shellPageType">Shell page type</param>
+        /// <param name="mainPageType">Main page type</param>
+        /// <param name="settingsPageType">Settings page type</param>
         public ApplicationBase(string appDisplayName, Type shellPageType, Type mainPageType, Type settingsPageType)
         {
             this.shellPageType = shellPageType;
@@ -68,12 +78,10 @@ namespace ISUF.UI.App
             Suspending += OnSuspending;
         }
 
-        private void AnalyseModules()
-        {
-            foreach (var module in ModuleManager.GetModules())
-                ModuleAnalyser.Analyse(module.ModuleItemType);
-        }
-
+        /// <summary>
+        /// Import resources
+        /// </summary>
+        /// <returns>Imported resurces</returns>
         public object ImportResources()
         {
             var customResources = (ResourceDictionary)XamlReader.Load(XamlDictionaries.Colors);
@@ -82,8 +90,14 @@ namespace ISUF.UI.App
             return customResources;
         }
 
+        /// <summary>
+        /// Register modules
+        /// </summary>
         public abstract void RegisterModules();
 
+        /// <summary>
+        /// Load UI modules into shell
+        /// </summary>
         public void LoadUIModules()
         {
             AppUIModules = ModuleManager.GetUIModules();

@@ -11,6 +11,9 @@ using Windows.UI.Xaml.Input;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// Modal window
+    /// </summary>
     public partial class ModalWindow : UserControl
     {
         private static object modalContent;
@@ -18,11 +21,18 @@ namespace ISUF.UI.Controls
         private static MessageDialogButtons showedButtons;
         private static Action<MessageDialogResult> modalResult;
 
+        /// <summary>
+        /// Init modla window
+        /// </summary>
         public ModalWindow()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Init modal window with content
+        /// </summary>
+        /// <param name="modalContent">Content of modal window</param>
         public ModalWindow(object modalContent) : this()
         {
             if (modalContent != null)
@@ -31,6 +41,9 @@ namespace ISUF.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Is showed window
+        /// </summary>
         public bool IsShowed
         {
             get { return (bool)GetValue(IsShowedProperty); }
@@ -40,6 +53,14 @@ namespace ISUF.UI.Controls
         public static readonly DependencyProperty IsShowedProperty =
             DependencyProperty.Register(nameof(IsShowed), typeof(bool), typeof(ModalWindow), new PropertyMetadata(false));
 
+        /// <summary>
+        /// Show modal window
+        /// </summary>
+        /// <param name="modalResult">Result of showing</param>
+        /// <param name="modalContent">Content of window</param>
+        /// <param name="showButtons">Show buttons on modal window</param>
+        /// <param name="showedButtons">Buttons on modal window</param>
+        /// <param name="useDesignAnimation">Use animation</param>
         public static void ShowModal(Action<MessageDialogResult> modalResult, object modalContent = null, bool showButtons = true, MessageDialogButtons showedButtons = MessageDialogButtons.Ok, bool useDesignAnimation = true)
         {
             SetVisibility(true, modalContent, showButtons, showedButtons, useDesignAnimation);

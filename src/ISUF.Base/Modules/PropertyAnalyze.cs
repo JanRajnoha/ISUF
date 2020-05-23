@@ -8,13 +8,23 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Modules
 {
+    /// <summary>
+    /// Analyze of property
+    /// </summary>
     public class PropertyAnalyze
     {
         public string PropertyName { get; set; }
         public PropertyType PropertyType { get; set; }
         public List<object> PropertyAttributes { get; set; }
-        private Type fullPropertyType;
 
+        private readonly Type fullPropertyType;
+
+        /// <summary>
+        /// Initialize new PropertyAnalyze
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <param name="type">Property type</param>
+        /// <param name="attributes">Attributes of property</param>
         public PropertyAnalyze(string name, Type type, List<object> attributes)
         {
             fullPropertyType = type;
@@ -24,6 +34,7 @@ namespace ISUF.Base.Modules
             PropertyAttributes = attributes;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj is PropertyAnalyze propAnal)
@@ -36,6 +47,11 @@ namespace ISUF.Base.Modules
                 return false;
         }
 
+        /// <summary>
+        /// Convert property type to <see cref="PropertyType"/>
+        /// </summary>
+        /// <param name="propertyType">Property type</param>
+        /// <returns>Value of PropertyType enum</returns>
         private PropertyType PropertyTypeNameToEnum(Type propertyType)
         {
             List<PropertyType> propTypeEnumValuesList = System.Enum.GetValues(typeof(PropertyType)).Cast<PropertyType>().ToList();

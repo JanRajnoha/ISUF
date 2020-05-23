@@ -6,13 +6,18 @@ using Windows.Storage.Pickers;
 
 namespace ISUF.UI.Command
 {
+    /// <summary>
+    /// Importing items command
+    /// </summary>
     public class ImportItemsCommand : Command
     {
+        /// <inheritdoc/>
         public override bool CanExecute(object parameter)
         {
             return true;
         }
 
+        /// <inheritdoc/>
         public async override void Execute(object parameter)
         {
             if (!(parameter is string fileExtension))

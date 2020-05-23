@@ -7,6 +7,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Modules
 {
+    /// <summary>
+    /// Model of module item showed in app
+    /// </summary>
     public class AppModuleItem
     {
         public string ModuleDisplayName { get; set; }

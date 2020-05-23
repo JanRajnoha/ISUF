@@ -30,6 +30,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.ViewModel
 {
+    /// <summary>
+    /// View model base for module page
+    /// </summary>
+    /// <typeparam name="T">Type of item</typeparam>
     public abstract class ModuleVMBase<T> : ViewModelBase, IModuleVMBase<T> where T : BaseItem
     {
         protected const string addPivotItemName = "AddPivot";
@@ -37,10 +41,13 @@ namespace ISUF.UI.ViewModel
         public const string ShareFileName = "Share.isuf";
         protected string shareMessage = string.Empty;
         protected string shareHtml;
+        protected Type addPaneType;
+        protected Type detailPaneType;
+        protected Type addViewModel;
+        protected Type detailViewModel;
 
         Type ItemType;
 
-        private Messenger messenger;
         public Messenger Messenger
         {
             get => messenger;
@@ -207,8 +214,15 @@ namespace ISUF.UI.ViewModel
 
         public ICommand EditCommand { get; set; }
 
-        public abstract Task OnLoadAsync(bool SecureChanged = false);
+        public virtual Task OnLoadAsync(bool SecureChanged = false)
+        {
+            return null;
+        }
 
+        /// <summary>
+        /// Init view model base for module page
+        /// </summary>
+        /// <param name="modulePage">Module page</param>
         public ModuleVMBase(Type modulePage)
         {
             Messenger = ApplicationBase.Current.VMLocator.GetMessenger();
@@ -295,6 +309,21 @@ namespace ISUF.UI.ViewModel
             ItemType = uiModule.ModuleItemType;
         }
 
+        /// <summary>
+        /// Init view model base for module page
+        /// </summary>
+        /// <param name="modulePage">Module page</param>
+        /// <param name="secondaryTile">Secondary tile</param>
+        public ModuleVMBase(Type modulePage, SecondaryTile secondaryTile) : this(modulePage)
+        {
+            SecTile = secondaryTile;
+            StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
+        }
+
+        /// <summary>
+        /// Form loaded message recieved
+        /// </summary>
+        /// <param name="obj">Form loaded message</param>
         private void FormLoaded(FormLoadedMsg obj)
         {
             if (obj.FormType == GetType())
@@ -303,6 +332,10 @@ namespace ISUF.UI.ViewModel
             UpdateSource(true);
         }
 
+        /// <summary>
+        /// New item added message recieved
+        /// </summary>
+        /// <param name="obj">Item saved message</param>
         protected virtual async void NewItemAdded(ItemAddSavedMsg obj)
         {
             if (obj.ItemType == ItemType)
@@ -325,6 +358,10 @@ namespace ISUF.UI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Item removed message recieved
+        /// </summary>
+        /// <param name="msg">Item removed message</param>
         private void RemoveItem(ItemRemoveMsg msg)
         {
             if (msg.ItemType == ItemType)
@@ -340,23 +377,32 @@ namespace ISUF.UI.ViewModel
             }
         }
 
+        /// <summary>
+        /// Update source for items
+        /// </summary>
+        /// <param name="secureChanged">Change of secure</param>
         protected virtual void UpdateSource(bool secureChanged = false)
         {
             Source = uiModule.GetAllItems<T>();
         }
 
+        /// <summary>
+        /// Collection of panes changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PivotPanes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PropertyChangedNotifier.NotifyPropertyChanged(GetType(), PivotPanes, nameof(PivotPanes));
         }
 
-        public ModuleVMBase(Type modulePage, SecondaryTile secondaryTile) : this(modulePage)
+        /// <summary>
+        /// Show modal message recieved
+        /// </summary>
+        /// <param name="obj"></param>
+        protected virtual void ShowModal(ShowModalActivationMsg obj) 
         {
-            SecTile = secondaryTile;
-            StartTileAdded = SecondaryTile.Exists(SecTile.TileId) ? true : false;
         }
-
-        protected abstract void ShowModal(ShowModalActivationMsg obj);
 
         /// <summary>
         /// Prepare package for share
@@ -379,10 +425,94 @@ namespace ISUF.UI.ViewModel
             daTranManaItems.DataRequested -= DaTranManaItems_DataRequestedAsync;
         }
 
-        protected virtual void AddPane<TMessage>(string paneName, TMessage msg)
+        /// <summary>
+        /// Add pane
+        /// </summary>
+        /// <typeparam name="TMessage">Type of message to be sended</typeparam>
+        /// <param name="paneName">Pane name</param>
+        /// <param name="msg">Message to be sended</param>
+        /// <param name="paneType">Pane type</param>
+        /// <param name="paneViewModel">Pane view model</param>
+        protected virtual void AddPane<TMessage>(string paneName, TMessage msg, Type paneType, Type paneViewModel)
         {
+            string header = "";
+            object content = Functions.CreateInstance(paneType, uiModule, paneViewModel, Messenger, modulePage);
+
+            switch (paneName)
+            {
+                case addPivotItemName:
+
+                    if (msg.GetType() == typeof(ItemAddNewMsg))
+                    {
+                        header = "Add";
+                    }
+                    else
+                    {
+                        header = "Edit";
+                    }
+
+                    break;
+
+                case detailPivotItemName:
+
+                    header = "Detail";
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            try
+            {
+                if (PivotPanes.FirstOrDefault(x => x.Name == paneName) == null)
+                    PivotPanes.Insert(0, new PivotItem()
+                    {
+                        Name = paneName,
+                        Header = header,
+                        Margin = new Thickness(0),
+                        Content = content
+                    });
+                else
+                {
+                    PivotPanes.FirstOrDefault(x => x.Name == paneName).Header = header;
+                    PivotPanes.FirstOrDefault(x => x.Name == paneName).Content = content;
+                }
+            }
+            catch (Exception e)
+            {
+                PivotPanes.Clear();
+                PivotPanes.Insert(0, new PivotItem()
+                {
+                    Name = paneName,
+                    Header = header,
+                    Content = content
+                });
+            }
+            finally
+            {
+                if (PivotPanes.FirstOrDefault(x => x.Name == paneName) != null)
+                {
+                    //pivotPanes = PivotPanes;
+                    RaisePropertyChanged(nameof(PivotPanes));
+
+                    PaneVisibility = true;
+
+                    double MinNormalWidth = (double)Application.Current.Resources["NormalMinWidth"];
+                    if (MinNormalWidth > ApplicationView.GetForCurrentView().VisibleBounds.Width)
+                    {
+                        MasterFrame = new GridLength(0);
+                    }
+
+                    Messenger.Send(msg);
+                }
+            }
         }
 
+        /// <summary>
+        /// Data share completed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void Data_ShareCompleted(DataPackage sender, ShareCompletedEventArgs args)
         {
             messenger.Send(new ShowNotificationMsg()
@@ -391,6 +521,11 @@ namespace ISUF.UI.ViewModel
             });
         }
 
+        /// <summary>
+        /// Custom settings changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void CustomSettings_UserLogChanged(object sender, UserLoggedEventArgs e)
         {
             OnLoadAsync(true);
@@ -407,6 +542,9 @@ namespace ISUF.UI.ViewModel
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Close pane
+        /// </summary>
         public void ClosePane()
         {
             if (PivotPanes.Count == 0)
@@ -573,7 +711,7 @@ namespace ISUF.UI.ViewModel
                     ItemType = ItemType,
                     ID = obj.ID,
                     Edit = obj.Edit
-                });
+                }, detailPaneType, detailViewModel);
         }
 
         /// <summary>
@@ -603,7 +741,7 @@ namespace ISUF.UI.ViewModel
                     {
                         ItemType = ItemType,
                         ID = obj.ID
-                    });
+                    }, addPaneType, addViewModel);
             }
         }
 
@@ -616,7 +754,7 @@ namespace ISUF.UI.ViewModel
             AddPane(addPivotItemName, new ItemAddNewMsg()
             {
                 ItemType = ItemType
-            });
+            }, addPaneType, addViewModel);
         }
     }
 }

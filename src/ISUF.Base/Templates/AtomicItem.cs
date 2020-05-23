@@ -7,22 +7,32 @@ using System.Xml.Serialization;
 
 namespace ISUF.Base.Template
 {
+    /// <summary>
+    /// Basic item type
+    /// </summary>
     public class AtomicItem : INotifyPropertyChanged, ICloneable
     {
+        /// <summary>
+        /// Item index
+        /// </summary>
         [UIParams(ReadOnlyMode = true, ShowDetailOnOneLine = true)]
         public int Id { get; set; } = -1;
 
+        /// <summary>
+        /// Item is secured
+        /// </summary>
         [UIParams(UseLongTextInput = true, UIOrder = 30)]
         public bool Secured { get; set; }
 
+        /// <summary>
+        /// Creation of item
+        /// </summary>
         [UIIgnore] // TODO opravit
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
-        [JsonIgnore]
-        [XmlIgnore]
-        [UIIgnore]
-        public string ManagerID { get; set; } = string.Empty;
-
+        /// <summary>
+        /// Item was encrypted
+        /// </summary>
         [JsonIgnore]
         [XmlIgnore]
         [UIIgnore]
@@ -33,27 +43,39 @@ namespace ISUF.Base.Template
 
         }
 
-        public AtomicItem(AtomicItem baseItem) : this()
+        /// <summary>
+        /// Initialize new instance of item from existing one
+        /// </summary>
+        /// <param name="atomicItem">Existin item</param>
+        public AtomicItem(AtomicItem atomicItem) : this()
         {
-            Secured = baseItem.Secured;
-            Id = baseItem.Id;
+            Secured = atomicItem.Secured;
+            Id = atomicItem.Id;
 
-            Encrypted = baseItem.Encrypted;
-            ManagerID = baseItem.ManagerID;
+            Encrypted = atomicItem.Encrypted;
         }
 
+        /// <inheritdoc/>
         public virtual object Clone()
         {
             return new AtomicItem(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return Id.ToString(); 
         }
 
+        /// <summary>
+        /// Property changed
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Property changed notification
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void NotifyPropertyChanged([CallerMemberName]string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

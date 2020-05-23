@@ -25,10 +25,16 @@ namespace ISUF.UI.Views
     {
         protected ListView mainPageMenu;
 
+        /// <summary>
+        /// Init main page base
+        /// </summary>
+        /// <param name="viewModelType">View model type</param>
+        /// <param name="viewModelArgs">View model arguemnts</param>
         public MainPageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
         }
 
+        /// <inheritdoc/>
         public override void AddControls()
         {
             var container = AddContainer();
@@ -36,6 +42,10 @@ namespace ISUF.UI.Views
             AddModuleMenu(container);
         }
 
+        /// <summary>
+        /// Add container into page
+        /// </summary>
+        /// <returns>Container</returns>
         public virtual Panel AddContainer()
         {
             RelativePanel Container = new RelativePanel
@@ -50,6 +60,10 @@ namespace ISUF.UI.Views
             return Container;
         }
 
+        /// <summary>
+        /// Add command bar into page
+        /// </summary>
+        /// <param name="container">Container</param>
         public virtual void AddCommandBar(Panel container)
         {
             CommandBar PageHeader = new CommandBar
@@ -77,6 +91,10 @@ namespace ISUF.UI.Views
             container.Children.Add(PageHeader);
         }
 
+        /// <summary>
+        /// Add module menu into page
+        /// </summary>
+        /// <param name="container">COntainer</param>
         public virtual void AddModuleMenu(Panel container)
         {
             if (container == null)
@@ -132,6 +150,10 @@ namespace ISUF.UI.Views
             container.Children.Add(ShadowPanel);
         }
 
+        /// <summary>
+        /// Add menu list into page
+        /// </summary>
+        /// <param name="moduleMenu">Module menu panel</param>
         private void AddMenuList(Panel moduleMenu)
         {
             ListView MainPageMenu = new ListView
@@ -165,6 +187,10 @@ namespace ISUF.UI.Views
             moduleMenu.Children.Add(MainPageMenu);
         }
 
+        /// <summary>
+        /// Add minor update notification row
+        /// </summary>
+        /// <param name="moduleMenu">Module menu panel</param>
         private void AddMinorUpdateRow(Panel moduleMenu)
         {
             RelativePanel MinorUpdatePanel = new RelativePanel();

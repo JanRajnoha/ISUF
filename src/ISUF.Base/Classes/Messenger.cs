@@ -5,16 +5,15 @@ using System.Linq;
 
 namespace ISUF.Base.Classes
 {
+    /// <summary>
+    /// Messenger design patttern implementation
+    /// </summary>
     public class Messenger : IMessenger
     {
         private readonly ConcurrentDictionary<Type, ConcurrentBag<Delegate>> registeredActions = new ConcurrentDictionary<Type, ConcurrentBag<Delegate>>();
         private readonly object bagLock = new object();
 
-        /// <summary>
-        /// Register for messages
-        /// </summary>
-        /// <typeparam name="TMessage">Type of message</typeparam>
-        /// <param name="action">Function to call</param>
+        /// <inheritdoc/>
         public void Register<TMessage>(Action<TMessage> action)
         {
             var key = typeof(TMessage);
@@ -31,11 +30,7 @@ namespace ISUF.Base.Classes
             }
         }
 
-        /// <summary>
-        /// Send message
-        /// </summary>
-        /// <typeparam name="TMessage">Type of message</typeparam>
-        /// <param name="message">Message</param>
+        /// <inheritdoc/>
         public void Send<TMessage>(TMessage message)
         {
             if (registeredActions.TryGetValue(typeof(TMessage), out ConcurrentBag<Delegate> actions))
@@ -47,11 +42,7 @@ namespace ISUF.Base.Classes
             }
         }
 
-        /// <summary>
-        /// Unregister from messages
-        /// </summary>
-        /// <typeparam name="TMessage">Type of message</typeparam>
-        /// <param name="action">Function to call</param>
+        /// <inheritdoc/>
         public void UnRegister<TMessage>(Action<TMessage> action)
         {
             var key = typeof(TMessage);

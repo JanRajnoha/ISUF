@@ -11,19 +11,41 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Modules
 {
+    /// <summary>
+    /// User module
+    /// </summary>
     public class UserModule : StorageModule
     {
         //public int CurrentUserSession { get; private set; }
         public int CurrentUserId { get; private set; } = -1;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moduleItemType"></param>
+        /// <param name="itemManagerType"></param>
+        /// <param name="moduleTableName"></param>
         public UserModule(Type moduleItemType, Type itemManagerType, string moduleTableName = null) : base(moduleItemType, itemManagerType, moduleTableName)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="moduleItemType"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="itemManagerType"></param>
+        /// <param name="moduleTableName"></param>
         public UserModule(Type moduleItemType, string moduleName, Type itemManagerType, string moduleTableName = null) : base(moduleItemType, moduleName, itemManagerType, moduleTableName)
         {
         }
 
+        /// <summary>
+        /// Try sign user
+        /// </summary>
+        /// <param name="username">Inserted username</param>
+        /// <param name="password">Inserted password</param>
+        /// <returns>Result of signing</returns>
         public bool SignInUser(string username, string password)
         {
             var user = ((UserItemManager)itemManager).GetUserByUsername<UserItem>(username);
@@ -44,6 +66,11 @@ namespace ISUF.Storage.Modules
             return true;
         }
 
+        /// <summary>
+        /// Log user activity
+        /// </summary>
+        /// <param name="logType">User log activity</param>
+        /// <param name="currentUserId">User ID</param>
         private void LogUserActivity(UserLogType logType, int currentUserId)
         {
             var userActivityLogItem = new LogUserActivityItem()
@@ -55,6 +82,11 @@ namespace ISUF.Storage.Modules
             ((LogUserModule)moduleManager.GetModule(typeof(LogUserModule))).LogUserActivity(userActivityLogItem);
         }
 
+        /// <summary>
+        /// Register new user
+        /// </summary>
+        /// <param name="newUser">New user item</param>
+        /// <returns>Result of registration</returns>
         public bool RegisterUser(UserItem newUser)
         {
             if (!((UserItemManager)itemManager).AddItem(newUser, moduleManager))
@@ -67,12 +99,19 @@ namespace ISUF.Storage.Modules
             return true;
         }
 
+        /// <summary>
+        /// Sign out user
+        /// </summary>
         public void SignOutUser()
         {
             LogUserActivity(UserLogType.SignOut, CurrentUserId);
             CurrentUserId = -1;
         }
 
+        /// <summary>
+        /// Get current user ID
+        /// </summary>
+        /// <returns>Current user ID</returns>
         public int GetCurrentUserId()
         {
             return CurrentUserId;

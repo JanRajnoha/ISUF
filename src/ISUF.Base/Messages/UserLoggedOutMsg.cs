@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// User logged out message
+    /// </summary>
     public class UserLoggedOutMsg
     {
     }

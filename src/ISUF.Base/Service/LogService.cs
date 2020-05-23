@@ -11,11 +11,13 @@ using Windows.Storage;
 
 namespace ISUF.Base.Service
 {
-
-    public class LogService
+    /// <summary>
+    /// Class for logging messages from application
+    /// </summary>
+    public static class LogService
     {
-        private static Dictionary<string, List<string>> messageQueue = new Dictionary<string, List<string>>();
-        private static Dictionary<string, bool> savingProcedure = new Dictionary<string, bool>();
+        private static readonly Dictionary<string, List<string>> messageQueue = new Dictionary<string, List<string>>();
+        private static readonly Dictionary<string, bool> savingProcedure = new Dictionary<string, bool>();
 
         /// <summary>
         /// Check Log enable switch
@@ -33,7 +35,7 @@ namespace ISUF.Base.Service
         /// Check Log enable switch and Log level
         /// </summary>
         /// <param name="logLevel">Checked log level</param>
-        /// <returns>Log level enable result</returns>
+        /// <returns>Value of <see cref="LogLevel"> indicating level of logging</returns>
         public static LogLevel GetLogLevel()
         {
             if (!IsLogEnabled())
@@ -104,8 +106,8 @@ namespace ISUF.Base.Service
         /// Save all log file messages
         /// </summary>
         /// <param name="fileName">Log file name</param>
-        /// <param name="Attempts"></param>
-        private static async void SaveAllLogFile(string fileName, int Attempts = 0)
+        /// <param name="attempts"></param>
+        private static async void SaveAllLogFile(string fileName, int attempts = 0)
         {
             try
             {
@@ -122,9 +124,9 @@ namespace ISUF.Base.Service
             }
 
             // When file is unavailable
-            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                SaveAllLogFile(fileName, Attempts + 1);
+                SaveAllLogFile(fileName, attempts + 1);
             }
 
             catch (Exception e)
@@ -138,9 +140,9 @@ namespace ISUF.Base.Service
         /// </summary>
         /// <param name="message">Log message</param>
         /// <param name="fileName">Log file</param>
-        /// <param name="Attempts"></param>
+        /// <param name="attempts"></param>
         [Obsolete("Function is not reliable.")]
-        private static async void SaveLogFile(string message, string fileName, int Attempts = 0)
+        private static async void SaveLogFile(string message, string fileName, int attempts = 0)
         {
             try
             {
@@ -149,9 +151,9 @@ namespace ISUF.Base.Service
             }
 
             // When file is unavailable
-            catch (Exception e) when (e.Message.Contains("is in use") && Attempts < 10)
+            catch (Exception e) when (e.Message.Contains("is in use") && attempts < 10)
             {
-                SaveLogFile(message, fileName, Attempts + 1);
+                SaveLogFile(message, fileName, attempts + 1);
             }
 
             catch (Exception e)

@@ -15,21 +15,31 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Command
 {
+    /// <summary>
+    /// Share items command
+    /// </summary>
+    /// <typeparam name="T">Item type</typeparam>
     public class ShareItemsCommand<T> : Command where T : BaseItem
     {
         private Messenger messenger;
 
+        /// <summary>
+        /// Init share items command
+        /// </summary>
+        /// <param name="messenger"></param>
         public ShareItemsCommand(Messenger messenger)
         {
             this.messenger = messenger;
         }
 
+        /// <inheritdoc/>
         public override bool CanExecute(object parameter)
         {
             return true;
         }
 
         //Insp -> vlastni typ pripony
+        /// <inheritdoc/>
         public override void Execute(object parameter)
         {
             if (parameter is ListViewBase itemList)

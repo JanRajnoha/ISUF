@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Base.Messages
 {
+    /// <summary>
+    /// Item source updated message
+    /// </summary>
     public class ItemSourceUpdatedMsg : ItemBaseMsg
     {
     }
