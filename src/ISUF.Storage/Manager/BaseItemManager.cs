@@ -27,10 +27,10 @@ namespace ISUF.Storage.Manager
         public virtual List<string> GetItemsNameList<T>() where T : BaseItem => GetAllItems<T>()?.Select(x => x.Name).ToList() ?? new List<string>();
 
         /// <summary>
-        /// <inheritdoc/>
+        /// Get all items by async
         /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
+        /// <typeparam name="T">Item type</typeparam>
+        /// <returns>Collection of items</returns>
         public virtual async Task<List<T>> GetItemsAsync<T>() where T : BaseItem
         {
             var itemSource = dbAccess.GetAllItems<T>();

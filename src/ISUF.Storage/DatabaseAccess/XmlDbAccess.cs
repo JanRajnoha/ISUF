@@ -36,11 +36,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="connectionString"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override bool CheckConnectionString(string connectionString)
         {
             try
@@ -55,9 +51,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override void CreateDatabase()
         {
             foreach (KeyValuePair<Type, string> module in registeredModules)
@@ -66,9 +60,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override void UpdateDatabase()
         {
             foreach (KeyValuePair<Type, string> module in registeredModules)
@@ -77,9 +69,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override void RemoveDatabase()
         {
             foreach (KeyValuePair<Type, string> module in registeredModules)
@@ -88,12 +78,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="newItem"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override async Task<bool> AddItemIntoDatabase<T>(T newItem)
         {
             base.AddItemIntoDatabase(newItem);
@@ -114,10 +99,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public override void CreateDatabaseTable(Type tableType)
         {
             base.CreateDatabaseTable(tableType);
@@ -137,11 +119,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public override List<T> GetAllItems<T>()
         {
             if (useInMemoryCache)
@@ -232,31 +210,19 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override T GetItem<T>(int ID)
         {
             return GetAllItems<T>().FirstOrDefault(x => x.Id == ID);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override bool IsItemInDatabase<T>(int ID)
         {
             return GetItem<T>(ID) != null;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public override void RemoveAllItemsFromDatabase()
         {
             FileStream clearedFile = null;
@@ -271,10 +237,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public override void RemoveDatabaseTable(Type tableType)
         {
             base.RemoveDatabaseTable(tableType);
@@ -288,12 +251,7 @@ namespace ISUF.Storage.DatabaseAccess
                 File.Delete($@"{connectionsString}\{tableName}.xml");
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override async Task<bool> RemoveItemFromDatabase<T>(int ID)
         {
             base.RemoveItemFromDatabase<T>(ID);
@@ -328,12 +286,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="source"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override async Task SetSourceCollection<T>(List<T> source)
         {
             if (useInMemoryCache)
@@ -347,10 +300,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public override void UpdateDatabaseTable(Type tableType)
         {
             base.UpdateDatabaseTable(tableType);
@@ -359,12 +309,7 @@ namespace ISUF.Storage.DatabaseAccess
             CreateDatabaseTable(tableType);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="editedItem"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override async Task<bool> EditItemInDatabase<T>(T editedItem)
         {
             base.EditItemInDatabase(editedItem);
@@ -390,11 +335,7 @@ namespace ISUF.Storage.DatabaseAccess
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public override async Task WriteInMemoryCache<T>()
         {
             List<AtomicItem> itemsToSave = inMemoryCache[typeof(T)];
@@ -403,22 +344,13 @@ namespace ISUF.Storage.DatabaseAccess
             await SaveFileAsync(itemsToSave, tableName);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public override async Task ClearChangesInMemoryCache<T>()
         {
             await ReloadInMemoryCache<T>(false);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="writeChangesIntoFB"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override async Task<List<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB)
         {
             List<AtomicItem> itemsToSave = inMemoryCache[typeof(T)];

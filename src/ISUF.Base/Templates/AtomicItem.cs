@@ -55,19 +55,13 @@ namespace ISUF.Base.Template
             Encrypted = atomicItem.Encrypted;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <returns><inheritdoc/></returns>
         public virtual object Clone()
         {
             return new AtomicItem(this);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <returns><inheritdoc/></returns>
         public override string ToString()
         {
             return Id.ToString(); 

@@ -53,106 +53,65 @@ namespace ISUF.Storage.Modules
             this.ModuleTableName = moduleTableName ?? ModuleName;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         private void CreateItemManager() => itemManager = (IAtomicItemManager)Activator.CreateInstance(itemManagerType, dbAccess, ModuleItemType, ModuleName);
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="dbAccess"><inheritdoc/></param>
         public void SetDbAccess(IDatabaseAccess dbAccess)
         {
             this.dbAccess = dbAccess;
             CreateItemManager();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="id"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public T GetItemById<T>(int id) where T : AtomicItem
         {
             return itemManager.GetItem<T>(id);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="newItem"><inheritdoc/></param>
-        /// <param name="ignoreLinkedTableUpdate"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public bool AddItem<T>(T newItem, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
             return itemManager.AddItem(newItem, moduleManager, ignoreLinkedTableUpdate);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="id"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public bool RemoveItemById<T>(int id) where T : AtomicItem
         {
             return RemoveItemByIdAsync<T>(id).Result;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="id"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public Task<bool> RemoveItemByIdAsync<T>(int id) where T : AtomicItem
         {
             return itemManager.RemoveItem<T>(id, moduleManager);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public List<T> GetAllItems<T>() where T : AtomicItem
         {
             return itemManager.GetAllItems<T>();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="editedItem"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public bool EditItem<T>(T editedItem) where T : AtomicItem
         {
             return itemManager.AddItem(editedItem, moduleManager);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void UpdateDatabaseTable()
         {
             itemManager.UpdateDatabaseTable();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void CreateDatabaseTable()
         {
             itemManager.CreateDatabaseTable();
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void RemoveDatabaseTable()
         {
             itemManager.RemoveDatabaseTable();

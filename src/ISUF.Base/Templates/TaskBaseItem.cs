@@ -67,10 +67,7 @@ namespace ISUF.Base.Templates
             NotifyDays = taskBaseItem.NotifyDays;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <returns><inheritdoc/></returns>
         public override object Clone()
         {
             return new TaskBaseItem(this);

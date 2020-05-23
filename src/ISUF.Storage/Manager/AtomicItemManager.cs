@@ -55,12 +55,7 @@ namespace ISUF.Storage.Manager
             LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType()}.");
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <param name="saveData"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual bool AddItem<T>(T item, ModuleManager moduleManager, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
             T newItem = item;
@@ -94,22 +89,13 @@ namespace ISUF.Storage.Manager
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual bool AddItemAdditionCheck<T>(T item) where T : AtomicItem
         {
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="itemList"><inheritdoc/></param>
-        /// <param name="checkItems"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> AddItemRange<T>(List<T> itemList, ModuleManager moduleManager, bool checkItems = true) where T : AtomicItem
         {
             bool res = true;
@@ -129,10 +115,7 @@ namespace ISUF.Storage.Manager
             return res;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="detailedItem"><inheritdoc/></param>
         public virtual async Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager) where T : AtomicItem
         {
             //UpdatePhraseList();
@@ -140,13 +123,7 @@ namespace ISUF.Storage.Manager
             return await RemoveItem<T>(detailedItem.Id, moduleManager);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="id"><inheritdoc/></param>
-        /// <param name="moduleManager"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> RemoveItem<T>(int id, ModuleManager moduleManager) where T : AtomicItem
         {
             //UpdatePhraseList();
@@ -218,12 +195,8 @@ namespace ISUF.Storage.Manager
 
             return itemSource.Count + 1;
         }
-
-        /// <summary>
-        /// Get item from collection
-        /// </summary>
-        /// <param name="ID">Index of item</param>
-        /// <returns>Item</returns>
+        
+        /// <inheritdoc/>
         public virtual T GetItem<T>(int ID) where T : AtomicItem
         {
             if (dbMemoryDirty)
@@ -232,35 +205,25 @@ namespace ISUF.Storage.Manager
             return (itemsSource as IReadOnlyList<T>).FirstOrDefault(x => x.Id == ID);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void UpdateDatabaseTable()
         {
             dbAccess.UpdateDatabaseTable(moduleItemType);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void CreateDatabaseTable()
         {
             dbAccess.CreateDatabaseTable(moduleItemType);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public virtual void RemoveDatabaseTable()
         {
             dbAccess.RemoveDatabaseTable(moduleItemType);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public virtual List<T> GetAllItems<T>() where T : AtomicItem
         {
             if (dbMemoryDirty)
@@ -273,9 +236,9 @@ namespace ISUF.Storage.Manager
         }
 
         /// <summary>
-        /// Get collection of valid items
+        /// Get all items by async
         /// </summary>
-        /// <param name="reloadItems">Reload collection after changing security</param>
+        /// <typeparam name="T">Item type</typeparam>
         /// <returns>Collection of items</returns>
         public virtual async Task<List<T>> GetItemsAsync<T>() where T : AtomicItem
         {

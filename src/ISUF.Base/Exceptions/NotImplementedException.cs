@@ -14,30 +14,22 @@ namespace ISUF.Base.Exceptions
     /// </summary>
     public class NotImplementedException : System.NotImplementedException
     {
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public NotImplementedException() : base()
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public NotImplementedException(string message) : base(message)
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public NotImplementedException(string message, System.Exception inner) : base(message, inner)
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         protected NotImplementedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

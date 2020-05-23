@@ -14,34 +14,27 @@ namespace ISUF.Base.Exceptions
     /// </summary>
     public class ArgumentNullException : System.ArgumentNullException
     {
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ArgumentNullException() : base()
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ArgumentNullException(string paramName) : base(paramName)
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ArgumentNullException(string message, System.Exception inner) : base(message, inner)
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public ArgumentNullException(string paramName, string message) : base(paramName, message)
         {
         }
 
+        /// <inheritdoc/>
         protected ArgumentNullException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

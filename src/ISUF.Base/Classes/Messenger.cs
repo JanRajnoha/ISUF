@@ -13,9 +13,7 @@ namespace ISUF.Base.Classes
         private readonly ConcurrentDictionary<Type, ConcurrentBag<Delegate>> registeredActions = new ConcurrentDictionary<Type, ConcurrentBag<Delegate>>();
         private readonly object bagLock = new object();
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void Register<TMessage>(Action<TMessage> action)
         {
             var key = typeof(TMessage);
@@ -32,9 +30,7 @@ namespace ISUF.Base.Classes
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void Send<TMessage>(TMessage message)
         {
             if (registeredActions.TryGetValue(typeof(TMessage), out ConcurrentBag<Delegate> actions))
@@ -46,9 +42,7 @@ namespace ISUF.Base.Classes
             }
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public void UnRegister<TMessage>(Action<TMessage> action)
         {
             var key = typeof(TMessage);

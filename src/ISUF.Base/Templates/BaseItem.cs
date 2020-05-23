@@ -44,19 +44,13 @@ namespace ISUF.Base.Template
             Description = baseItem.Description;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <returns><inheritdoc/></returns>
         public override object Clone()
         {
             return new BaseItem(this);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <returns><inheritdoc/></returns>
         public override string ToString()
         {
             return Name.ToString();

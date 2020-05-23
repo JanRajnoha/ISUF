@@ -38,11 +38,7 @@ namespace ISUF.Storage.DatabaseAccess
             this.useInMemoryCache = useInMemoryCache;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="moduleType"><inheritdoc/></param>
-        /// <param name="tableName"><inheritdoc/></param>
         public void RegisterModule(Type moduleType, string tableName)
         {
             if (!registeredModules.ContainsKey(moduleType))
@@ -51,14 +47,10 @@ namespace ISUF.Storage.DatabaseAccess
                 throw new Base.Exceptions.ArgumentException("Module with this name is already registered.");
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public abstract void CreateDatabase();
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public abstract void UpdateDatabase();
 
         /// <summary>
@@ -66,17 +58,10 @@ namespace ISUF.Storage.DatabaseAccess
         /// </summary>
         public abstract void RemoveDatabase();
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="connectionString"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public abstract bool CheckConnectionString(string connectionString);
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public virtual void UpdateDatabaseTable(Type tableType)
         {
             StorageChange addStorageChange = new StorageChange()
@@ -91,10 +76,7 @@ namespace ISUF.Storage.DatabaseAccess
             dbChanges.Add(addStorageChange);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public virtual void CreateDatabaseTable(Type tableType)
         {
             StorageChange addStorageChange = new StorageChange()
@@ -109,10 +91,7 @@ namespace ISUF.Storage.DatabaseAccess
             dbChanges.Add(addStorageChange);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="tableType"><inheritdoc/></param>
         public virtual void RemoveDatabaseTable(Type tableType)
         {
             StorageChange addStorageChange = new StorageChange()
@@ -127,27 +106,13 @@ namespace ISUF.Storage.DatabaseAccess
             dbChanges.Add(addStorageChange);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public abstract List<T> GetAllItems<T>() where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public abstract T GetItem<T>(int ID) where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="editedItem"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> EditItemInDatabase<T>(T editedItem) where T : AtomicItem
         {
             StorageChange editStorageChange = new StorageChange()
@@ -164,12 +129,7 @@ namespace ISUF.Storage.DatabaseAccess
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="newItem"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> AddItemIntoDatabase<T>(T newItem) where T : AtomicItem
         {
             StorageChange addStorageChange = new StorageChange()
@@ -186,17 +146,10 @@ namespace ISUF.Storage.DatabaseAccess
             return true;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public abstract void RemoveAllItemsFromDatabase();
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> RemoveItemFromDatabase<T>(int ID) where T : AtomicItem
         {
             StorageChange removeStorageChange = new StorageChange()
@@ -215,20 +168,10 @@ namespace ISUF.Storage.DatabaseAccess
 
         //protected abstract  ObservableCollection<T> GetFinalCollection<T>() where T : BaseItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="ID"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public abstract bool IsItemInDatabase<T>(int ID) where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="item"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public virtual bool IsItemInDatabase<T>(T item) where T : AtomicItem
         {
             if (useInMemoryCache)
@@ -237,34 +180,16 @@ namespace ISUF.Storage.DatabaseAccess
                 return IsItemInDatabase<T>(item.Id);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public abstract Task WriteInMemoryCache<T>() where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public abstract Task ClearChangesInMemoryCache<T>() where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="writeChangesIntoFB"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public abstract Task<List<T>> ReloadInMemoryCache<T>(bool writeChangesIntoFB) where T : AtomicItem;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <param name="source"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public abstract Task SetSourceCollection<T>(List<T> source) where T : AtomicItem;
 
         /// <summary>
@@ -279,21 +204,13 @@ namespace ISUF.Storage.DatabaseAccess
             return x.Secured == userLogged || (x.Secured != userLogged && userLogged == true);
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public bool HasInMemoryCacheItem<T>() where T : AtomicItem
         {
             return inMemoryCache.ContainsKey(typeof(T));
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
         public bool CreateInMemoryCacheItem<T>() where T : AtomicItem
         {
             if (!HasInMemoryCacheItem<T>())
@@ -305,10 +222,7 @@ namespace ISUF.Storage.DatabaseAccess
                 return false;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="userModuleType"><inheritdoc/></param>
         public void RegisterUserModule(Type userModuleType)
         {
             if (this.userModuleType != null)
@@ -317,11 +231,7 @@ namespace ISUF.Storage.DatabaseAccess
             this.userModuleType = userModuleType;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="historyModuleType"><inheritdoc/></param>
-        /// <param name="historyManager"><inheritdoc/></param>
         public void RegisterHistoryModule(Type historyModuleType, IAtomicItemManager historyManager)
         {
             if (this.historyModuleType != null)

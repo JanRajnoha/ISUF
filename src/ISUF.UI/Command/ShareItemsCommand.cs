@@ -32,21 +32,14 @@ namespace ISUF.UI.Command
             this.messenger = messenger;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="parameter"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override bool CanExecute(object parameter)
         {
             return true;
         }
 
         //Insp -> vlastni typ pripony
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="parameter"><inheritdoc/></param>
         public override void Execute(object parameter)
         {
             if (parameter is ListViewBase itemList)

@@ -45,10 +45,7 @@ namespace ISUF.Base.Modules
             ModuleName = moduleName;
         }
 
-        /// <summary>
-        /// <inheritdoc />
-        /// </summary>
-        /// <param name="moduleManager"><inheritdoc /></param>
+        /// <inheritdoc/>
         public void SetModuleManager(ModuleManager moduleManager) => this.moduleManager = moduleManager;
     }
 }

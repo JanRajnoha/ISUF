@@ -34,11 +34,7 @@ namespace ISUF.Base.Modules
             PropertyAttributes = attributes;
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="obj"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override bool Equals(object obj)
         {
             if (obj is PropertyAnalyze propAnal)
