@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Templates
 {
+    /// <summary>
+    /// Model for storing user log activity in database
+    /// </summary>
     public class LogUserActivityItem : AtomicItem
     {
         public int UserId { get; set; }

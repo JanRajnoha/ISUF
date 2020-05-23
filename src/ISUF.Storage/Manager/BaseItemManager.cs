@@ -10,10 +10,14 @@ using ISUF.Security;
 
 namespace ISUF.Storage.Manager
 {
+    /// <summary>
+    /// Base item manager
+    /// </summary>
     public class BaseItemManager : AtomicItemManager, IBaseItemManager
     {
         public BaseItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName) : base(dbAccess, moduleItemType, moduleName)
         {
+
         }
         
         /// <summary>
@@ -22,6 +26,11 @@ namespace ISUF.Storage.Manager
         /// <returns>List of names of items</returns>
         public virtual List<string> GetItemsNameList<T>() where T : BaseItem => GetAllItems<T>()?.Select(x => x.Name).ToList() ?? new List<string>();
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
         public virtual async Task<List<T>> GetItemsAsync<T>() where T : BaseItem
         {
             var itemSource = dbAccess.GetAllItems<T>();

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Enum
 {
+    /// <summary>
+    /// Enum of log types
+    /// </summary>
     public enum UserLogType
     {
         SignIn,

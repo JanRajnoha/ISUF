@@ -50,12 +50,12 @@ namespace ISUF.Interface.Storage
         List<T> GetAllItems<T>() where T : AtomicItem;
 
         /// <summary>
-        /// 
+        /// Remove selected item
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="detailedItem"></param>
-        /// <param name="moduleManager"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">Item type</typeparam>
+        /// <param name="detailedItem">Selected item</param>
+        /// <param name="moduleManager">Module manager for item</param>
+        /// <returns>Success of task</returns>
         Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager) where T : AtomicItem;
 
         /// <summary>

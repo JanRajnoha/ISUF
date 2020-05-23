@@ -16,22 +16,35 @@ namespace ISUF.Storage.Manager
         private readonly string shortTypeName;
         private readonly string longTypeName;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbAccess"></param>
+        /// <param name="moduleItemType"></param>
+        /// <param name="moduleName"></param>
+        /// <param name="shortTypeName"></param>
+        /// <param name="longTypeName"></param>
         public TaskItemManager(IDatabaseAccess dbAccess, Type moduleItemType, string moduleName, string shortTypeName, string longTypeName) : base(dbAccess, moduleItemType, moduleName)
         {
             this.shortTypeName = shortTypeName;
             this.longTypeName = longTypeName;
         }
 
+        /// <summary>
+        /// User log changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected override void CustomSettings_UserLogChanged(object sender, UserLoggedEventArgs e)
         {
-            LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType().ToString()}.");
+            LogService.AddLogMessage($"User secure settings has changed. Log called from {GetType()}.");
         }
 
         /// <summary>
-        /// Add addition check for AddItem
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="item">New task item</param>
-        /// <returns>Result of addition check action. True = successful</returns>
+        /// <param name="item"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public override bool AddItemAdditionCheck<T>(T item)
         {
             if (item is TaskBaseItem itemTask)
@@ -55,9 +68,9 @@ namespace ISUF.Storage.Manager
         }
 
         /// <summary>
-        /// Remove item from collection and remove schduled toast
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="detailedItem">Removed item</param>
+        /// <param name="detailedItem"><inheritdoc/></param>
         public override Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager)
         {
             var result = base.RemoveItem(detailedItem, moduleManager);

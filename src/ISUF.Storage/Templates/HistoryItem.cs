@@ -9,6 +9,9 @@ using System.Xml.Serialization;
 
 namespace ISUF.Storage.Templates
 {
+    /// <summary>
+    /// Model for history record in database
+    /// </summary>
     public class HistoryItem : AtomicItem
     {
         public int ItemID { get; set; }

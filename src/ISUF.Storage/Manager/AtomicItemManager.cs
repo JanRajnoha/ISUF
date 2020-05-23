@@ -17,7 +17,7 @@ using System.Reflection;
 namespace ISUF.Storage.Manager
 {
     /// <summary>
-    /// Basic item manager class
+    /// Atomic item manager class
     /// </summary>
     public class AtomicItemManager : IAtomicItemManager
     {
@@ -28,7 +28,6 @@ namespace ISUF.Storage.Manager
         protected bool dbMemoryDirty = true;
         protected object oldItem;
 
-        // TODO dopsat dokumentaci
         /// <summary>
         /// Create instance of class for selected file and register UserLogChanged
         /// </summary>
@@ -57,11 +56,11 @@ namespace ISUF.Storage.Manager
         }
 
         /// <summary>
-        /// Add item into collection and save it, when required
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="item">New item</param>
-        /// <param name="saveData">Save data after adding item into collection</param>
-        /// <returns>True, if action was succesfull</returns>
+        /// <param name="item"><inheritdoc/></param>
+        /// <param name="saveData"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual bool AddItem<T>(T item, ModuleManager moduleManager, bool ignoreLinkedTableUpdate = false) where T : AtomicItem
         {
             T newItem = item;
@@ -96,21 +95,21 @@ namespace ISUF.Storage.Manager
         }
 
         /// <summary>
-        /// Add addition check for AddItem
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="item">New item</param>
-        /// <returns>Result of addition check action. True = successful</returns>
+        /// <param name="item"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual bool AddItemAdditionCheck<T>(T item) where T : AtomicItem
         {
             return true;
         }
 
         /// <summary>
-        /// Add range of items into collection and save it
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="itemList">List of imported items</param>
-        /// <param name="checkItems">Before add check items</param>
-        /// <returns>True, if action was succesfull</returns>
+        /// <param name="itemList"><inheritdoc/></param>
+        /// <param name="checkItems"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> AddItemRange<T>(List<T> itemList, ModuleManager moduleManager, bool checkItems = true) where T : AtomicItem
         {
             bool res = true;
@@ -131,9 +130,9 @@ namespace ISUF.Storage.Manager
         }
 
         /// <summary>
-        /// Remove item from collection and save it
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="detailedItem">Removed item</param>
+        /// <param name="detailedItem"><inheritdoc/></param>
         public virtual async Task<bool> RemoveItem<T>(T detailedItem, ModuleManager moduleManager) where T : AtomicItem
         {
             //UpdatePhraseList();
@@ -141,6 +140,13 @@ namespace ISUF.Storage.Manager
             return await RemoveItem<T>(detailedItem.Id, moduleManager);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <param name="id"><inheritdoc/></param>
+        /// <param name="moduleManager"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public virtual async Task<bool> RemoveItem<T>(int id, ModuleManager moduleManager) where T : AtomicItem
         {
             //UpdatePhraseList();
@@ -154,6 +160,13 @@ namespace ISUF.Storage.Manager
             return await dbAccess.RemoveItemFromDatabase<T>(id);
         }
 
+        /// <summary>
+        /// Clear values in linked tables
+        /// </summary>
+        /// <typeparam name="T">Item type</typeparam>
+        /// <param name="item">Selected item</param>
+        /// <param name="moduleManager">Module manager</param>
+        /// <returns>Updated item</returns>
         protected T SetLinkedTablesValuesToDefault<T>(T item, ModuleManager moduleManager) where T : AtomicItem
         {
             var currentModule = moduleManager.GetModuleByItemType(typeof(T));
@@ -219,21 +232,35 @@ namespace ISUF.Storage.Manager
             return (itemsSource as IReadOnlyList<T>).FirstOrDefault(x => x.Id == ID);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public virtual void UpdateDatabaseTable()
         {
             dbAccess.UpdateDatabaseTable(moduleItemType);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public virtual void CreateDatabaseTable()
         {
             dbAccess.CreateDatabaseTable(moduleItemType);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public virtual void RemoveDatabaseTable()
         {
             dbAccess.RemoveDatabaseTable(moduleItemType);
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
         public virtual List<T> GetAllItems<T>() where T : AtomicItem
         {
             if (dbMemoryDirty)
@@ -263,13 +290,12 @@ namespace ISUF.Storage.Manager
             return itemSource;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        /// <summary>
+        /// Update values in linked tables
+        /// </summary>
+        /// <typeparam name="T">Item type</typeparam>
+        /// <param name="item">Selected item</param>
+        /// <param name="moduleManager">Module manager</param>
         protected void UpdateLinkedTableValues<T>(T item, ModuleManager moduleManager) where T : AtomicItem
         {
             var currentModule = moduleManager.GetModuleByItemType(typeof(T));

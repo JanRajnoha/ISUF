@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.Storage.Enum
 {
+    /// <summary>
+    /// Enum of database changes
+    /// </summary>
     public enum DbTypeOfChange
     {
         Add,
