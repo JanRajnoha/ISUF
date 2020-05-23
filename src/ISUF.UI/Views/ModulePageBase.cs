@@ -34,7 +34,12 @@ namespace ISUF.UI.Views
         MenuFlyoutItem editFlyoutItem = new MenuFlyoutItem();
 
         protected ColumnDefinition slaveFrameCD = new ColumnDefinition();
-
+        
+        /// <summary>
+        /// Init page base for module page
+        /// </summary>
+        /// <param name="viewModelType">View model type</param>
+        /// <param name="viewModelArgs">View model arguments</param>
         public ModulePageBase(Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
             uiModule = (UIModule)ApplicationBase.Current.ModuleManager.GetModules().Where(x => x is UIModule).FirstOrDefault(x => ((UIModule)x).ModulePage == GetType());
@@ -47,6 +52,7 @@ namespace ISUF.UI.Views
             ShellBase.Instance.SetSelectedNavItem(uiModule.ModulePage);
         }
 
+        /// <inheritdoc/>
         protected override void CreateViewModel()
         {
             var vmArgs = viewModelArgs.ToList();
@@ -56,6 +62,7 @@ namespace ISUF.UI.Views
             base.CreateViewModel();
         }
 
+        /// <inheritdoc/>
         public override void AddControls()
         {
             var container = AddContainer();
@@ -63,6 +70,10 @@ namespace ISUF.UI.Views
             AddContent(container);
         }
 
+        /// <summary>
+        /// Add container
+        /// </summary>
+        /// <returns>Container</returns>
         protected virtual Panel AddContainer()
         {
             RelativePanel Container = new RelativePanel
@@ -77,6 +88,10 @@ namespace ISUF.UI.Views
             return Container;
         }
 
+        /// <summary>
+        /// Add command bar into page
+        /// </summary>
+        /// <param name="container">Container</param>
         protected virtual void AddCommandBar(Panel container)
         {
             CommandBar PageHeader = new CommandBar
@@ -405,6 +420,10 @@ namespace ISUF.UI.Views
             container.Children.Add(PageHeader);
         }
 
+        /// <summary>
+        /// Add content into page
+        /// </summary>
+        /// <param name="container">Container</param>
         protected virtual void AddContent(Panel container)
         {
             if (container == null)
@@ -462,6 +481,10 @@ namespace ISUF.UI.Views
             container.Children.Add(ShadowPanel);
         }
 
+        /// <summary>
+        /// Add data view part into page
+        /// </summary>
+        /// <param name="container">Container</param>
         private void AddDataViewPart(Panel container)
         {
             ModuleData = new ListView()
@@ -529,6 +552,11 @@ namespace ISUF.UI.Views
             container.Children.Add(ModuleData);
         }
 
+        /// <summary>
+        /// Add context menu for items
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Item_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             if (e.OriginalSource is FrameworkElement originalSource)
@@ -558,6 +586,10 @@ namespace ISUF.UI.Views
             }
         }
 
+        /// <summary>
+        /// Add in app notify contrl into page
+        /// </summary>
+        /// <param name="container">Container</param>
         private void AddInAppNotify(Panel container)
         {
             InAppNotifyMVVM InAppNotify = new InAppNotifyMVVM()
@@ -570,6 +602,10 @@ namespace ISUF.UI.Views
             container.Children.Add(InAppNotify);
         }
 
+        /// <summary>
+        /// Add loading into page
+        /// </summary>
+        /// <param name="container">Container</param>
         private void AddLoading(Panel container)
         {
             StackPanel LoadingStack = new StackPanel()
@@ -611,6 +647,11 @@ namespace ISUF.UI.Views
             container.Children.Add(LoadingStack);
         }
 
+        /// <summary>
+        /// Loading event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoadingStack_Loaded(object sender, RoutedEventArgs e)
         {
             FormLoadedMsg msg = new FormLoadedMsg()
@@ -621,6 +662,10 @@ namespace ISUF.UI.Views
             ApplicationBase.Current.VMLocator.GetMessenger().Send(msg);
         }
 
+        /// <summary>
+        /// Add panes into page
+        /// </summary>
+        /// <param name="container">Container</param>
         private void AddSlavePane(Panel container)
         {
             Grid ItemSlave = new Grid()

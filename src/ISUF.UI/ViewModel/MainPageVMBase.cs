@@ -16,6 +16,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ISUF.UI.ViewModel
 {
+    /// <summary>
+    /// View model for Main page
+    /// </summary>
     public class MainPageVMBase : ViewModelBase
     {
         public string NavigatedPage { get; set; }
@@ -38,6 +41,9 @@ namespace ISUF.UI.ViewModel
 
         public ICommand CloseMinor { get; set; }
 
+        /// <summary>
+        /// Init view model base for main page
+        /// </summary>
         public MainPageVMBase()
         {
             ApplicationClass = ApplicationBase.Current;
@@ -94,6 +100,10 @@ namespace ISUF.UI.ViewModel
         //    await launcher.LaunchAsync();
         //});
 
+        /// <summary>
+        /// Navigating to selected module from menu
+        /// </summary>
+        /// <param name="destinationPage"></param>
         public void GoToPage(Type destinationPage)
         {
             if (destinationPage != null)

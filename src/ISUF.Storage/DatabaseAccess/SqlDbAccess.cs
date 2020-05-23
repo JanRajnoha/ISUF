@@ -21,11 +21,7 @@ namespace ISUF.Storage.DatabaseAccess
         {
         }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
-        /// <param name="connectionString"><inheritdoc/></param>
-        /// <returns><inheritdoc/></returns>
         public override bool CheckConnectionString(string connectionString)
         {
             try

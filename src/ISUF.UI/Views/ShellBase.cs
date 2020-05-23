@@ -21,6 +21,9 @@ using NavigationView = Windows.UI.Xaml.Controls.NavigationView;
 
 namespace ISUF.UI.Views
 {
+    /// <summary>
+    /// Base for shell of app
+    /// </summary>
     public class ShellBase : Page, IPageBase
     {
         const string MSAProviderId = "https://login.microsoft.com";
@@ -74,6 +77,11 @@ namespace ISUF.UI.Views
             Loading += ShellBase_Loading;
         }
 
+        /// <summary>
+        /// Shell loading event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         protected virtual void ShellBase_Loading(FrameworkElement sender, object args)
         {
             AddControls();
@@ -152,6 +160,9 @@ namespace ISUF.UI.Views
             navView.ShowAd = !e.ShowAdsChangedNewState ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Add controls into shell
+        /// </summary>
         public void AddControls()
         {
             Grid Container = new Grid();
@@ -219,6 +230,11 @@ namespace ISUF.UI.Views
             Content = Container;
         }
 
+        /// <summary>
+        /// Crate navigation item
+        /// </summary>
+        /// <param name="appModuleItem">App module item</param>
+        /// <returns>Navigation item</returns>
         private object CreateNavigationItem(AppModuleItem appModuleItem)
         {
             NavigationViewItem navItem = new NavigationViewItem
@@ -231,6 +247,11 @@ namespace ISUF.UI.Views
             return navItem;
         }
 
+        /// <summary>
+        /// Navigationview selection changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             // Is it really needed?

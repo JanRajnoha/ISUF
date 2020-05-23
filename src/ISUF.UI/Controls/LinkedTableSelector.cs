@@ -18,6 +18,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// Linked table selector
+    /// </summary>
     public class LinkedTableSelector : ModalWindow
     {
         readonly LinkedTableAttribute linkedTableAttribute;
@@ -25,11 +28,21 @@ namespace ISUF.UI.Controls
         private ListView selectorContent;
         private Action<MessageDialogResult, List<object>> selectorResultFunction;
 
+        /// <summary>
+        /// Init linked table selector
+        /// </summary>
+        /// <param name="controlData">Control data</param>
         public LinkedTableSelector(PropertyAnalyze controlData)
         {
             linkedTableAttribute = controlData.PropertyAttributes.FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
         }
 
+        /// <summary>
+        /// Show selector
+        /// </summary>
+        /// <param name="selectorResult">Result of selection</param>
+        /// <param name="selectedIds">Selected IDs</param>
+        /// <param name="useDesignAnimation">Use animation</param>
         public void ShowSelector(Action<MessageDialogResult, List<object>> selectorResult, List<int> selectedIds = null, bool useDesignAnimation = true)
         {
             selectorContent = CreateSelectorContent();
@@ -40,11 +53,20 @@ namespace ISUF.UI.Controls
             ShowModal(CloseSelector, selectorContent, true, MessageDialogButtons.OkCancel, useDesignAnimation);
         }
 
+        /// <summary>
+        /// Close selector
+        /// </summary>
+        /// <param name="obj">Message dialog result</param>
         private void CloseSelector(MessageDialogResult obj)
         {
             selectorResultFunction.Invoke(obj, selectorContent.SelectedItems.ToList());
         }
 
+        /// <summary>
+        /// Fill selector
+        /// </summary>
+        /// <param name="selectorContent">Content</param>
+        /// <param name="selectedIds">Selected IDs</param>
         private void FillContent(ListView selectorContent, List<int> selectedIds)
         {
             MethodInfo method = typeof(StorageModule).GetMethod("GetAllItems");
@@ -60,11 +82,19 @@ namespace ISUF.UI.Controls
             selectorContent.ItemsSource = allItems;
         }
 
+        /// <summary>
+        /// Get linked module
+        /// </summary>
+        /// <returns>Linked module</returns>
         private StorageModule GetLinkedUIModule()
         {
             return ApplicationBase.Current.ModuleManager.GetModule(linkedTableAttribute.LinkedTableType) as StorageModule;
         }
 
+        /// <summary>
+        /// Create selector content
+        /// </summary>
+        /// <returns>List view with content</returns>
         private ListView CreateSelectorContent()
         {
             ListViewSelectionMode selectionMode;

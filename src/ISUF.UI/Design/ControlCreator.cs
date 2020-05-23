@@ -18,8 +18,18 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Design
 {
+    /// <summary>
+    /// Control creator for dynamic forms
+    /// </summary>
     public static class ControlCreator
     {
+        /// <summary>
+        /// Create editable controls
+        /// </summary>
+        /// <param name="controlAnalyze">Analyze of property</param>
+        /// <param name="previousControl">Previous control</param>
+        /// <param name="uiModule">UI module</param>
+        /// <returns>New control</returns>
         public static UIElement CreateEditableControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl, UIModule uiModule)
         {
             string controlName = controlAnalyze.Key;
@@ -194,6 +204,12 @@ namespace ISUF.UI.Design
             return control;
         }
 
+        /// <summary>
+        /// Create readonly controls
+        /// </summary>
+        /// <param name="controlAnalyze">Analyze of property</param>
+        /// <param name="previousControl">Previous control</param>
+        /// <returns>New control</returns>
         internal static UIElement CreateDetailControl(KeyValuePair<string, PropertyAnalyze> controlAnalyze, ref UIElement previousControl)
         {
             string controlName = controlAnalyze.Key;
@@ -323,6 +339,11 @@ namespace ISUF.UI.Design
             return control;
         }
 
+        /// <summary>
+        /// Add control under selected control
+        /// </summary>
+        /// <param name="control">Control to add under control</param>
+        /// <param name="upperControl">Upper control</param>
         private static void AddControlUnder(UIElement control, ref UIElement upperControl)
         {
             if (upperControl != null)

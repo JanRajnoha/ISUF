@@ -6,10 +6,19 @@ using Windows.UI.Popups;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MessageDialog
     {
         public Windows.UI.Popups.MessageDialog PopupMessageDialog = new Windows.UI.Popups.MessageDialog("");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="header"></param>
+        /// <param name="messageDialogButtons"></param>
         public MessageDialog(string description, string header = "", MessageDialogButtons messageDialogButtons = MessageDialogButtons.Ok)
         {
             PopupMessageDialog = new Windows.UI.Popups.MessageDialog(description, header);
@@ -54,6 +63,13 @@ namespace ISUF.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commands"></param>
+        /// <param name="clearButtons"></param>
+        /// <param name="defaultCommand"></param>
+        /// <param name="cancelCommand"></param>
         public void SetCustomButtons(List<UICommand> commands, bool clearButtons = true, uint defaultCommand = 0, uint cancelCommand = 1)
         {
             if (clearButtons)
@@ -68,11 +84,19 @@ namespace ISUF.UI.Controls
             PopupMessageDialog.CancelCommandIndex = cancelCommand;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
         private void EscapeFce(IUICommand command)
         {
             return;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<MessageDialogResult> ShowAsync()
         {
             var res = (await PopupMessageDialog.ShowAsync());

@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ISUF.UI.Controls
 {
+    /// <summary>
+    /// Linked table selector for single values
+    /// </summary>
     public class LinkedTableSingleSelectorControl : Grid
     {
         readonly PropertyAnalyze controlData;
@@ -24,6 +27,12 @@ namespace ISUF.UI.Controls
 
         public Type LinkedTableType { get; private set; }
 
+        /// <summary>
+        /// Init Linked table selector for single value
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
+        /// <param name="linkedTableAttribute">Attributes of property</param>
         public LinkedTableSingleSelectorControl(string controlName, PropertyAnalyze controlData, LinkedTableAttribute linkedTableAttribute)
         {
             this.controlData = controlData;
@@ -31,6 +40,12 @@ namespace ISUF.UI.Controls
 
             CreateUI(controlName, controlData);
         }
+
+        /// <summary>
+        /// Create UI of selector
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
 
         private void CreateUI(string controlName, PropertyAnalyze controlData)
         {
@@ -140,16 +155,29 @@ namespace ISUF.UI.Controls
             linkedTableControlsRowGrid.Children.Add(selectedIdLabel);
         }
 
+        /// <summary>
+        /// Clear selectedlinked value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LinkedTableRowCleaner_Click(object sender, RoutedEventArgs e)
         {
             SetSelectedId(null);
         }
 
+        /// <summary>
+        /// Get selected ID
+        /// </summary>
+        /// <returns>Selected ID</returns>
         public int GetSelectedId()
         {
             return selectedLinkedId;
         }
 
+        /// <summary>
+        /// Set selected item
+        /// </summary>
+        /// <param name="selectedItem">Selected item</param>
         public void SetSelectedId(AtomicItem selectedItem)
         {
             if (selectedItem != null)
@@ -165,12 +193,23 @@ namespace ISUF.UI.Controls
             FormatSelectedIdText();
         }
 
+        /// <summary>
+        /// Format selected item to text
+        /// </summary>
         private void FormatSelectedIdText()
         {
             if (selectedIdLabel != null)
                 selectedIdLabel.Text = selectedLinkedId != -1 ? selectedLinkedId.ToString() : "-";
         }
 
+        /// <summary>
+        /// Create linked table control
+        /// </summary>
+        /// <param name="controlName">Control name</param>
+        /// <param name="controlData">Control data</param>
+        /// <param name="controlType">Control type</param>
+        /// <param name="linkedTableAttribute">Linked table attributes</param>
+        /// <returns>Created control</returns>
         public static UIElement CreateLinkedTableControl(string controlName, PropertyAnalyze controlData, PropertyType controlType, LinkedTableAttribute linkedTableAttribute)
         {
             if (controlData is null)
@@ -191,12 +230,22 @@ namespace ISUF.UI.Controls
             return control;
         }
 
+        /// <summary>
+        /// Add selected item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LinkedTableRowSelector_Click(object sender, RoutedEventArgs e)
         {
             LinkedTableSelector selector = new LinkedTableSelector(controlData);
             selector.ShowSelector(Selector_Closed);
         }
 
+        /// <summary>
+        /// Selector closed
+        /// </summary>
+        /// <param name="result">Result of closing</param>
+        /// <param name="selectedIds">Selected IDs</param>
         private void Selector_Closed(MessageDialogResult result, List<object> selectedIds)
         {
             if (result == MessageDialogResult.Ok && selectedIds.Count >= 1)

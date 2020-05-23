@@ -6,13 +6,25 @@ using Windows.Storage.Pickers;
 
 namespace ISUF.UI.Command
 {
+    /// <summary>
+    /// Command for backuping
+    /// </summary>
     public class BackupItemsCommand : Command
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="parameter"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public override bool CanExecute(object parameter)
         {
             return true;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="parameter"><inheritdoc/></param>
         public async override void Execute(object parameter)
         {
             if (!(parameter is string fileExtension))

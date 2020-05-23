@@ -18,17 +18,27 @@ using System.Collections.ObjectModel;
 
 namespace ISUF.UI.Views
 {
+    /// <summary>
+    /// Base for add control
+    /// </summary>
 
     public class ModuleAddControlBase : ControlBase
     {
         Panel mainContent;
         readonly UIModule uiModule;
 
+        /// <summary>
+        /// Init add control base
+        /// </summary>
+        /// <param name="uiModule">UI module</param>
+        /// <param name="viewModelType">View model type</param>
+        /// <param name="viewModelArgs">View model arguments</param>
         public ModuleAddControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
             this.uiModule = uiModule;
         }
 
+        /// <inheritdoc/>
         protected override void CreateViewModel(bool rewriteViewModel = false)
         {
             var vma = viewModelArgs.ToList();
@@ -38,6 +48,7 @@ namespace ISUF.UI.Views
             base.CreateViewModel(rewriteViewModel);
         }
 
+        /// <inheritdoc/>
         public override void AddControls()
         {
             Grid content = new Grid()
@@ -271,6 +282,7 @@ namespace ISUF.UI.Views
             Content = content;
         }
 
+        /// <inheritdoc/>
         public override void CreateControlsForModule()
         {
             var result = ApplicationBase.Current.ModuleAnalyser.SortProperties(uiModule.ModuleItemType);
@@ -293,6 +305,9 @@ namespace ISUF.UI.Views
             FillPredefinedValues();
         }
 
+        /// <summary>
+        /// Fill predefined values into form
+        /// </summary>
         private void FillPredefinedValues()
         {
             object item = (DataContext as ViewModelBase).GetPropertyValue("AddEditItem");

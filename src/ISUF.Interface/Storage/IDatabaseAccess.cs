@@ -14,6 +14,13 @@ namespace ISUF.Interface.Storage
     public interface IDatabaseAccess
     {
         /// <summary>
+        /// Check connection string for database
+        /// </summary>
+        /// <param name="connectionString">Connection string for database</param>
+        /// <returns>Result of checking</returns>
+        bool CheckConnectionString(string connectionString);
+
+        /// <summary>
         /// Register module for database access
         /// </summary>
         /// <param name="moduleType">Module type</param>

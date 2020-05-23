@@ -14,13 +14,27 @@ using System.Threading;
 
 namespace ISUF.UI.Design
 {
+    /// <summary>
+    /// Data miner from form ui objects
+    /// </summary>
     public class FormDataMiner
     {
+        /// <summary>
+        /// Fill value into selected form control
+        /// </summary>
+        /// <param name="formControl">Selected form control</param>
+        /// <param name="item">Item to be filled into form control</param>
         public static void FillValueIntoControl(FrameworkElement formControl, object item)
         {
             throw new Base.Exceptions.NotImplementedException("Not implemented yet.");
         }
 
+        /// <summary>
+        /// Fill values into form from model
+        /// </summary>
+        /// <param name="formControls">List of form controls</param>
+        /// <param name="item">Model</param>
+        /// <param name="isDetailMode">Value is filled into read only form control</param>
         public static void FillValuesIntoForm(IList<FrameworkElement> formControls, object item, bool isDetailMode = false)
         {
             var itemProps = item.GetType().GetProperties();
@@ -42,6 +56,12 @@ namespace ISUF.UI.Design
             }
         }
 
+        /// <summary>
+        /// Convert value to value showed in form
+        /// </summary>
+        /// <param name="prop">Info of property</param>
+        /// <param name="value">Value to be converted</param>
+        /// <returns>Converted value</returns>
         private static object ConvertValueToFormValue(PropertyInfo prop, object value)
         {
             var linkedTableAttribute = prop.GetCustomAttributes(true).ToList().FirstOrDefault(x => x.GetType() == typeof(LinkedTableAttribute)) as LinkedTableAttribute;
@@ -120,6 +140,12 @@ namespace ISUF.UI.Design
                 return value;
         }
 
+        /// <summary>
+        /// Fill value into form control
+        /// </summary>
+        /// <param name="formControl">Form control</param>
+        /// <param name="value">Value to be filled</param>
+        /// <param name="itemProp">Info of property</param>
         private static void SetValueIntoControl(FrameworkElement formControl, object value, PropertyInfo itemProp)
         {
             if (formControl is TextBox textBoxControl)
@@ -190,11 +216,25 @@ namespace ISUF.UI.Design
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for setting value.");
         }
 
+        /// <summary>
+        /// Fill value from form control into property
+        /// </summary>
+        /// <typeparam name="T">Type of item</typeparam>
+        /// <param name="formControl">Form control</param>
+        /// <param name="item">Model</param>
+        /// <returns>Updated item</returns>
         public static T FillValueIntoProperty<T>(FrameworkElement formControl, T item) where T : BaseItem
         {
             throw new Base.Exceptions.NotImplementedException("Not implemented yet.");
         }
 
+        /// <summary>
+        /// Fill values from form controls into property
+        /// </summary>
+        /// <typeparam name="T">Type of item</typeparam>
+        /// <param name="formControls">List of form control</param>
+        /// <param name="item">Model</param>
+        /// <returns>Updated item</returns>
         public static T FillValuesIntoProperty<T>(IList<FrameworkElement> formControls, T item) where T : BaseItem
         {
             var itemProps = typeof(T).GetProperties();
@@ -221,6 +261,11 @@ namespace ISUF.UI.Design
             return item;
         }
 
+        /// <summary>
+        /// Get value from form control
+        /// </summary>
+        /// <param name="formControl">Form control</param>
+        /// <returns>Value from form control</returns>
         private static object GetValueFromControl(FrameworkElement formControl)
         {
             if (formControl is TextBox textBoxControl)
@@ -239,6 +284,12 @@ namespace ISUF.UI.Design
                 throw new Base.Exceptions.NotSupportedException("Not supported type of control for getting value.");
         }
 
+        /// <summary>
+        /// Convert value from form control into item value
+        /// </summary>
+        /// <param name="value">Value from form</param>
+        /// <param name="prop">Info of property</param>
+        /// <returns>Converted value</returns>
         private static object ConvertValueToPropValue(object value, PropertyInfo prop)
         {
             object convertedValue;
@@ -293,6 +344,11 @@ namespace ISUF.UI.Design
             return convertedValue;
         }
 
+        /// <summary>
+        /// Get list of form controls
+        /// </summary>
+        /// <param name="form">Form</param>
+        /// <returns>Lis of form controls</returns>
         public static IList<FrameworkElement> GetControlsFromForm(Control form)
         {
             return Classes.Functions.GetControlsByName(form, Classes.Constants.DATA_CONTROL_IDENTIFIER, true);

@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Data;
 
 namespace ISUF.UI.Design
 {
+    /// <summary>
+    /// Model of registered destination property
+    /// </summary>
     public class RegisteredDestinationProperty
     {
         public DependencyObject DestinationObject { get; set; }

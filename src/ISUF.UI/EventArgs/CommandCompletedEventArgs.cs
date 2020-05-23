@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ISUF.UI.EventArgs
 {
+    /// <summary>
+    /// Command completed event args
+    /// </summary>
     public class CommandCompletedEventArgs
     {
         public string CommandName { get; set; }

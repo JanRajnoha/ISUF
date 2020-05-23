@@ -20,16 +20,26 @@ using Windows.UI.Xaml.Media;
 
 namespace ISUF.UI.Views
 {
+    /// <summary>
+    /// Module detail control
+    /// </summary>
     public class ModuleDetailControlBase : ControlBase
     {
         Panel mainContent;
         readonly UIModule uiModule;
 
+        /// <summary>
+        /// Init module detail control
+        /// </summary>
+        /// <param name="uiModule">UI Module</param>
+        /// <param name="viewModelType">View model type</param>
+        /// <param name="viewModelArgs">View module arguments</param>
         public ModuleDetailControlBase(UIModule uiModule, Type viewModelType, params object[] viewModelArgs) : base(viewModelType, viewModelArgs)
         {
             this.uiModule = uiModule;
         }
 
+        /// <inheritdoc/>
         public override void AddControls()
         {
             Grid content = new Grid()
@@ -115,6 +125,7 @@ namespace ISUF.UI.Views
             Content = content;
         }
 
+        /// <inheritdoc/>
         public override void CreateControlsForModule()
         {
             var result = ApplicationBase.Current.ModuleAnalyser.SortProperties(uiModule.ModuleItemType);
@@ -132,6 +143,9 @@ namespace ISUF.UI.Views
             FillPredefinedValues();
         }
 
+        /// <summary>
+        /// Fill predefined values
+        /// </summary>
         private void FillPredefinedValues()
         {
             object item = (DataContext as ViewModelBase).GetPropertyValue("DetailItem");
